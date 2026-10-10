@@ -15,7 +15,12 @@
     "refresh": "node scripts/refresh.mjs",
     "covers": "node scripts/fetch-covers.mjs",
     "orgs": "node scripts/fetch-orgs.mjs",
-    "gh-relay": "node scripts/github-exchange.local.mjs"
+    "gh-relay": "node scripts/github-exchange.local.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx src/lib/db/seed.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
@@ -37,6 +42,7 @@
     "postcss": "^8.5.29",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.1.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.7.0",
     "vitest": "^5.0.3"
   }
