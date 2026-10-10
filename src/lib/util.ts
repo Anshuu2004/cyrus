@@ -14,7 +14,7 @@ export const fmt = (n: number): string =>
 
 export const byStars = (a: { stars: number }, b: { stars: number }) => b.stars - a.stars;
 
-export const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+export const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function hash(str: string): number {
   let h = 0;

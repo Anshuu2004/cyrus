@@ -11,7 +11,7 @@
    The implicit id_token flow needs only the (public) client id - never a secret. */
 
 export const GOOGLE_CLIENT_ID: string | undefined =
-  (import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined)?.trim() || undefined;
+  (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string | undefined)?.trim() || undefined;
 
 /** true when a real Google sign-in is configured; otherwise the UI keeps its demo flow */
 export const googleConfigured = () => !!GOOGLE_CLIENT_ID;

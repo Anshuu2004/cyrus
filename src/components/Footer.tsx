@@ -1,5 +1,6 @@
+"use client"
 /* ══ Footer.tsx — dark coffee footer ════════════════════════ */
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { Logo, Brand } from "./ui";
 
 const COLS: [string, [string, string][]][] = [

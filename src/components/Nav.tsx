@@ -1,6 +1,7 @@
+"use client"
 /* ══ Nav.tsx — floating pill header + clean circle theme toggle + user menu + drawer ═ */
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "@/lib/router";
 import { Logo, Brand, Avatar, btn } from "./ui";
 import { TONES } from "./plat";
 import { useStore } from "../lib/store";

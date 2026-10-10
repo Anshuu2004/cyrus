@@ -1,7 +1,8 @@
+"use client"
 /* ══ CompanyBand.tsx — the companies band that sits just above the
    footer on every page: a dark coffee panel carrying the real org
    logos whose public GitHub data powers the index.               ══ */
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { btn, OrgImg } from "./ui";
 import { avatarOf } from "../lib/util";
 

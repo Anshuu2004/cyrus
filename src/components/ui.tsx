@@ -1,3 +1,4 @@
+"use client"
 /* ══ ui.tsx — small shared primitives ═══════════════════════ */
 import { useState } from "react";
 import type { ReactNode, ImgHTMLAttributes } from "react";

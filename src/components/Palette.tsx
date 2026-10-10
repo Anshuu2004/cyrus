@@ -1,6 +1,7 @@
+"use client"
 /* ══ Palette.tsx — ⌘K search across repos + orgs ════════════ */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router";
 import { useStore } from "../lib/store";
 import { REPOS } from "../data/repos";
 import { ORGS } from "../data/orgs";

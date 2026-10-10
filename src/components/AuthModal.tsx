@@ -1,8 +1,9 @@
+"use client"
 /* ══ AuthModal.tsx — full-screen split sign-in sheet ═
    left: cyrus.ai logo + programming-language wall · right: LOGIN/SIGN UP tabs, email+password, OAuth row */
 import { useEffect, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router";
 import { useStore } from "../lib/store";
 import { LANG_COLORS } from "../lib/util";
 import { googleConfigured, promptGoogle, readGoogleRedirectCredential } from "../lib/google";

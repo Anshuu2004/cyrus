@@ -1,7 +1,8 @@
+"use client"
 /* ══ plat.tsx — shared kit for the /platform pages: pills, icons,
    mock product panels, step headers, behind-the-scenes cards ── */
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { btn } from "./ui";
 
 export const W = "max-w-[1240px] mx-auto px-6";

@@ -22,9 +22,9 @@
    No client id configured = the UI keeps its demo prompt fallback.   ═ */
 
 export const GITHUB_CLIENT_ID: string | undefined =
-  (import.meta.env.VITE_GITHUB_CLIENT_ID as string | undefined)?.trim() || undefined;
+  (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID as string | undefined)?.trim() || undefined;
 const GITHUB_EXCHANGE_URL: string | undefined =
-  (import.meta.env.VITE_GITHUB_EXCHANGE_URL as string | undefined)?.trim() || undefined;
+  (process.env.NEXT_PUBLIC_GITHUB_EXCHANGE_URL as string | undefined)?.trim() || undefined;
 
 export const githubConfigured = () => !!GITHUB_CLIENT_ID;
 
