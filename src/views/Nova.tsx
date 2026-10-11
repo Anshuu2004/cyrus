@@ -12,8 +12,26 @@ import type { Repo } from "../lib/types";
 import { ALL_HACKS } from "./Hackathons";
 import type { Hack } from "../data/hackathons";
 import { btn, Chip, Eyebrow, Word } from "../components/ui";
+import { useStore } from "../lib/store";
+import { api } from "../lib/api";
 
 const W = "max-w-[1240px] mx-auto px-6";
+
+/* ── application desk: one pipeline per target, next move at every stage ── */
+type DeskApp = { kind: "program" | "hackathon"; targetId: string; title: string; status: string; serverId?: string | null };
+const STAGES: Record<DeskApp["kind"], string[]> = {
+  program: ["drafting", "roadmap", "drafting_done", "submitted", "interview", "accepted", "rejected"],
+  hackathon: ["drafting", "roadmap", "submitted", "accepted", "rejected"],
+};
+const HINT: Record<string, string> = {
+  drafting: "Line up three small issues on the target's repo that your stack could close this week.",
+  roadmap: "nova's plan: two merged PRs first, then one mentor conversation before the window closes.",
+  drafting_done: "Have someone read the draft - a community channel or a builder who applied last season.",
+  submitted: "Keep the issues you opened alive while reviewers dig, and answer fast on your PRs.",
+  interview: "Prep the demo: show what you built, not what you read.",
+  accepted: "Community bonding starts - calendar the first call with your mentor today.",
+  rejected: "Ask for feedback, bank the merged PRs, and take the same evidence to the next window.",
+};
 
 const QUICK = ["TypeScript", "Python", "React", "AI agents", "LLMs", "Machine learning", "Go", "Rust", "DevOps", "Kubernetes", "MCP", "Open source", "Web3", "Data", "Mobile", "Security", "Docs", "Design systems", "NLP", "Computer vision"];
 
@@ -37,6 +55,66 @@ export default function Nova() {
   const [free, setFree] = useState("");
   const [ran, setRan] = useState(false);
   const resRef = useRef<HTMLDivElement>(null);
+  const deskRef = useRef<HTMLDivElement>(null);
+
+  /* application desk - localStorage first, mirrored to the server when signed in for real */
+  const { serverUser } = useStore();
+  const [apps, setApps] = useStored<DeskApp[]>("cyrus.apps", []);
+  const appsRef = useRef(apps); appsRef.current = apps;
+  useEffect(() => {
+    if (!serverUser) return;
+    let go = true;
+    void (async () => {
+      const list = await api.appList();
+      if (!go || !list?.applications?.length) return;
+      const remote = list.applications.map((a) => ({
+        kind: a.kind, targetId: a.targetId, title: a.targetTitle ?? a.targetId, status: a.status, serverId: a.id,
+      }));
+      const local = appsRef.current.filter((l) => !remote.some((r) => r.kind === l.kind && r.targetId === l.targetId));
+      if (local.length || remote.some((r) => !appsRef.current.some((l) => l.kind === r.kind && l.targetId === r.targetId))) {
+        setApps([...remote, ...local]);
+      }
+    })();
+    return () => { go = false; };
+  }, [serverUser, setApps]);
+
+  const addApp = (kind: DeskApp["kind"], targetId: string, title: string) => {
+    if (apps.some((a) => a.kind === kind && a.targetId === targetId)) {
+      deskRef.current?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    const next: DeskApp[] = [...apps, { kind, targetId, title, status: "drafting", serverId: null }];
+    setApps(next);
+    if (serverUser) {
+      void api.appUpsert(kind, targetId, title).then((r) => {
+        const id = r?.application?.id;
+        if (id) setApps(next.map((a) => (a.kind === kind && a.targetId === targetId ? { ...a, serverId: id } : a)));
+      });
+    }
+    setTimeout(() => deskRef.current?.scrollIntoView({ behavior: "smooth" }), 60);
+  };
+
+  const advanceApp = (kind: DeskApp["kind"], targetId: string) => {
+    const app = apps.find((a) => a.kind === kind && a.targetId === targetId);
+    if (!app) return;
+    const cycle = STAGES[kind];
+    const status = cycle[(cycle.indexOf(app.status) + 1) % cycle.length];
+    const next = apps.map((a) => (a.kind === kind && a.targetId === targetId ? { ...a, status } : a));
+    setApps(next);
+    if (serverUser) {
+      if (app.serverId) void api.appPatch(app.serverId, { status });
+      else void api.appUpsert(kind, targetId, app.title).then((r) => {
+        const id = r?.application?.id;
+        if (id) { void api.appPatch(id, { status }); setApps(next.map((a) => (a.kind === kind && a.targetId === targetId ? { ...a, serverId: id } : a))); }
+      });
+    }
+  };
+
+  const dropApp = (kind: DeskApp["kind"], targetId: string) => {
+    const app = apps.find((a) => a.kind === kind && a.targetId === targetId);
+    setApps(apps.filter((a) => !(a.kind === kind && a.targetId === targetId)));
+    if (app?.serverId && serverUser) void api.appDelete(app.serverId);
+  };
 
   /* accept a typed list too: "python, kubernetes, mcp" */
   const skills = useMemo(() => {
@@ -162,7 +240,7 @@ export default function Nova() {
 
             {prof.goal === "hack" && (
               <section className="grid gap-3.5">
-                {hacks.length ? hacks.map(({ h, s }) => <HackRow key={h.id} h={h} s={s} />)
+                {hacks.length ? hacks.map(({ h, s }) => <HackRow key={h.id} h={h} s={s} onApply={() => addApp("hackathon", h.id, h.name)} />)
                   : <p className="text-dim">Nothing in the live shelf matches that stack - try adding a broader tag like "AI agents" or "Web".</p>}
                 <Link to="/hackathons" className={btn("outline", "md", "self-start")}>Browse all {ALL_HACKS.length} hackathons</Link>
               </section>
@@ -198,10 +276,14 @@ export default function Nova() {
                   <Link key={p.id} to={`/programs/${p.id}`} className="group bg-card border border-line rounded-[18px] p-5 flex flex-col gap-2 shadow-soft hover:-translate-y-1 hover:border-accent/40 transition-all">
                     <b className="font-display text-[16px]">{p.name} <span className="text-dim group-hover:text-accent transition-colors"></span></b>
                     <span className="text-cocoa text-[13px] leading-[1.6]">{p.tag}</span>
-                    <span className="font-mono text-[10.5px] text-dim mt-auto">{p.pay} · {p.window} · {p.status}</span>
+                    <span className="font-mono text-[10.5px] text-dim">{p.pay} · {p.window} · {p.status}</span>
                     {PROGRAM_META[(Object.keys(PROGRAM_META) as (keyof typeof PROGRAM_META)[]).find((k) => PROGRAM_ID_BY_NAME[k] === p.id) ?? ("GSoC" as keyof typeof PROGRAM_META)] && (
                       <Chip tone="cat">flagship projects on /opensource</Chip>
                     )}
+                    <div className="flex items-center justify-between mt-auto pt-1">
+                      <span className="font-mono text-[10.5px] uppercase tracking-[.1em] text-accent font-bold">Open card</span>
+                      <ApplyBtn onApply={() => addApp("program", p.id, p.name)} />
+                    </div>
                   </Link>
                 ))}
                 <Link to="/opensource" className={btn("outline", "md", "self-start col-span-full")}>Search the full program project archive</Link>
@@ -212,7 +294,7 @@ export default function Nova() {
             {prof.goal !== "hack" && hacks.length > 0 && (
               <section className="mt-10">
                 <h3 className="font-display font-extrabold text-[18px] mb-4">Also scoring well for your stack</h3>
-                {hacks.slice(0, 3).map(({ h }) => <HackRow key={h.id} h={h} s={0} slim />)}
+                {hacks.slice(0, 3).map(({ h }) => <HackRow key={h.id} h={h} s={0} slim onApply={() => addApp("hackathon", h.id, h.name)} />)}
               </section>
             )}
             {prof.goal !== "build" && repos.length > 0 && (
@@ -225,11 +307,64 @@ export default function Nova() {
           </>
         )}
       </div>
+
+      {/* ── application desk ── */}
+      <div ref={deskRef} id="desk" className="scroll-mt-28 pt-12">
+        <div className="flex items-baseline justify-between gap-4 flex-wrap mb-5">
+          <h2 className="font-display font-extrabold tracking-[-.02em] text-[24px]">Your <Word>application</Word> desk</h2>
+          <span className="font-mono text-[10px] uppercase tracking-[.12em] text-dim">
+            {serverUser ? "synced across devices" : "saved in this browser"}{apps.length ? ` · ${apps.length} in pipeline` : ""}
+          </span>
+        </div>
+        {apps.length ? (
+          <section className="grid gap-3">
+            {apps.map((a) => {
+              const cycle = STAGES[a.kind];
+              const i = Math.max(0, cycle.indexOf(a.status));
+              return (
+                <article key={a.kind + a.targetId} className="bg-card border border-line rounded-[16px] px-5 py-4 flex items-center gap-4 flex-wrap shadow-soft">
+                  <div className="min-w-0 max-[860px]:w-full md:flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <b className="font-display text-[15px] truncate">{a.title}</b>
+                      <Chip tone="cat">{a.kind}</Chip>
+                    </div>
+                    <p className="text-cocoa text-[12.5px] leading-[1.55] mt-1.5">{HINT[a.status] ?? "nova will flag the next move once this stage lands."}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap max-[860px]:order-3">
+                    {cycle.map((st, idx) => (
+                      <span key={st} className={`font-mono text-[9px] font-bold uppercase tracking-[.06em] rounded-full px-2 py-1 border transition-colors ${idx === i ? "bg-accent border-accent text-white" : idx < i ? "bg-peach border-accent/25 text-rust" : "bg-transparent border-line text-dim"}`}>{st.replace(/_/g, " ")}</span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2.5 shrink-0 max-[860px]:order-4 ml-auto max-[860px]:ml-0">
+                    <button onClick={() => advanceApp(a.kind, a.targetId)} className={btn("outline", "sm")}>Advance stage</button>
+                    <button onClick={() => dropApp(a.kind, a.targetId)} className="font-mono text-[10px] uppercase tracking-[.1em] text-dim hover:text-rust cursor-pointer transition-colors">remove</button>
+                  </div>
+                </article>
+              );
+            })}
+          </section>
+        ) : (
+          <div className="text-center py-12 border border-dashed border-line rounded-[22px] bg-cream/60 text-dim leading-relaxed">
+            Hit "Apply" on any hackathon or program match above - nova opens one pipeline per target and shows the next move at every stage.
+            <span className="block mt-1.5 text-[12.5px]">{serverUser ? "Your desk is synced to your account across devices." : "Sign in and your desk follows you across devices."}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-function HackRow({ h, s, slim }: { h: Hack; s: number; slim?: boolean }) {
+function ApplyBtn({ onApply }: { onApply: () => void }) {
+  return (
+    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); onApply(); }}
+      title="Start an application plan on the desk below"
+      className="shrink-0 font-mono text-[10px] font-bold uppercase tracking-[.08em] text-rust bg-peach border border-accent/25 rounded-full px-2.5 py-1 hover:bg-accent/15 transition-colors cursor-pointer">
+      Apply
+    </button>
+  );
+}
+
+function HackRow({ h, s, slim, onApply }: { h: Hack; s: number; slim?: boolean; onApply?: () => void }) {
   return (
     <Link to={`/hackathons/${h.id}`} className={`group bg-card border border-line rounded-[16px] px-5 ${slim ? "py-3.5" : "py-4.5"} flex items-center gap-4 shadow-soft hover:border-accent/45 hover:-translate-y-0.5 transition-all`}>
       <span className="w-[10px] h-[10px] rounded-[4px] shrink-0" style={{ background: h.color }} />
@@ -239,7 +374,7 @@ function HackRow({ h, s, slim }: { h: Hack; s: number; slim?: boolean }) {
       </div>
       {!slim && s > 0 && <Chip tone="green">fit {Math.min(99, Math.round(55 + s * 3))}%</Chip>}
       <span className="font-mono text-[10px] uppercase tracking-[.1em] text-dim shrink-0 hidden max-[640px]:hidden md:block">{h.org} · {h.status}</span>
-      <span className="text-accent font-bold group-hover:translate-x-1 transition-transform"></span>
+      {onApply && <ApplyBtn onApply={onApply} />}
     </Link>
   );
 }

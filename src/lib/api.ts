@@ -9,6 +9,10 @@ export type ServerUser = {
   email: string | null; picture: string | null; provider: string;
 };
 export type SavedRow = { itemType: string; itemId: string; title?: string | null };
+export type AppRow = {
+  id: string; kind: "program" | "hackathon"; targetId: string; targetTitle: string | null;
+  status: string; notes?: unknown; createdAt: string; updatedAt: string;
+};
 
 const JSON_INIT: RequestInit = { headers: { "content-type": "application/json" }, credentials: "same-origin" };
 
@@ -21,7 +25,7 @@ async function getJson<T>(url: string): Promise<T | null> {
   }
 }
 
-async function postJson<T>(url: string, body: unknown, method: "POST" | "DELETE" = "POST"): Promise<T | null> {
+async function postJson<T>(url: string, body: unknown, method: "POST" | "PATCH" | "DELETE" = "POST"): Promise<T | null> {
   try {
     const r = await fetch(url, { ...JSON_INIT, method, body: JSON.stringify(body) });
     return r.ok ? ((await r.json()) as T) : null;
@@ -56,6 +60,13 @@ export const api = {
 
   submit: (kind: string, payload: unknown, extra?: { name?: string; email?: string }) =>
     postJson<{ ok: true; id: string }>("/api/submissions", { kind, payload, ...extra }),
+
+  appList: () => getJson<{ applications: AppRow[] }>("/api/me/applications"),
+  appUpsert: (kind: string, targetId: string, targetTitle?: string) =>
+    postJson<{ application: AppRow }>("/api/me/applications", { kind, targetId, targetTitle }),
+  appPatch: (id: string, patch: { status?: string; notes?: unknown }) =>
+    postJson<{ application: AppRow }>("/api/me/applications", { id, ...patch }, "PATCH"),
+  appDelete: (id: string) => postJson<{ ok: boolean }>("/api/me/applications", { id }, "DELETE"),
 };
 
 /** can this deployment actually run server sessions? (cached per page load) */

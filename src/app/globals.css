@@ -107,8 +107,8 @@
 }
 .dark .tl-phase.is-active { background: color-mix(in srgb, var(--pc) 26%, #17120c); }
 
-html { scroll-behavior: smooth; }
-body { @apply bg-paper text-ink font-sans antialiased; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { @apply bg-paper text-ink font-sans antialiased; overflow-x: clip; }
 
 /* ── display typography polish (Plus Jakarta Sans) ──────────
    headings wrap evenly instead of orphaning one word; large

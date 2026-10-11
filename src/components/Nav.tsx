@@ -47,13 +47,15 @@ export default function Nav() {
       <div className="max-w-[1340px] mx-auto bg-paper/92 backdrop-blur-[16px] saturate-[1.35] border border-liness rounded-full shadow-soft">
         <div className="flex items-center gap-5 h-[62px] pl-4 pr-4 max-[700px]:gap-2.5 max-[700px]:pl-2.5 max-[700px]:pr-2.5">
           <Link to="/" className="flex items-center gap-2.5 shrink-0 max-[700px]:gap-2"><Logo size={34} /><Brand /></Link>
-          <button className="hidden max-[767px]:grid place-items-center w-9 h-9 rounded-[10px] border border-line bg-card ml-1 text-ink"
+          <button className="hidden max-[1179px]:grid place-items-center w-9 h-9 rounded-[10px] border border-line bg-card ml-1 text-ink"
             aria-label="Menu" onClick={() => setOpen(!open)}>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
           </button>
 
-          {/* our pill-link style, laid out on the reference bar's rhythm */}
-          <div className={`gap-1.5 overflow-x-auto md:overflow-visible no-scrollbar flex-col ${open ? "flex absolute left-4 right-4 top-[76px] bg-card border border-line rounded-[22px] shadow-lift z-50 px-5 py-4" : "hidden"} md:!flex md:static md:bg-transparent md:border-0 md:shadow-none md:p-0 md:flex-row md:rounded-full`}>
+          {/* our pill-link style, laid out on the reference bar's rhythm -
+              below lg the row collapses into the drawer card so nothing
+              ever overflows the viewport */}
+          <div className={`gap-1.5 overflow-x-auto no-scrollbar flex-col ${open ? "flex absolute left-4 right-4 top-[76px] bg-card border border-line rounded-[22px] shadow-lift z-50 px-5 py-4" : "hidden"} lg:!flex lg:static lg:overflow-visible lg:bg-transparent lg:border-0 lg:shadow-none lg:p-0 lg:flex-row lg:rounded-full`}>
             {LINKS.slice(0, -1).map((l) => (
               <NavLink key={l.to} to={l.to} end={l.to === "/"}
                 className={`px-3.5 py-2 rounded-full text-[13.5px] font-semibold whitespace-nowrap transition-colors ${active(l.to) ? "bg-coffee text-foam" : "text-cocoa hover:bg-card hover:text-ink"}`}>
@@ -122,7 +124,7 @@ function PlatformMenu({ drawer }: { drawer: boolean }) {
           className={`transition-transform duration-200 ${pop ? "rotate-180" : ""}`}><path d="m5 9 7 7 7-7" /></svg>
       </button>
       {pop && (
-        <div className="hidden md:block absolute left-0 top-[50px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
+        <div className="hidden lg:block absolute left-0 top-[50px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
           {PLAT.map(([slug, label, desc, d, tone]) => (
             <Link key={slug} to={`/platform/${slug}`}
               onClick={() => setPop(false)}
@@ -137,7 +139,7 @@ function PlatformMenu({ drawer }: { drawer: boolean }) {
         </div>
       )}
       {drawer && (
-        <div className="md:hidden grid gap-1 pl-1.5 pb-1">
+        <div className="lg:hidden grid gap-1 pl-1.5 pb-1">
           {PLAT.map(([slug, label, , d]) => (
             <Link key={slug} to={`/platform/${slug}`}
               className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13px] font-semibold text-cocoa hover:bg-peach hover:text-rust transition-colors">
