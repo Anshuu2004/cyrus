@@ -12,6 +12,7 @@ import { HACKS } from "../data/hackathons";
 import { RESOURCES } from "../data/resources";
 import { avatarOf, fmt } from "../lib/util";
 import { btn, Word, SectionTag, OrgImg, Logo } from "../components/ui";
+import { Rule } from "../components/plat";
 import CompanyBand from "../components/CompanyBand";
 
 const W = "max-w-[1240px] mx-auto px-6";
@@ -112,7 +113,7 @@ const CAPS: [string, string, string, string, ReactNode, string][] = [
 ];
 function Capabilities() {
   return (
-    <section className={`${W} mt-[92px] scroll-mt-24`} id="capabilities">
+    <section className={`${W} mt-[54px] scroll-mt-24`} id="capabilities">
       <div className="text-center max-w-[640px] mx-auto">
         <Pill>One contributor platform</Pill>
         <h2 className="font-display font-extrabold tracking-[-.02em] text-[clamp(30px,3.8vw,44px)] mt-5 leading-[1.12]">
@@ -202,10 +203,12 @@ export default function About() {
         </div>
       </header>
 
+      <Rule />
       <Capabilities />
 
+      <Rule />
       {/* ── why we exist: editorial band ── */}
-      <section id="why" className={`${W} mt-[92px] scroll-mt-24`}>
+      <section id="why" className={`${W} mt-[54px] scroll-mt-24`}>
         <div className="grid grid-cols-[.9fr_1.1fr] gap-12 items-start max-[1020px]:grid-cols-1 max-[1020px]:gap-6">
           <div>
             <SectionTag>Why we exist</SectionTag>
@@ -237,8 +240,9 @@ export default function About() {
         </div>
       </section>
 
+      <Rule />
       {/* ── principles ─ */}
-      <section className={`${W} mt-[92px]`}>
+      <section className={`${W} mt-[54px]`}>
         <SectionTag>Our principles</SectionTag>
         <h2 className="font-display font-extrabold tracking-[-.02em] text-[clamp(28px,3.4vw,40px)] mt-3.5 mb-9">
           Guided by <Word>four rules.</Word>
@@ -256,8 +260,9 @@ export default function About() {
         </div>
       </section>
 
+      <Rule />
       {/* ── data & methodology + FAQ ── */}
-      <section className={`${W} mt-[92px] grid grid-cols-[1fr_320px] gap-10 items-start max-[980px]:grid-cols-1`}>
+      <section className={`${W} mt-[54px] grid grid-cols-[1fr_320px] gap-10 items-start max-[980px]:grid-cols-1`}>
         <article className="max-w-[720px]">
           <h2 id="data" className="font-display font-extrabold text-[24px] tracking-[-.02em] mb-3 scroll-mt-24">Data &amp; methodology</h2>
           <p className="text-cocoa text-[15px] leading-[1.75] mb-4">
@@ -315,8 +320,9 @@ export default function About() {
         </aside>
       </section>
 
+      <Rule />
       {/* ── closing line ── */}
-      <section className={`${W} mt-[92px] text-center max-w-[760px]`}>
+      <section className={`${W} mt-[54px] text-center max-w-[760px]`}>
         <h2 className="font-display font-extrabold tracking-[-.02em] text-[clamp(26px,3.2vw,38px)] leading-[1.15]">
           A good index is earned <Word>one commit at a time.</Word>
         </h2>
