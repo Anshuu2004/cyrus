@@ -135,7 +135,7 @@ export function ToolCard({ tool, fav }: { tool: Tool; fav?: { toggle: (id: strin
   return (
     <Link
       to={toolPath(tool)}
-      className="group block bg-card border border-line rounded-[18px] p-3.5 shadow-soft hover:shadow-lift hover:border-ember transition-all"
+      className="group block min-w-0 overflow-hidden bg-card border border-line rounded-[18px] p-3.5 shadow-soft hover:shadow-lift hover:border-ember transition-all"
     >
       <MiniPreview tool={tool} />
       <div className="mt-3 flex items-start justify-between gap-2 px-1">

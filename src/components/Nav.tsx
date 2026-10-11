@@ -45,8 +45,8 @@ export default function Nav() {
   return (
     <nav className="sticky top-0 z-[60] bg-paper px-4 pt-3 max-[700px]:px-2.5">
       <div className="max-w-[1340px] mx-auto bg-paper/92 backdrop-blur-[16px] saturate-[1.35] border border-liness rounded-full shadow-soft">
-        <div className="flex items-center gap-5 h-[62px] pl-4 pr-4">
-          <Link to="/" className="flex items-center gap-2.5 shrink-0"><Logo size={34} /><Brand /></Link>
+        <div className="flex items-center gap-5 h-[62px] pl-4 pr-4 max-[700px]:gap-2.5 max-[700px]:pl-2.5 max-[700px]:pr-2.5">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0 max-[700px]:gap-2"><Logo size={34} /><Brand /></Link>
           <button className="hidden max-[767px]:grid place-items-center w-9 h-9 rounded-[10px] border border-line bg-card ml-1 text-ink"
             aria-label="Menu" onClick={() => setOpen(!open)}>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
@@ -68,7 +68,7 @@ export default function Nav() {
 
           <div className="ml-auto flex items-center gap-3.5 max-[700px]:gap-2">
             <ThemeToggle />
-            <span className="w-px h-6 bg-line shrink-0" aria-hidden />
+            <span className="w-px h-6 bg-line shrink-0 max-[700px]:hidden" aria-hidden />
             {user ? (
               <div className="relative" ref={menuRef}>
                 <button className="!p-0 border-0" onClick={(e) => { e.stopPropagation(); setPop(!pop); }} aria-label="Account">
@@ -88,7 +88,7 @@ export default function Nav() {
                 )}
               </div>
             ) : (
-              <SignInButton />
+              <SignInButton className="max-[700px]:!px-3.5 max-[700px]:!py-2 max-[700px]:!text-[12.5px]" />
             )}
           </div>
         </div>
@@ -97,9 +97,9 @@ export default function Nav() {
   );
 }
 
-export function SignInButton({ label = "Sign in", size = "md" as const, variant = "dark" as const, onClick }: { label?: string; size?: "sm" | "md" | "lg"; variant?: "dark" | "primary" | "outline"; onClick?: () => void }) {
+export function SignInButton({ label = "Sign in", size = "md" as const, variant = "dark" as const, onClick, className = "" }: { label?: string; size?: "sm" | "md" | "lg"; variant?: "dark" | "primary" | "outline"; onClick?: () => void; className?: string }) {
   const { setAuthOpen } = useStore();
-  return <button className={btn(variant, size)} onClick={onClick ?? (() => setAuthOpen(true))}>{label}</button>;
+  return <button className={btn(variant, size, className)} onClick={onClick ?? (() => setAuthOpen(true))}>{label}</button>;
 }
 
 /* ── Platform dropdown: caret pill + card panel on desktop, inline list in the mobile drawer ── */

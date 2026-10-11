@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>mobile check</title>
+<style>body{margin:0;background:#888;display:flex;justify-content:center}iframe{border:0;width:390px;height:844px;background:#fff}</style>
+</head>
+<body>
+<iframe id="f" src="/"></iframe>
+<script>
+window.__report = () => {
+  const doc = document.getElementById('f').contentDocument;
+  const vw = 390;
+  const out = { scrollWidth: doc.documentElement.scrollWidth, offenders: [] };
+  if (out.scrollWidth <= vw) return out;
+  const seen = [];
+  const walk = (el, depth) => {
+    if (depth > 24) return;
+    for (const c of el.children) {
+      const r = c.getBoundingClientRect();
+      if (r.width > vw + 2 || r.right > vw + 2) {
+        const cls = (c.className && typeof c.className === 'string') ? c.className.split(' ').filter(Boolean).slice(0,4).join('.') : '';
+        const tag = c.tagName.toLowerCase() + (c.id ? '#' + c.id : '') + (cls ? '.' + cls : '');
+        // only report the outermost offender
+        if (!seen.some(s => tag.startsWith(s.split(' ')[0]))) out.offenders.push(tag.slice(0,140) + ' w=' + Math.round(r.width) + ' x=' + Math.round(r.left));
+        seen.push(tag);
+      }
+      walk(c, depth + 1);
+    }
+  };
+  walk(doc.body, 0);
+  out.offenders = out.offenders.slice(0, 30);
+  return out;
+};
+</script>
+</body>
+</html>
