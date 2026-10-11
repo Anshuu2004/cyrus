@@ -1,6 +1,7 @@
 "use client"
 /* ══ AuthModal.tsx — full-screen split sign-in sheet ═
-   left: cyrus.ai logo + programming-language wall · right: LOGIN/SIGN UP tabs, email+password, OAuth row */
+   left: cyrus.ai logo + programming-language wall · right: LOGIN/SIGN UP tabs,
+   email + 6-digit verification code (server-issued), OAuth row */
 import { useEffect, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { useNavigate } from "@/lib/router";
@@ -31,8 +32,11 @@ export default function AuthModal() {
   const nav = useNavigate();
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
   const [name, setName] = useState("");
+  const [step, setStep] = useState<"form" | "code">("form");
+  const [code, setCode] = useState("");
+  const [busyMail, setBusyMail] = useState(false);
+  const [resendIn, setResendIn] = useState(0);
   const [busyGoogle, setBusyGoogle] = useState(false);
   const [busyGithub, setBusyGithub] = useState(false);
 
@@ -55,6 +59,19 @@ export default function AuthModal() {
     setTimeout(() => nav("/dashboard"), 450);
   }, []);
 
+  /* resend cooldown ticker for the email code step */
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const t = setInterval(() => setResendIn((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(t);
+  }, [resendIn]);
+
+  /* closing the sheet always returns the email form to step one (hook order: above the guard) */
+  useEffect(() => {
+    if (authOpen) return;
+    setStep("form"); setCode(""); setResendIn(0); setBusyMail(false);
+  }, [authOpen]);
+
   if (!authOpen) return null;
 
   const done = (who: string, provider: string, msg: string, extras?: { email?: string; picture?: string }) => {
@@ -66,12 +83,73 @@ export default function AuthModal() {
     setTimeout(() => nav("/dashboard"), 450);
   };
 
-  const submit = (e: FormEvent) => {
+  const isEmail = (m: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m);
+
+  /* step 1: ask the server for a code. Without a reachable backend we keep
+     the old browser-only demo sign-in so the sheet never dead-ends. */
+  const sendCode = async (e: FormEvent) => {
     e.preventDefault();
-    const mail = email.trim();
-    if (!mail || !pw) { toast("Add an email and password to continue."); return; }
-    const who = tab === "signup" ? (name.trim() || mail.split("@")[0]) : mail.split("@")[0];
-    done(who, "Email", tab === "signup" ? `Account created - welcome, ${who}!` : `Welcome back, ${who}!`, { email: mail });
+    const mail = email.trim().toLowerCase();
+    if (!isEmail(mail)) { toast("That email doesn't look right."); return; }
+    setBusyMail(true);
+    try {
+      const r = await api.emailStart(mail);
+      if (!r) {
+        const who = tab === "signup" ? (name.trim() || mail.split("@")[0]) : mail.split("@")[0];
+        done(who, "Email", tab === "signup" ? `Account created - welcome, ${who}!` : `Welcome back, ${who}!`, { email: mail });
+        return;
+      }
+      if (r.ok) {
+        setStep("code"); setCode(""); setResendIn(30);
+        toast(r.demo && r.code
+          ? `Demo mode (no mail key configured) - your code is ${r.code}`
+          : `We sent a 6-digit code to ${mail}. It expires in 10 minutes.`);
+        return;
+      }
+      toast(r.reason === "too_soon" ? "A code was just sent - give it half a minute, then try again."
+        : r.reason === "invalid_email" ? "That email doesn't look right."
+        : "Couldn't send the code right now - GitHub or Google sign-in work instantly.");
+    } finally {
+      setBusyMail(false);
+    }
+  };
+
+  /* step 2: trade the entered code for a session */
+  const verifyCode = async (e: FormEvent) => {
+    e.preventDefault();
+    const mail = email.trim().toLowerCase();
+    if (!/^\d{6}$/.test(code)) { toast("Enter the 6-digit code from the email."); return; }
+    setBusyMail(true);
+    try {
+      const r = await api.emailVerify(mail, code, tab === "signup" ? name.trim() || undefined : undefined);
+      if (r?.ok && r.user) {
+        const first = r.user.name.split(" ")[0];
+        done(r.user.name, "Email", tab === "signup" ? `Account created - welcome, ${first}!` : `Welcome back, ${first}!`, { email: mail });
+        return;
+      }
+      toast(!r ? "Sign-in didn't complete - try again."
+        : r.reason === "expired" ? "That code expired - send yourself a new one."
+        : r.reason === "locked" || r.reason === "no_code" ? "That code is no longer active - send a new one."
+        : "That code doesn't match - check the email and try again.");
+    } finally {
+      setBusyMail(false);
+    }
+  };
+
+  const resend = async () => {
+    if (resendIn > 0 || busyMail) return;
+    setBusyMail(true);
+    try {
+      const r = await api.emailStart(email.trim().toLowerCase());
+      if (r?.ok) {
+        setResendIn(30);
+        toast(r.demo && r.code ? `Demo mode - your new code is ${r.code}` : "A fresh code is on its way.");
+      } else {
+        toast(r?.reason === "too_soon" ? "Almost - give it a few more seconds." : "Couldn't resend right now - try again.");
+      }
+    } finally {
+      setBusyMail(false);
+    }
   };
 
   const oauth = (p: string) => {
@@ -177,34 +255,51 @@ export default function AuthModal() {
               ))}
             </div>
 
-            <form onSubmit={submit} className="grid gap-5">
-              {tab === "signup" && (
+            {step === "form" ? (
+              <form onSubmit={sendCode} className="grid gap-5">
+                {tab === "signup" && (
+                  <div>
+                    <span className={label}>Display name</span>
+                    <input className={fin} placeholder="Ada Lovelace" value={name} onChange={(e) => setName(e.target.value)} autoComplete="nickname" />
+                  </div>
+                )}
                 <div>
-                  <span className={label}>Display name</span>
-                  <input className={fin} placeholder="ada@lovelace.dev" value={name} onChange={(e) => setName(e.target.value)} autoComplete="nickname" />
+                  <span className={label}>Email address</span>
+                  <input className={fin} type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
                 </div>
-              )}
-              <div>
-                <span className={label}>Email address</span>
-                <input className={fin} type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
-              </div>
-              <div>
-                <div className="flex items-baseline justify-between mb-2">
-                  <span className={`${label} !mb-0`}>Password</span>
-                  {tab === "login" && (
-                    <button type="button" onClick={() => toast("Demo preview - password reset isn't wired up yet.")}
-                      className="font-mono text-[11px] font-bold tracking-[.08em] text-rust hover:text-accent cursor-pointer">
-                      Forgot?
-                    </button>
-                  )}
+                <button type="submit" disabled={busyMail}
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180,96,44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  {busyMail ? "Sending code..." : tab === "login" ? "Send Login Code" : "Send Sign-Up Code"}
+                </button>
+                <p className="text-center font-mono text-[10.5px] tracking-[.08em] text-dim -mt-1">
+                  No passwords - we email you a 6-digit code instead.
+                </p>
+              </form>
+            ) : (
+              <form onSubmit={verifyCode} className="grid gap-5">
+                <div>
+                  <span className={label}>6-digit code</span>
+                  <input className={`${fin} !text-center font-mono font-bold tracking-[.42em] text-[22px]`}
+                    inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="000000"
+                    value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} autoFocus />
                 </div>
-                <input className={fin} type="password" placeholder="••••••••" value={pw} onChange={(e) => setPw(e.target.value)} autoComplete={tab === "login" ? "current-password" : "new-password"} />
-              </div>
-              <button type="submit"
-                className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180,96,44,.6)] transition-all active:scale-[.99] cursor-pointer">
-                {tab === "login" ? "Log In" : "Create Account"}
-              </button>
-            </form>
+                <button type="submit" disabled={busyMail}
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180,96,44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  {busyMail ? "Verifying..." : "Verify & Continue"}
+                </button>
+                <div className="flex items-center justify-between font-mono text-[11px] font-bold tracking-[.08em]">
+                  <button type="button" onClick={() => { setStep("form"); setCode(""); }}
+                    className="text-rust hover:text-accent cursor-pointer">Change email</button>
+                  <button type="button" onClick={resend} disabled={resendIn > 0 || busyMail}
+                    className="text-cocoa hover:text-rust transition-all cursor-pointer disabled:text-dim disabled:cursor-not-allowed">
+                    {resendIn > 0 ? `Resend in ${resendIn}s` : "Resend code"}
+                  </button>
+                </div>
+                <p className="text-center text-[12.5px] text-cocoa leading-[1.6] -mt-1">
+                  Sent to <span className="font-semibold text-ink">{email.trim().toLowerCase()}</span>. The code expires in 10 minutes.
+                </p>
+              </form>
+            )}
 
             <div className="flex items-center gap-4 text-dim text-[12px] font-mono tracking-[.1em] my-7 before:content-[''] before:flex-1 before:h-px before:bg-line after:content-[''] after:flex-1 after:h-px after:bg-line">OR</div>
 

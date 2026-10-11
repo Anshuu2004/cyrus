@@ -9,6 +9,11 @@ export type ServerUser = {
   email: string | null; picture: string | null; provider: string;
 };
 export type SavedRow = { itemType: string; itemId: string; title?: string | null };
+export type EmailStartRes = {
+  ok: boolean; sent?: boolean; demo?: boolean; code?: string;
+  reason?: string; error?: string; expires_in_seconds?: number;
+};
+export type EmailVerifyRes = { ok: boolean; user?: ServerUser; offline?: boolean; reason?: string };
 export type AppRow = {
   id: string; kind: "program" | "hackathon"; targetId: string; targetTitle: string | null;
   status: string; notes?: unknown; createdAt: string; updatedAt: string;
@@ -51,6 +56,10 @@ export const api = {
   authGithub: (code: string, verifier: string) =>
     postJson<{ ok: true; user: ServerUser }>("/api/auth/github", { code, verifier }),
   authGoogle: (idToken: string) => postJson<{ ok: true; user: ServerUser }>("/api/auth/google", { idToken }),
+
+  emailStart: (email: string) => postJson<EmailStartRes>("/api/auth/email/start", { email }),
+  emailVerify: (email: string, code: string, name?: string) =>
+    postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name }),
 
   savedList: () => getJson<{ items: SavedRow[] }>("/api/me/saved"),
   savedAdd: (itemType: string, itemId: string, title?: string) =>

@@ -18,7 +18,7 @@ export const users = pgTable(
   "users",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    provider: text("provider").notNull(), // "github" | "google"
+    provider: text("provider").notNull(), // "github" | "google" | "email"
     providerId: text("provider_id").notNull(),
     login: text("login"),
     name: text("name").notNull(),
@@ -27,6 +27,20 @@ export const users = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("users_provider_idx").on(t.provider, t.providerId)],
+);
+
+/** one live verification code per email address (email sign-in) */
+export const emailCodes = pgTable(
+  "email_codes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    codeHash: text("code_hash").notNull(), // sha256 of the 6-digit code
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    tries: integer("tries").notNull().default(0), // max 6 checks before burn
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("email_codes_email_idx").on(t.email)],
 );
 
 export const savedItems = pgTable(
@@ -223,6 +237,7 @@ export const catalogMeta = pgTable("catalog_meta", {
 /* ── inferred row types ─────────────────────────────────────────────── */
 
 export type UserRow = typeof users.$inferSelect;
+export type EmailCodeRow = typeof emailCodes.$inferSelect;
 export type SavedItemRow = typeof savedItems.$inferSelect;
 export type ApplicationRow = typeof applications.$inferSelect;
 export type SubmissionRow = typeof submissions.$inferSelect;

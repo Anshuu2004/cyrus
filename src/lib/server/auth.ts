@@ -78,7 +78,7 @@ export async function currentUser(): Promise<UserRow | null> {
 }
 
 export async function upsertUser(input: {
-  provider: "google" | "github"; providerId: string;
+  provider: "google" | "github" | "email"; providerId: string;
   login?: string | null; name: string; email?: string | null; picture?: string | null;
 }): Promise<UserRow> {
   const db = getDb();
