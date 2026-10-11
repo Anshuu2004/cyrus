@@ -10,6 +10,7 @@ import { REPOS, CATEGORIES } from "../data/repos";
 import { ORGS, PROGRAMS } from "../data/orgs";
 import { HACKS } from "../data/hackathons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS_TOTAL } from "../lib/tools/data";
 import { avatarOf, fmt } from "../lib/util";
 import { btn, Word, SectionTag, OrgImg, Logo } from "../components/ui";
 import CompanyBand from "../components/CompanyBand";
@@ -101,6 +102,10 @@ const CAPS: [string, string, string, string, ReactNode, string][] = [
     "Saved repos, followed orgs, a watchlist with statuses, live deadlines and a reading list tuned to the stack you actually saved.",
     capIcon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-8.5 3.5A9.9 9.9 0 0 1 2 12C2 6.5 6.5 2 12 2s10 4.5 10 10a9.9 9.9 0 0 1-1.5 5.5"),
     "Sign-in is demo-grade on purpose: everything lives in your browser's localStorage. No email, no tracking pixel, no spam."],
+  ["Artifacts", "/tools", "text-plum bg-plum/10 border-plum/25",
+    "A hands-on library of design and build recipes - live demos you can tune, copy-paste code, and prompts that carry your exact values into Cursor, Claude or ChatGPT.",
+    capIcon("M6 3h12l4 6-10 12L2 9Zm-4 6h20M9 3 6.5 9 12 21m3-18 2.5 6L12 21"),
+    "Every recipe is written from scratch and stays in the browser. Open-licensed references are credited with a source link, and the master builder turns one pick per slot into a single ready-to-run prompt."],
   ["Org matcher", "/dashboard#matcher", "text-denim bg-denim/10 border-denim/25",
     "Drop your GitHub username or resume; the matcher scores every archived org against the stack you actually know.",
     capIcon("M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm3.5 5.5-2 5-5 2 2-5 5-2Z"),
@@ -224,8 +229,9 @@ export default function About() {
               So we built the index we kept wishing for: {REPOS.length} repositories across{" "}
               {CATEGORIES.length} shelves published by {ORGS.length} curated organizations, the{" "}
               {PROGRAMS.length} mentored programs those orgs join every year, {fmt(6600)}+ accepted
-              program projects from 2022 to 2026, {RESOURCES.length} vetted learning resources and{" "}
-              {HACKS.length} hackathons with full prep plans - each with the boring-but-decisive
+              program projects from 2022 to 2026, {RESOURCES.length} vetted learning resources,{" "}
+              {HACKS.length} hackathons with full prep plans and {TOOLS_TOTAL} artifacts with live
+              demos and tuned AI prompts - each with the boring-but-decisive
               facts: stars, forks, open issues, language, license and last push.
             </p>
             <p>
@@ -297,6 +303,7 @@ export default function About() {
               [String(PROGRAMS.length), "mentorship programs tracked"],
               [String(HACKS.length), "hackathons with prep plans"],
               [String(RESOURCES.length), "learning resources vetted"],
+              [String(TOOLS_TOTAL), "artifacts with live demos"],
               ["2026-10-02", "current snapshot date"],
             ].map(([v, l]) => (
               <div key={l} className="flex items-baseline justify-between gap-3 py-2.5 border-b border-liness last:border-0">

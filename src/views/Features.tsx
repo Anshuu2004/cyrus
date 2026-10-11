@@ -27,6 +27,7 @@ const D: Record<string, string> = {
   calendar: "M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z",
   layers: "M12 3 3 8l9 5 9-5-9-5ZM3 16l9 5 9-5M3 12l9 5 9-5",
   flag: "M5 21V4m0 0 6 2 8-2v9l-8 2-6-2",
+  gem: "M6 3h12l4 6-10 12L2 9Zm-4 6h20M9 3 6.5 9 12 21m3-18 2.5 6L12 21",
 };
 
 /* ── section 2: numbered workflow (image 1) ── */
@@ -238,12 +239,13 @@ const SHELVES: [string, string, string, string, string][] = [
   ["Hackathon plans", "/hackathons", "flag", "brick", "Timelines, prizes, ideas and prep plans for every tracked event."],
   ["Project archive", "/opensource", "layers", "leaf", "6,600+ accepted program projects, filterable by year, stack and difficulty."],
   ["Learning resources", "/resources", "check", "honey", "58 company-grade courses and docs, each with an in-site breakdown."],
+  ["Artifacts", "/tools", "gem", "brick", "135 design and build tricks in plain English - live demos, copy-paste code and prompts tuned to your exact values."],
   ["Nova AI", "/platform/nova", "spark", "plum", "Ask your saved stack a question and get the next move, not a lecture."],
 ];
 function Shelves() {
   return (
     <section className={`${W} mt-[54px]`}>
-      <CenterHead pill="What's on the platform" h2={<>Six shelves. <Word>One keystroke.</Word></>} />
+      <CenterHead pill="What's on the platform" h2={<>Seven shelves. <Word>One keystroke.</Word></>} />
       <div className="grid grid-cols-3 gap-5 mt-11 max-[1020px]:grid-cols-2 max-[640px]:grid-cols-1">
         {SHELVES.map(([b, to, d, tone, p]) => (
           <Link key={b} to={to} className="group bg-card border border-line rounded-[20px] p-6 shadow-soft hover:-translate-y-1 hover:border-ember hover:shadow-lift transition-all">

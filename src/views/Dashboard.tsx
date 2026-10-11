@@ -12,6 +12,7 @@ import { useStore } from "../lib/store";
 import { useStored } from "../lib/util";
 import { googleConfigured, promptGoogle } from "../lib/google";
 import { Avatar, btn, Chip, OrgImg, Word } from "../components/ui";
+import { toolById, toolPath, TOOLS_TOTAL } from "../lib/tools/data";
 
 const W = "max-w-[1240px] mx-auto px-6";
 
@@ -34,6 +35,7 @@ const D = {
   plus: "M12 5v14M5 12h14",
   x: "M6.5 6.5l11 11M17.5 6.5l-11 11",
   bookmark: "M7 4h10a1 1 0 0 1 1 1v15l-6-3.6L6 20V5a1 1 0 0 1 1-1z",
+  gem: "M6 3h12l4 6-10 12L2 9Zm-4 6h20M9 3 6.5 9 12 21m3-18 2.5 6L12 21",
 };
 const IC_STAR = <Ic d={D.star} filled />;
 const IC_STAR_SM = <Ic d={D.star} size={14} filled />;
@@ -120,6 +122,10 @@ export default function Dashboard() {
   /* org compare picker */
   const [cmpQ, setCmpQ] = useState("");
   const [cmpIds, setCmpIds] = useStored<string[]>("cyrus.compare", []);
+
+  /* artifact favourites - same localStorage key the Artifacts pages write */
+  const [favIds] = useStored<string[]>("agenthub.tools.favs", []);
+  const favTools = useMemo(() => favIds.map(toolById).filter((t): t is NonNullable<typeof t> => Boolean(t)).slice(0, 6), [favIds]);
 
   /* program archive, same runtime JSON the Projects page streams */
   const [archive, setArchive] = useState<ARow[]>([]);
@@ -308,6 +314,7 @@ export default function Dashboard() {
     [watch.length >= 1, "Put one org on the watchlist", "#watchlist"],
     [prof.done, "Run the personalised org matcher", "#matcher"],
     [cmpIds.length >= 2, "Compare two organizations", "#compare"],
+    [favTools.length >= 1, "Save an artifact and tune its demo", "/tools"],
   ];
   const stepsDone = steps.filter(([on]) => on).length;
 
@@ -343,6 +350,7 @@ export default function Dashboard() {
     [IC_EYE, "Watchlist", "#watchlist", String(watch.length)],
     [IC_USER, "Mentor finder", "#mentors", String(mentors.length)],
     [IC_SCALE, "Compare orgs", "#compare", String(cmpOrgs.length)],
+    [<Ic key="m" d={D.gem} size={15} />, "Artifact favourites", "#artifacts", String(favTools.length)],
     [IC_FLAG, "Deadlines ahead", "#deadlines", String(due.length)],
     [<Ic key="p" d={D.pulse} size={15} />, "Activity", "#activity", ""],
   ];
@@ -397,6 +405,7 @@ export default function Dashboard() {
           <Link to="/nova" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-white bg-accent/85 hover:bg-accent transition-colors"><Ic d={D.spark} size={15} /> Ask nova.ai</Link>
           <Link to="/projects" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={D.plus} size={15} /> Find something to save</Link>
           <Link to="/organizations" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={D.building} size={15} /> Pick an organization</Link>
+          <Link to="/tools" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={D.gem} size={15} /> Browse the Artifacts</Link>
         </div>
       </aside>
 
@@ -732,6 +741,32 @@ export default function Dashboard() {
               </Link>
             ))}
           </div>
+        </section>
+
+        <section id="artifacts" className="bg-card border border-line rounded-[22px] p-6 shadow-soft scroll-mt-24">
+          <h3 className="panel-h-lg mb-4 flex items-center gap-2.5">
+            <Ic d={D.gem} size={16} /> Artifact favourites
+            <span className="flex gap-2 ml-auto items-center">
+              <Link to="/tools/builder" className="text-[13px] font-medium text-dim hover:text-accent">prompt builder</Link>
+              <Link to="/tools" className="text-[13px] font-medium text-dim hover:text-accent">all {TOOLS_TOTAL}</Link>
+            </span>
+          </h3>
+          {favTools.length ? (
+            <div className="grid grid-cols-3 gap-3 max-[800px]:grid-cols-1">
+              {favTools.map((t) => (
+                <Link key={t.id} to={toolPath(t)}
+                  className="group flex flex-col gap-1.5 border border-line rounded-[16px] p-4 hover:border-ember hover:-translate-y-px transition-all">
+                  <span className="font-mono text-[9.5px] uppercase tracking-[.1em] text-dim">{t.tags.slice(0, 2).join(" · ") || t.name}</span>
+                  <b className="card-title text-[14px] leading-snug group-hover:text-rust transition-colors line-clamp-1">{t.name}</b>
+                  <span className="text-cocoa text-[12.5px] leading-[1.5] line-clamp-2">{t.summary}</span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-dim text-[14px] py-5 text-center">
+              Tap Save on any artifact and it lands here - {TOOLS_TOTAL} live demos with copy-paste code and prompts tuned to your values. <Link to="/tools" className="text-accent font-semibold hover:underline">Open Artifacts</Link>
+            </p>
+          )}
         </section>
 
         <section id="activity" className="bg-card border border-line rounded-[22px] p-6 shadow-soft scroll-mt-24">
