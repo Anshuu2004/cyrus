@@ -248,12 +248,12 @@ export default function RepoDetail() {
 
           <Panel title="Languages" count={langs ? "live from GitHub API" : "estimated from snapshot"}>
             <div className="flex h-2.5 rounded-full overflow-hidden gap-[2px] mb-3.5">
-              {langArr.map(([l, v]) => <i key={l} className="block h-full grow-x" style={{ flex: v, background: LANG_COLORS[l] ?? "#a09282" }} />)}
+              {langArr.map(([l, v]) => <i key={l} className="block h-full grow-x" style={{ flex: v, background: LANG_COLORS[l] ?? "#9d87a6" }} />)}
             </div>
             <ul className="flex flex-wrap gap-x-[18px] gap-y-2 list-none">
               {langArr.map(([l, v]) => (
                 <li key={l} className="text-[12.5px] text-cocoa flex items-center gap-1.5">
-                  <i className="w-[9px] h-[9px] rounded-full not-italic" style={{ background: LANG_COLORS[l] ?? "#a09282" }} />
+                  <i className="w-[9px] h-[9px] rounded-full not-italic" style={{ background: LANG_COLORS[l] ?? "#9d87a6" }} />
                   {l} <b className="font-mono text-[11px] text-ink">{((v / langTotal) * 100).toFixed(1)}%</b>
                 </li>
               ))}
@@ -284,7 +284,7 @@ export default function RepoDetail() {
                   <p className="text-[11.5px] text-cocoa leading-[1.5] line-clamp-2">{r.desc}</p>
                   <div className="flex items-center gap-3 mt-2 font-mono text-[10.5px] text-dim">
                     <span className="text-honey font-bold">★ {fmt(r.stars)}</span>
-                    <span className="inline-flex items-center gap-1"><i className="w-2 h-2 rounded-full not-italic" style={{ background: LANG_COLORS[r.lang] ?? "#a09282" }} />{r.lang}</span>
+                    <span className="inline-flex items-center gap-1"><i className="w-2 h-2 rounded-full not-italic" style={{ background: LANG_COLORS[r.lang] ?? "#9d87a6" }} />{r.lang}</span>
                   </div>
                 </Link>
               ))}

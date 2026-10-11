@@ -137,7 +137,7 @@ export default function Organizations() {
     (!q.trim() || (o.login + " " + o.name + " " + o.tagline + " " + o.tags.join(" ")).toLowerCase().includes(q.trim().toLowerCase()))
   ).sort(byStars), [q, level, tag]);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180,96,44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(178, 58, 114,.12)]";
 
   return (
     <>

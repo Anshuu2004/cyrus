@@ -11,7 +11,7 @@ export const PROGRAMS: Program[] = [
     orgs: "900+ orgs", slots: "~3,800 students",
     phases: [
       { label: "Org applications", s: 0, e: 1.6, c: "#3b6ea5" },
-      { label: "Student applications", s: 2.1, e: 3.8, c: "#b4602c" },
+      { label: "Student applications", s: 2.1, e: 3.8, c: "#b23a72" },
       { label: "Community bonding", s: 3.8, e: 4.6, c: "#7a5aa8" },
       { label: "Coding period", s: 4.6, e: 8.2, c: "#3e7d4f" },
     ],
@@ -25,7 +25,7 @@ export const PROGRAMS: Program[] = [
     orgs: "150+ communities", slots: "~120 interns",
     phases: [
       { label: "Outreach period", s: 10.2, e: 11.2, c: "#3b6ea5" },
-      { label: "Applications", s: 1.6, e: 3.1, c: "#b4602c" },
+      { label: "Applications", s: 1.6, e: 3.1, c: "#b23a72" },
       { label: "Internship (May cohort)", s: 4, e: 8, c: "#3e7d4f" },
       { label: "Internship (Dec cohort)", s: 11, e: 12, c: "#7a5aa8" },
     ],
@@ -78,7 +78,7 @@ export const PROGRAMS: Program[] = [
     orgs: "200+ projects", slots: "Open to all",
     phases: [
       { label: "Registration", s: 6.3, e: 7.4, c: "#3b6ea5" },
-      { label: "Contribution period", s: 7.4, e: 10.6, c: "#b4602c", active: true },
+      { label: "Contribution period", s: 7.4, e: 10.6, c: "#b23a72", active: true },
       { label: "Evaluation", s: 10.6, e: 11.2, c: "#a97b1f" },
     ],
   },
@@ -91,7 +91,7 @@ export const PROGRAMS: Program[] = [
     orgs: "KDE ecosystem", slots: "Global",
     phases: [
       { label: "Ideas list", s: 9.4, e: 10.6, c: "#3b6ea5" },
-      { label: "Registration", s: 11, e: 12, c: "#b4602c" },
+      { label: "Registration", s: 11, e: 12, c: "#b23a72" },
       { label: "Mentoring", s: 0, e: 2.9, c: "#3e7d4f" },
     ],
   },
