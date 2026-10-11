@@ -1,5 +1,8 @@
 "use client"
-/* ══ Nav.tsx — floating pill header + clean circle theme toggle + user menu + drawer ═ */
+/* ══ Nav.tsx — floating pill header + clean circle theme toggle + user menu
+   No hamburger anywhere: desktop (lg+) keeps the tightened single row;
+   phone/tablet show every link as wrapped pills on a second row inside
+   the same card, and Platform expands inline in that row.             ═ */
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "@/lib/router";
 import { Logo, Brand, Avatar, btn } from "./ui";
@@ -25,16 +28,21 @@ const PLAT: [string, string, string, string, string][] = [
   ["how", "How it works", "Three steps from empty tabs to merged PR.", "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3.5 2", "honey"],
 ];
 
+/* pill size bases - desktop is tightened so all 9 items fit from 1024px up */
+const PILL = "px-3 py-[7px] rounded-full text-[12.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer";
+const MPILL = "px-2.5 py-1.5 rounded-full text-[12px] font-semibold whitespace-nowrap transition-colors cursor-pointer";
+const pillCls = (on: boolean) => on ? "bg-coffee text-foam" : "text-cocoa hover:bg-card hover:text-ink";
+
 export default function Nav() {
   const { user, signOut, saved, savedOrgs } = useStore();
   const [pop, setPop] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [platOpen, setPlatOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const loc = useLocation();
 
-  useEffect(() => { setPop(false); setOpen(false); }, [loc.pathname]);
+  useEffect(() => { setPop(false); setPlatOpen(false); }, [loc.pathname]);
   useEffect(() => {
-    const close = () => setPop(false);
+    const close = () => { setPop(false); setPlatOpen(false); };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
@@ -45,25 +53,18 @@ export default function Nav() {
   return (
     <nav className="sticky top-0 z-[60] bg-paper px-4 pt-3 max-[700px]:px-2.5">
       <div className="max-w-[1340px] mx-auto bg-paper/92 backdrop-blur-[16px] saturate-[1.35] border border-liness rounded-full shadow-soft">
-        <div className="flex items-center gap-5 h-[62px] pl-4 pr-4 max-[700px]:gap-2.5 max-[700px]:pl-2.5 max-[700px]:pr-2.5">
+        <div className="flex items-center gap-5 h-[62px] pl-4 pr-4 max-[1023px]:h-[54px] max-[700px]:gap-2.5 max-[700px]:pl-2.5 max-[700px]:pr-2.5">
           <Link to="/" className="flex items-center gap-2.5 shrink-0 max-[700px]:gap-2"><Logo size={34} /><Brand /></Link>
-          <button className="hidden max-[1179px]:grid place-items-center w-9 h-9 rounded-[10px] border border-line bg-card ml-1 text-ink"
-            aria-label="Menu" onClick={() => setOpen(!open)}>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-          </button>
-
-          {/* our pill-link style, laid out on the reference bar's rhythm -
-              below lg the row collapses into the drawer card so nothing
-              ever overflows the viewport */}
-          <div className={`gap-1.5 overflow-x-auto no-scrollbar flex-col ${open ? "flex absolute left-4 right-4 top-[76px] bg-card border border-line rounded-[22px] shadow-lift z-50 px-5 py-4" : "hidden"} lg:!flex lg:static lg:overflow-visible lg:bg-transparent lg:border-0 lg:shadow-none lg:p-0 lg:flex-row lg:rounded-full`}>
+          {/* desktop strip: single tightened row, lg+ only */}
+          <div className="hidden lg:flex items-center gap-1 min-w-0">
             {LINKS.slice(0, -1).map((l) => (
               <NavLink key={l.to} to={l.to} end={l.to === "/"}
-                className={`px-3.5 py-2 rounded-full text-[13.5px] font-semibold whitespace-nowrap transition-colors ${active(l.to) ? "bg-coffee text-foam" : "text-cocoa hover:bg-card hover:text-ink"}`}>
+                className={`${PILL} ${pillCls(active(l.to))}`}>
                 {l.label}
               </NavLink>
             ))}
-            <PlatformMenu drawer={open} />
-            <NavLink to="/about" className={`px-3.5 py-2 rounded-full text-[13.5px] font-semibold whitespace-nowrap transition-colors ${active("/about") ? "bg-coffee text-foam" : "text-cocoa hover:bg-card hover:text-ink"}`}>
+            <PlatformMenu />
+            <NavLink to="/about" className={`${PILL} ${pillCls(active("/about"))}`}>
               About us
             </NavLink>
           </div>
@@ -94,6 +95,35 @@ export default function Nav() {
             )}
           </div>
         </div>
+
+        {/* phone + tablet strip: every link visible as wrapped pills;
+            Platform expands inline so nothing hides behind a button */}
+        <div className="lg:hidden flex flex-wrap items-center gap-x-1 gap-y-1.5 px-3.5 pb-3">
+          {LINKS.map((l) => (
+            <NavLink key={l.to} to={l.to} end={l.to === "/"}
+              className={`${MPILL} ${pillCls(active(l.to))}`}>
+              {l.label}
+            </NavLink>
+          ))}
+          <button onClick={(e) => { e.stopPropagation(); setPlatOpen(!platOpen); }} aria-expanded={platOpen}
+            className={`${MPILL} flex items-center gap-1.5 ${pillCls(loc.pathname.startsWith("/platform"))}`}>
+            Platform
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden
+              className={`transition-transform duration-200 ${platOpen ? "rotate-180" : ""}`}><path d="m5 9 7 7 7-7" /></svg>
+          </button>
+          {platOpen && (
+            <div className="basis-full grid grid-cols-2 gap-1 mt-1 pt-2.5 border-t border-liness max-[420px]:grid-cols-1">
+              {PLAT.map(([slug, label, desc, d]) => (
+                <Link key={slug} to={`/platform/${slug}`}
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-[12px] text-cocoa hover:bg-peach hover:text-rust transition-colors">
+                  <MenuIcon d={d} />
+                  <span className="min-w-0"><b className="block text-[12.5px] font-bold text-ink leading-tight">{label}</b>
+                  <span className="block text-[10.5px] text-dim truncate">{desc}</span></span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
@@ -104,8 +134,8 @@ export function SignInButton({ label = "Sign in", size = "md" as const, variant 
   return <button className={btn(variant, size, className)} onClick={onClick ?? (() => setAuthOpen(true))}>{label}</button>;
 }
 
-/* ── Platform dropdown: caret pill + card panel on desktop, inline list in the mobile drawer ── */
-function PlatformMenu({ drawer }: { drawer: boolean }) {
+/* ── Platform dropdown (desktop row): caret pill + card panel ── */
+function PlatformMenu() {
   const [pop, setPop] = useState(false);
   const loc = useLocation();
   useEffect(() => setPop(false), [loc.pathname]);
@@ -118,13 +148,13 @@ function PlatformMenu({ drawer }: { drawer: boolean }) {
   return (
     <div className="relative">
       <button onClick={(e) => { e.stopPropagation(); setPop(!pop); }} aria-expanded={pop}
-        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[13.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer ${on ? "bg-coffee text-foam" : "text-cocoa hover:bg-card hover:text-ink"}`}>
+        className={`${PILL} flex items-center gap-1.5 ${pillCls(on)}`}>
         Platform
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden
           className={`transition-transform duration-200 ${pop ? "rotate-180" : ""}`}><path d="m5 9 7 7 7-7" /></svg>
       </button>
       {pop && (
-        <div className="hidden lg:block absolute left-0 top-[50px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
+        <div className="absolute left-0 top-[42px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
           {PLAT.map(([slug, label, desc, d, tone]) => (
             <Link key={slug} to={`/platform/${slug}`}
               onClick={() => setPop(false)}
@@ -134,16 +164,6 @@ function PlatformMenu({ drawer }: { drawer: boolean }) {
                 <b className="block text-[13.5px] font-bold text-ink leading-tight">{label}</b>
                 <span className="block text-[11.5px] text-dim mt-0.5 truncate">{desc}</span>
               </span>
-            </Link>
-          ))}
-        </div>
-      )}
-      {drawer && (
-        <div className="lg:hidden grid gap-1 pl-1.5 pb-1">
-          {PLAT.map(([slug, label, , d]) => (
-            <Link key={slug} to={`/platform/${slug}`}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13px] font-semibold text-cocoa hover:bg-peach hover:text-rust transition-colors">
-              <MenuIcon d={d} />{label}
             </Link>
           ))}
         </div>
