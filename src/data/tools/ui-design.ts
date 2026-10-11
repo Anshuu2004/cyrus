@@ -129,7 +129,7 @@ Show the CSS and the markup, then explain in one short paragraph why the border 
       "Keep radius ≥ 12px; sharp corners read as acrylic, not glass",
       "Test in dark mode: a 55% white tint turns milky; try tinting with the scene colour instead",
     ],
-    related: ["gradient-mesh", "soft-shadow-layers", "backdrop-scenes", "modal-dialog"],
+    related: ["gradient-mesh", "soft-shadow-layers", "grain-texture", "modal-dialog"],
     learnMore: [
       { label: "MDN: backdrop-filter", url: "https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter" },
       { label: "MDN: @supports", url: "https://developer.mozilla.org/en-US/docs/Web/CSS/@supports" },
