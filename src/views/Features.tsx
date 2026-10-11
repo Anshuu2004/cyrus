@@ -3,7 +3,7 @@
    Section language borrowed from a best-in-class features page:
    numbered workflow card, feature list with floating product tile,
    "collect once, satisfy all three" program table, and a day-by-day
-   timeline - all in the Contriho coffee/honey theme.            ═ */
+   timeline - all in the cyrus.ai coffee/honey theme.            ═ */
 import { Link } from "@/lib/router";
 import { fmt } from "../lib/util";
 import { btn, Word } from "../components/ui";

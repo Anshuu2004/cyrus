@@ -2,7 +2,7 @@
 /* ══ NovaAI.tsx — /platform/nova, the marketing page for Nova.
    Sections mirror a best-in-class AI-product page: question-card
    scatter hero, hub-and-spoke capability grid, generic-AI vs Nova
-   split panel - rebuilt in the Contriho coffee/honey theme.     ═ */
+   split panel - rebuilt in the cyrus.ai coffee/honey theme.     ═ */
 import { Link } from "@/lib/router";
 import { btn, Word } from "../components/ui";
 import { W, Pill, Ico, Check, Cross, Tile, CenterHead, GridBG, Rule } from "../components/plat";
