@@ -20,6 +20,7 @@
         (plus your production origin when you host the site).
 
    No client id configured = the UI keeps its demo prompt fallback.   ═ */
+import { api, serverAuthReady } from "./api";
 
 export const GITHUB_CLIENT_ID: string | undefined =
   (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID as string | undefined)?.trim() || undefined;
@@ -72,6 +73,21 @@ export async function promptGitHub(): Promise<GithubProfile> {
     const cleanup = () => { clearInterval(timer); window.removeEventListener("message", onMsg); };
     window.addEventListener("message", onMsg);
   });
+
+  /* server-side exchange when the session backend is configured - the
+     client secret stays on the server and a real cookie is issued */
+  if (await serverAuthReady()) {
+    const srv = await api.authGithub(code, verifier);
+    if (srv?.user) {
+      return {
+        login: srv.user.login ?? "you",
+        name: srv.user.name,
+        email: srv.user.email ?? "",
+        avatar: srv.user.picture ?? "",
+      };
+    }
+    throw new Error("GitHub sign-in didn't complete on the server - try again.");
+  }
 
   const token = await exchange(code, verifier);
   const r = await fetch("https://api.github.com/user", { headers: { accept: "application/json", authorization: `Bearer ${token}` } });

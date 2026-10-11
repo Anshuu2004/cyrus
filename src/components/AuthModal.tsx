@@ -8,6 +8,7 @@ import { useStore } from "../lib/store";
 import { LANG_COLORS } from "../lib/util";
 import { googleConfigured, promptGoogle, readGoogleRedirectCredential } from "../lib/google";
 import { githubConfigured, promptGitHub } from "../lib/github";
+import { api, serverAuthReady } from "../lib/api";
 import { REPOS } from "../data/repos";
 import { RESOURCES } from "../data/resources";
 import { Logo, Word } from "./ui";
@@ -26,7 +27,7 @@ const GRID_BG: CSSProperties = {
 };
 
 export default function AuthModal() {
-  const { authOpen, setAuthOpen, signIn, toast } = useStore();
+  const { authOpen, setAuthOpen, signIn, toast, refreshSession } = useStore();
   const nav = useNavigate();
   const [tab, setTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -45,6 +46,12 @@ export default function AuthModal() {
     signIn({ name: g.name, provider: "Google", email: g.email, picture: g.picture });
     setAuthOpen(false);
     toast(`Welcome, ${g.name.split(" ")[0]} - signed in with Google.`);
+    /* hand the verified id_token to the server too, so saves sync across devices */
+    if (g.idToken) {
+      void (async () => {
+        if (await serverAuthReady()) { await api.authGoogle(g.idToken!); await refreshSession(); }
+      })();
+    }
     setTimeout(() => nav("/dashboard"), 450);
   }, []);
 
@@ -54,6 +61,8 @@ export default function AuthModal() {
     signIn({ name: who, provider, ...extras });
     setAuthOpen(false);
     toast(msg);
+    /* if a server session cookie exists (real GitHub/Google exchange), merge it now */
+    void refreshSession();
     setTimeout(() => nav("/dashboard"), 450);
   };
 

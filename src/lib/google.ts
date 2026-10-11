@@ -16,7 +16,7 @@ export const GOOGLE_CLIENT_ID: string | undefined =
 /** true when a real Google sign-in is configured; otherwise the UI keeps its demo flow */
 export const googleConfigured = () => !!GOOGLE_CLIENT_ID;
 
-export type GoogleProfile = { name: string; email: string; picture: string; sub: string };
+export type GoogleProfile = { name: string; email: string; picture: string; sub: string; idToken?: string };
 
 const NONCE_KEY = "cyrus.google.nonce";
 
@@ -92,6 +92,7 @@ export function readGoogleRedirectCredential(): GoogleProfile | null {
       email: payload.email ?? "",
       picture: payload.picture ?? "",
       sub: payload.sub ?? "",
+      idToken, // raw token for the optional server-side session
     };
   } catch {
     return null;

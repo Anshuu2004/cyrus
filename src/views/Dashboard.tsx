@@ -101,7 +101,7 @@ function Toggle({ on, flip }: { on: boolean; flip: () => void }) {
 }
 
 export default function Dashboard() {
-  const { user, signIn, setAuthOpen, saved, toggleSaved, savedOrgs, toggleSavedOrg, toast } = useStore();
+  const { user, signIn, setAuthOpen, saved, toggleSaved, savedOrgs, toggleSavedOrg, toast, serverUser } = useStore();
   const nav = useNavigate();
   const [prefs, setPrefs] = useStored("agenthub.prefs", { digest: true, windows: true, mentions: false });
   const [gBusy, setGBusy] = useState(false);
@@ -421,6 +421,12 @@ export default function Dashboard() {
               {" · "}{due.length ? `${due.length} deadline${due.length > 1 ? "s" : ""} coming up` : "no live deadlines right now"}
               {" · "}{saved.length + savedOrgs.length} saved item{saved.length + savedOrgs.length === 1 ? "" : "s"} on the board
             </p>
+            {serverUser && (
+              <span className="inline-flex items-center gap-1.5 mt-2 font-mono text-[10px] font-bold uppercase tracking-[.1em] text-leaf bg-leaf/10 border border-leaf/35 rounded-full px-2.5 py-1">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 12.5 10 18.5 20 6" /></svg>
+                synced across devices
+              </span>
+            )}
           </div>
           <div className="ml-auto flex gap-2.5 flex-wrap">
             <Link to="/hackathons" className={btn("outline", "sm")}>Hackathon calendar</Link>
