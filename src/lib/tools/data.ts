@@ -44,27 +44,43 @@ export const subPath = (catId: string, subId: string) => `/tools/${catId}/${subI
 export const isToolCategory = (id: string): id is ToolCategoryId =>
   TOOL_CATEGORIES.some((c) => c.id === id);
 
-/* ══ search: matches name, aliases, tags, summary - "frosted glass"
-   must find Glassmorphism. Score: name > alias > everything else. ══ */
+/* ══ search: matches name, aliases, id, tags, summary/description.
+   Each word in the query is scored on its own, so "frosted glass card"
+   finds both Glassmorphism (alias "frosted glass") and Feature cards.
+   Term scores add up; matching every term, or the whole phrase in the
+   name, gives a bonus so the best answer comes first. ══ */
 export interface ToolHit { tool: Tool; score: number }
+
+const termScore = (t: Tool, term: string): number => {
+  const name = t.name.toLowerCase();
+  if (name === term) return 100;
+  if (name.startsWith(term)) return 80;
+  if (name.includes(term)) return 60;
+  if (t.aliases.some((a) => a.toLowerCase().includes(term))) return 55;
+  if (t.id.includes(term)) return 45;
+  if (t.tags.some((g) => g.toLowerCase().includes(term))) return 30;
+  if (t.summary.toLowerCase().includes(term) || t.description.toLowerCase().includes(term)) return 20;
+  return 0;
+};
 
 export function searchTools(query: string, limit = 24): ToolHit[] {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];
+  const terms = q.split(/\s+/).filter(Boolean);
   const hits: ToolHit[] = [];
   for (const t of ALL_TOOLS) {
     let score = 0;
-    const name = t.name.toLowerCase();
-    if (name === q) score = 100;
-    else if (name.startsWith(q)) score = 80;
-    else if (name.includes(q)) score = 60;
-    else if (t.aliases.some((a) => a.toLowerCase().includes(q))) score = 55;
-    else if (t.tags.some((g) => g.toLowerCase().includes(q))) score = 30;
-    else if (t.summary.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)) score = 20;
-    else if (t.id.includes(q)) score = 40;
-    if (score > 0) hits.push({ tool: t, score });
+    let matched = 0;
+    for (const term of terms) {
+      const s = termScore(t, term);
+      if (s > 0) { matched += 1; score += s; }
+    }
+    if (matched === 0) continue;
+    if (terms.length > 1 && t.name.toLowerCase().includes(q)) score += 120;
+    if (matched === terms.length) score += 40;
+    hits.push({ tool: t, score });
   }
-  hits.sort((a, b) => b.score - a.score || b.tool.tags.length - a.tool.tags.length);
+  hits.sort((a, b) => b.score - a.score || a.tool.name.localeCompare(b.tool.name));
   return hits.slice(0, limit);
 }
 
