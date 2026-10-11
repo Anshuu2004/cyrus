@@ -47,8 +47,8 @@ function Hero() {
           </div>
           <div className="flex items-center gap-2 mt-3.5 flex-wrap reveal" style={{ animationDelay: ".78s" }}>
             <span className="font-mono text-[10.5px] tracking-[.12em] uppercase text-dim">Try:</span>
-            {[["mcp", "MCP servers"], ["skills", "agent skills"], ["cursor", "cursor rules"], ["agents", "dev agents"]].map(([k, l]) => (
-              <Link key={k} to={`/projects?q=${k}`} className="text-[12.5px] font-semibold text-cocoa bg-card border border-line rounded-full px-3.5 py-[5px] hover:border-accent hover:text-rust hover:-translate-y-px transition-all">{l}</Link>
+            {[["Open source", "/opensource"], ["Agent skills", "/projects?q=skills"], ["Artifacts", "/tools"], ["Projects", "/projects"]].map(([l, to]) => (
+              <Link key={l} to={to} className="text-[12.5px] font-semibold text-cocoa bg-card border border-line rounded-full px-3.5 py-[5px] hover:border-accent hover:text-rust hover:-translate-y-px transition-all">{l}</Link>
             ))}
           </div>
           <div className="flex gap-x-6 gap-y-3.5 mt-8 flex-wrap items-center reveal" style={{ animationDelay: ".9s" }}>

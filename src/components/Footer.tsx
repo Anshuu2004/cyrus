@@ -4,7 +4,7 @@ import { Link } from "@/lib/router";
 import { Logo, Brand } from "./ui";
 
 const COLS: [string, [string, string][]][] = [
-  ["Explore", [["Organizations", "/organizations"], ["Agent skills", "/projects"], ["Hackathons", "/hackathons"], ["Resources", "/resources"]]],
+  ["Explore", [["Organizations", "/organizations"], ["Agent skills", "/projects"], ["Artifacts", "/tools"], ["Hackathons", "/hackathons"], ["Resources", "/resources"]]],
   ["Platform", [["Features", "/platform/features"], ["Nova AI", "/platform/nova"], ["Trust centre", "/platform/trust"], ["How it works", "/platform/how"]]],
   ["Your space", [["Dashboard", "/dashboard"], ["Saved projects", "/dashboard"], ["Activity", "/dashboard"]]],
   ["About", [["About us", "/about"], ["Data & methodology", "/about#data"], ["FAQ", "/about#faq"]]],
