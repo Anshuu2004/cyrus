@@ -8,9 +8,9 @@ import type { Level } from "../lib/types";
 export function Logo({ size = 30 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true">
-      <rect width="100" height="100" rx="27" fill="#241b13" />
-      <path d="M68 34a21.5 21.5 0 1 0 .9 32" fill="none" stroke="#f5eee3" strokeWidth="11" strokeLinecap="round" />
-      <path d="M76 22c1.6 8.4 5.2 12 13.5 13.6C81.2 37.2 77.6 40.8 76 49.2 74.4 40.8 70.8 37.2 62.4 35.6 70.8 34 74.4 30.4 76 22z" fill="#d98546" />
+      <rect width="100" height="100" rx="27" fill="#2a1e24" />
+      <path d="M68 34a21.5 21.5 0 1 0 .9 32" fill="none" stroke="#f7edf0" strokeWidth="11" strokeLinecap="round" />
+      <path d="M76 22c1.6 8.4 5.2 12 13.5 13.6C81.2 37.2 77.6 40.8 76 49.2 74.4 40.8 70.8 37.2 62.4 35.6 70.8 34 74.4 30.4 76 22z" fill="#e8758f" />
     </svg>
   );
 }
@@ -42,7 +42,7 @@ const BTN_SIZES: Record<string, string> = {
   sm: "px-3.5 py-1.5 text-[12.5px]", md: "px-5 py-2.5 text-[14px]", lg: "px-7 py-3.5 text-[15.5px]",
 };
 export const BTN_VARIANTS: Record<string, string> = {
-  primary: "bg-accent text-white border border-accent shadow-[0_10px_26px_-10px_rgba(180,96,44,.55)] hover:bg-accentd",
+  primary: "bg-accent text-white border border-accent shadow-[0_10px_26px_-10px_rgba(193,77,108,.55)] hover:bg-accentd",
   dark: "bg-coffee text-foam border border-coffee hover:bg-bean hover:border-roast",
   outline: "bg-card border border-line text-ink shadow-soft hover:border-accent hover:-translate-y-px",
   ghost: "text-cocoa hover:text-ink hover:bg-card border border-transparent hover:border-line",

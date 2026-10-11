@@ -1,47 +1,48 @@
 /* ═══════════════════════════════════════════════════════════
-   cyrus.ai — Tailwind v4 theme (warm coffee-and-honey system)
-   paper/sand/cream surfaces · espresso ink · terracotta accent
-   dark coffee islands · Plus Jakarta Sans / Inter / JetBrains Mono
+   cyrus.ai — Tailwind v4 theme (rose-sunrise system)
+   blush paper/sand/cream surfaces · plum ink · rose accent
+   dark plum islands · Plus Jakarta Sans / Inter / JetBrains Mono
+   preview branch - restore with: git checkout next-migration
    ═══════════════════════════════════════════════════════════ */
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f5efe7;
-  --color-sand: #ede4d6;
-  --color-cream: #fbf7f1;
+  --color-paper: #faf6f4;
+  --color-sand: #f3eae7;
+  --color-cream: #fdfaf8;
   --color-card: #ffffff;
-  --color-clay: #f1e9dd;
-  --color-line: #e7dccd;
-  --color-liness: #efe7da;
-  --color-rule: #c9b494;
-  --color-ink: #241b13;
-  --color-cocoa: #6e6153;
-  --color-dim: #a09282;
-  --color-accent: #b4602c;
-  --color-accentd: #a55728;
-  --color-ember: #d98546;
-  --color-peach: #f7e5d4;
-  --color-rust: #8a4a22;
+  --color-clay: #f2e4df;
+  --color-line: #eadbd5;
+  --color-liness: #f0e3dc;
+  --color-rule: #d3a9a0;
+  --color-ink: #2a1e24;
+  --color-cocoa: #6e5a5f;
+  --color-dim: #a08c90;
+  --color-accent: #c14d6c;
+  --color-accentd: #a93e5a;
+  --color-ember: #e8758f;
+  --color-peach: #f9e3e8;
+  --color-rust: #963650;
   --color-leaf: #3e7d4f;
   --color-denim: #3b6ea5;
   --color-plum: #7a5aa8;
   --color-brick: #b0433c;
   --color-honey: #a97b1f;
-  --color-coffee: #221a13;
-  --color-bean: #291f17;
-  --color-bark: #322619;
-  --color-roast: #46372a;
-  --color-foam: #f5eee3;
-  --color-steam: #b5a28c;
-  --color-dimdk: #7d6c5a;
+  --color-coffee: #241419;
+  --color-bean: #2b181e;
+  --color-bark: #341e26;
+  --color-roast: #4a2c36;
+  --color-foam: #f7edf0;
+  --color-steam: #c29aa4;
+  --color-dimdk: #8a6470;
 
   --font-display: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
   --font-sans: "Inter", -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --shadow-soft: 0 4px 16px -6px rgba(58, 40, 22, 0.1);
-  --shadow-lift: 0 16px 44px -16px rgba(58, 40, 22, 0.22);
-  --shadow-dark: 0 26px 60px -24px rgba(34, 26, 19, 0.55);
+  --shadow-soft: 0 4px 16px -6px rgba(74, 28, 44, 0.1);
+  --shadow-lift: 0 16px 44px -16px rgba(74, 28, 44, 0.22);
+  --shadow-dark: 0 26px 60px -24px rgba(36, 20, 25, 0.55);
 
   --ease-silk: cubic-bezier(0.22, 0.8, 0.36, 1);
 
@@ -66,22 +67,22 @@
    Utilities compile to var(--color-x), so overriding the custom
    properties under .dark flips the whole site in one cascade. */
 .dark {
-  --color-paper: #100c08;
-  --color-sand: #17120c;
-  --color-cream: #1d1710;
-  --color-card: #16110b;
-  --color-clay: #2a2218;
-  --color-line: #2e2619;
-  --color-liness: #241d14;
-  --color-rule: #57472f;
-  --color-ink: #f5eee3;
-  --color-cocoa: #bdae99;
-  --color-dim: #857461;
-  --color-accent: #dd8a4e;
-  --color-accentd: #e89b60;
-  --color-ember: #e59a5f;
-  --color-peach: #33230f;
-  --color-rust: #f0a878;
+  --color-paper: #140b10;
+  --color-sand: #1a0e14;
+  --color-cream: #211219;
+  --color-card: #190f14;
+  --color-clay: #2c1a22;
+  --color-line: #33202a;
+  --color-liness: #261721;
+  --color-rule: #5e3a47;
+  --color-ink: #f7edf0;
+  --color-cocoa: #c7afb7;
+  --color-dim: #96767f;
+  --color-accent: #e5788f;
+  --color-accentd: #ef8ea1;
+  --color-ember: #e5788f;
+  --color-peach: #2c161f;
+  --color-rust: #f2a8bc;
   --color-leaf: #57b06e;
   --color-denim: #6ba3d6;
   --color-plum: #a98fd6;
@@ -89,23 +90,23 @@
   --color-honey: #e0b64a;
 }
 .dark body { background: var(--color-paper); }
-.dark ::selection { background: rgba(221, 138, 78, 0.3); }
+.dark ::selection { background: rgba(229, 120, 143, 0.3); }
 .dark .hero-glow {
   background:
-    radial-gradient(640px 380px at 12% 0%, rgba(221, 138, 78, 0.14), transparent 70%),
-    radial-gradient(700px 420px at 88% 10%, rgba(180, 96, 44, 0.12), transparent 70%),
+    radial-gradient(640px 380px at 12% 0%, rgba(229, 120, 143, 0.14), transparent 70%),
+    radial-gradient(700px 420px at 88% 10%, rgba(193, 77, 108, 0.12), transparent 70%),
     radial-gradient(900px 480px at 50% 118%, rgba(122, 90, 168, 0.12), transparent 70%);
 }
 .dark .hero-pattern {
   background-image:
-    linear-gradient(rgba(221, 190, 150, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(221, 190, 150, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(207, 175, 183, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 175, 183, 0.05) 1px, transparent 1px);
 }
 .dark .tl-phase {
-  color: color-mix(in srgb, var(--pc) 78%, #f5eee3);
-  background: color-mix(in srgb, var(--pc) 16%, #17120c);
+  color: color-mix(in srgb, var(--pc) 78%, #f7edf0);
+  background: color-mix(in srgb, var(--pc) 16%, #1a0e14);
 }
-.dark .tl-phase.is-active { background: color-mix(in srgb, var(--pc) 26%, #17120c); }
+.dark .tl-phase.is-active { background: color-mix(in srgb, var(--pc) 26%, #1a0e14); }
 
 html { scroll-behavior: smooth; overflow-x: clip; }
 body { @apply bg-paper text-ink font-sans antialiased; overflow-x: clip; }
@@ -117,7 +118,7 @@ h1, h2 { text-wrap: balance; }
 h3, h4 { text-wrap: pretty; }
 p { text-wrap: pretty; }
 .font-display { text-rendering: optimizeLegibility; font-variant-numeric: tabular-nums; }
-::selection { background: rgba(180, 96, 44, 0.22); }
+::selection { background: rgba(193, 77, 108, 0.22); }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 6px; }
 /* text fields never get the outline box - their surrounding pill shows focus instead */
 input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
@@ -149,8 +150,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .hero-pattern {
   position: absolute; inset: 0; z-index: 0; opacity: 0.55; pointer-events: none;
   background-image:
-    linear-gradient(rgba(70, 48, 26, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(70, 48, 26, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(122, 58, 74, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 58, 74, 0.05) 1px, transparent 1px);
   background-size: 46px 46px;
   mask-image: radial-gradient(720px 430px at 76% 34%, #000, transparent 75%);
   -webkit-mask-image: radial-gradient(720px 430px at 76% 34%, #000, transparent 75%);
@@ -158,8 +159,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .hero-glow {
   position: absolute; inset: -220px 0 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(640px 380px at 12% 0%, rgba(217, 133, 70, 0.16), transparent 70%),
-    radial-gradient(700px 420px at 88% 10%, rgba(180, 96, 44, 0.12), transparent 70%),
+    radial-gradient(640px 380px at 12% 0%, rgba(232, 117, 143, 0.16), transparent 70%),
+    radial-gradient(700px 420px at 88% 10%, rgba(193, 77, 108, 0.12), transparent 70%),
     radial-gradient(900px 480px at 50% 118%, rgba(122, 90, 168, 0.07), transparent 70%);
 }
 
@@ -193,7 +194,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   position: absolute; top: 7px; bottom: 7px; border-radius: 999px;
   display: flex; align-items: center; padding: 0 12px; overflow: hidden;
   font-size: 10.5px; font-weight: 700; white-space: nowrap;
-  color: color-mix(in srgb, var(--pc) 78%, #241b13);
+  color: color-mix(in srgb, var(--pc) 78%, #2a1e24);
   background: color-mix(in srgb, var(--pc) 9%, white);
   border: 1px dashed color-mix(in srgb, var(--pc) 45%, transparent);
   transition: transform 0.18s var(--ease-silk), box-shadow 0.18s;
