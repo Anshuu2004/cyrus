@@ -11,8 +11,8 @@ export const PROGRAMS: Program[] = [
     orgs: "900+ orgs", slots: "~3,800 students",
     phases: [
       { label: "Org applications", s: 0, e: 1.6, c: "#3b6ea5" },
-      { label: "Student applications", s: 2.1, e: 3.8, c: "#2571c8" },
-      { label: "Community bonding", s: 3.8, e: 4.6, c: "#2f7d72" },
+      { label: "Student applications", s: 2.1, e: 3.8, c: "#a97b1f" },
+      { label: "Community bonding", s: 3.8, e: 4.6, c: "#4a5c6b" },
       { label: "Coding period", s: 4.6, e: 8.2, c: "#3e7d4f" },
     ],
   },
@@ -25,9 +25,9 @@ export const PROGRAMS: Program[] = [
     orgs: "150+ communities", slots: "~120 interns",
     phases: [
       { label: "Outreach period", s: 10.2, e: 11.2, c: "#3b6ea5" },
-      { label: "Applications", s: 1.6, e: 3.1, c: "#2571c8" },
+      { label: "Applications", s: 1.6, e: 3.1, c: "#a97b1f" },
       { label: "Internship (May cohort)", s: 4, e: 8, c: "#3e7d4f" },
-      { label: "Internship (Dec cohort)", s: 11, e: 12, c: "#2f7d72" },
+      { label: "Internship (Dec cohort)", s: 11, e: 12, c: "#4a5c6b" },
     ],
   },
   {
@@ -39,7 +39,7 @@ export const PROGRAMS: Program[] = [
     orgs: "100+ projects", slots: "300+ mentees",
     phases: [
       { label: "Term 1", s: 2, e: 5, c: "#3b6ea5" },
-      { label: "Term 2", s: 5, e: 8, c: "#2f7d72" },
+      { label: "Term 2", s: 5, e: 8, c: "#4a5c6b" },
       { label: "Term 3", s: 8.3, e: 11, c: "#3e7d4f", active: true },
     ],
   },
@@ -65,7 +65,7 @@ export const PROGRAMS: Program[] = [
     orgs: "30+ partner orgs", slots: "Small cohorts",
     phases: [
       { label: "Spring batch", s: 2.5, e: 5, c: "#3b6ea5" },
-      { label: "Summer batch", s: 5.3, e: 7.8, c: "#2f7d72" },
+      { label: "Summer batch", s: 5.3, e: 7.8, c: "#4a5c6b" },
       { label: "Fall batch", s: 8.2, e: 10.8, c: "#3e7d4f", active: true },
     ],
   },
@@ -78,7 +78,7 @@ export const PROGRAMS: Program[] = [
     orgs: "200+ projects", slots: "Open to all",
     phases: [
       { label: "Registration", s: 6.3, e: 7.4, c: "#3b6ea5" },
-      { label: "Contribution period", s: 7.4, e: 10.6, c: "#2571c8", active: true },
+      { label: "Contribution period", s: 7.4, e: 10.6, c: "#a97b1f", active: true },
       { label: "Evaluation", s: 10.6, e: 11.2, c: "#a97b1f" },
     ],
   },
@@ -91,7 +91,7 @@ export const PROGRAMS: Program[] = [
     orgs: "KDE ecosystem", slots: "Global",
     phases: [
       { label: "Ideas list", s: 9.4, e: 10.6, c: "#3b6ea5" },
-      { label: "Registration", s: 11, e: 12, c: "#2571c8" },
+      { label: "Registration", s: 11, e: 12, c: "#a97b1f" },
       { label: "Mentoring", s: 0, e: 2.9, c: "#3e7d4f" },
     ],
   },
@@ -119,7 +119,7 @@ export const PROGRAMS: Program[] = [
       { label: "Registrations", s: 1.5, e: 2.5, c: "#3b6ea5" },
       { label: "Project selection", s: 2.5, e: 3.2, c: "#a97b1f" },
       { label: "Contribution window", s: 3.2, e: 4.7, c: "#3e7d4f" },
-      { label: "Evaluation", s: 4.7, e: 5.2, c: "#2f7d72" },
+      { label: "Evaluation", s: 4.7, e: 5.2, c: "#4a5c6b" },
     ],
   },
   {
@@ -130,7 +130,7 @@ export const PROGRAMS: Program[] = [
     status: "live", window: "All of October · you are here",
     orgs: "All of GitHub", slots: "Millions",
     phases: [
-      { label: "Prep & first-timer issues", s: 8.3, e: 9, c: "#2f7d72" },
+      { label: "Prep & first-timer issues", s: 8.3, e: 9, c: "#4a5c6b" },
       { label: "Hacktoberfest", s: 9, e: 10, c: "#3e7d4f", active: true },
     ],
   },

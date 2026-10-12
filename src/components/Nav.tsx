@@ -206,22 +206,22 @@ export function ThemeToggle() {
       title={dark ? "Switch to light theme" : "Switch to dark theme"}
       className="group relative w-[68px] h-[34px] rounded-full cursor-pointer shrink-0 border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       style={{
-        borderColor: dark ? "#24374f" : "#dddad3",
-        background: dark ? "#122038" : "#eceae4",
-        boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(120, 138, 160,.18)",
+        borderColor: dark ? "#1f3325" : "#dddad3",
+        background: dark ? "#101c12" : "#eceae4",
+        boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(122, 142, 122,.18)",
       }}>
       {/* idle icon resting on the track (opposite side from the knob) */}
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ right: "9px", opacity: dark ? 0 : 1 }}>
-        {MOON("#939dab")}
+        {MOON("#98a199")}
       </svg>
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ left: "9px", opacity: dark ? 1 : 0 }}>
-        {SUN("#7fb4e6")}
+        {SUN("#63c292")}
       </svg>
       {/* knob: a clean white circle carrying the active glyph */}
       <span aria-hidden className="absolute top-[3px] left-[3px] w-[26px] h-[26px] rounded-full bg-white grid place-items-center transition-transform duration-400 ease-[cubic-bezier(.55,1.6,.45,1)] group-hover:scale-[1.06]"
-        style={{ boxShadow: "0 2px 6px rgba(26, 39, 62,.22), 0 0 0 1px rgba(26, 39, 62,.04)", transform: dark ? "translateX(34px)" : "none" }}>
+        style={{ boxShadow: "0 2px 6px rgba(21, 36, 27,.22), 0 0 0 1px rgba(21, 36, 27,.04)", transform: dark ? "translateX(34px)" : "none" }}>
         <svg width="19" height="19" viewBox="0 0 24 24" style={{ opacity: dark ? 0 : 1, position: "absolute", transition: "opacity .3s" }}>
           <circle cx="12" cy="12" r="4.8" fill="#f0913a" />
           <g stroke="#f0913a" strokeWidth="1.7" strokeLinecap="round">
