@@ -529,6 +529,28 @@ const PALETTES: Palette[] = [
       dimdk: ["#928d84", "#928d84"],
     },
   },
+  {
+    id: "night",
+    name: "Violet Night",
+    note: "Midnight purple blacks, electric violet spark, lavender dawn light mode",
+    t: {
+      paper: ["#f4f2f8", "#0a0714"], sand: ["#ebe7f3", "#120e1f"],
+      cream: ["#faf8fd", "#191428"], card: ["#ffffff", "#141022"],
+      clay: ["#e8e4f1", "#1e182f"], line: ["#d8d2e4", "#2d2545"],
+      liness: ["#e2dced", "#241d3a"], rule: ["#c2bad4", "#4a3f6b"],
+      ink: ["#1f1a2e", "#f0ecfa"], cocoa: ["#615a75", "#beb4d8"],
+      dim: ["#9c95ac", "#8a80a3"], accent: ["#6d3fd4", "#9d7cf5"],
+      accentd: ["#5730ad", "#b79bff"], ember: ["#8f6fe0", "#a88ef2"],
+      peach: ["#ece4fb", "#241a3d"], rust: ["#5730ad", "#b79bff"],
+      leaf: ["#3e7d4f", "#57b06e"], denim: ["#4f6693", "#8fa6d6"],
+      plum: ["#675f80", "#b0a6cc"], brick: ["#b0433c", "#d9695f"],
+      honey: ["#a97b1f", "#e0b64a"],
+      coffee: ["#120c22", "#120c22"], bean: ["#19112e", "#19112e"],
+      bark: ["#221740", "#221740"], roast: ["#342560", "#342560"],
+      foam: ["#f0ecfa", "#f0ecfa"], steam: ["#b3a8d4", "#b3a8d4"],
+      dimdk: ["#8d82b0", "#8d82b0"],
+    },
+  },
 ];
 
 function applyPalette(id: string) {
