@@ -281,7 +281,7 @@ drizzle/                      SQL migrations for the Neon schema
 
 ## ☁️ Deploy on Vercel
 
-The repo is a plain Next.js 16 app - no `vercel.json` needed, Vercel detects the framework on import:
+A `vercel.json` pins the Next.js preset, so importing the repo is all it takes:
 
 1. [vercel.com/new](https://vercel.com/new) - import `cyrus-ai` - Deploy.
 2. Retype the env vars from `.env.example` in Project Settings (Production + Preview). Never upload your `.env` file. Public client ids are safe; `SESSION_SECRET`, `GITHUB_CLIENT_SECRET`, `DATABASE_URL` and `RESEND_API_KEY` belong only here.
@@ -301,7 +301,7 @@ The repo is a plain Next.js 16 app - no `vercel.json` needed, Vercel detects the
 | Database | Neon Postgres + Drizzle (optional) | sessions, saved items, submissions; graceful 503 without env |
 | Tests | Vitest + Playwright | unit/data-integrity suites plus an e2e smoke pass |
 | Charts | hand-rolled SVG | catalog charts, program stats, sparklines - no chart lib |
-| Hosting | Vercel | framework auto-detected, no config file |
+| Hosting | Vercel | `vercel.json` pins the Next.js preset |
 
 ## 🤝 Contribute & support
 
