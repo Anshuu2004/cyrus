@@ -1,6 +1,7 @@
 /* ══ layout.tsx — root server layout: metadata, fonts, shell ═══════════ */
 import type { Metadata, Viewport } from "next";
 import Shell from "@/components/Shell";
+import PaletteLab from "@/components/PaletteLab";
 import "./globals.css";
 
 const SITE = "https://cyrus-agent.vercel.app";
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Shell>{children}</Shell>
+        <PaletteLab />
       </body>
     </html>
   );
