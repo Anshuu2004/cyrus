@@ -96,7 +96,7 @@ function HackathonShelf() {
 /* ── developer programs shelf (restored, next to hackathons) ─ */
 const PSTATUS: Record<Program["status"], [string, string]> = {
   live: ["● Live now", "bg-[rgba(97,207,138,.16)] text-[#7ee2a8] border-[rgba(126,226,168,.4)]"],
-  upcoming: ["Upcoming", "bg-[rgba(255,209,102,.14)] text-[#ffd166] border-[rgba(255,209,102,.38)]"],
+  upcoming: ["Upcoming", "bg-white/10 text-foam border-white/20"],
   closed: ["Closed", "bg-white/8 text-steam border-white/14"],
 };
 
@@ -113,11 +113,11 @@ function ProgCard({ p }: { p: Program }) {
         <span className={`font-mono text-[9.5px] font-bold tracking-[.1em] uppercase px-3 py-[5px] rounded-full border backdrop-blur-sm ${PSTATUS[p.status][1]}`}>{PSTATUS[p.status][0]}</span>
       </div>
       <div className="mt-auto p-5 flex flex-col gap-2.5">
-        <span className="font-mono text-[10.5px] tracking-[.1em] uppercase text-ember">{p.owner} · {p.window}</span>
+        <span className="font-mono text-[10.5px] tracking-[.1em] uppercase text-foam/70">{p.owner} · {p.window}</span>
         <h3 className="card-title-xl text-white">{p.name}</h3>
         <p className="text-foam/75 text-[13.5px] leading-[1.6]">{p.tag}</p>
         <div className="flex items-center justify-between gap-2.5 mt-1.5">
-          <span className="font-mono text-[13px] font-bold text-[#eab261]">{p.pay}
+          <span className="font-mono text-[13px] font-bold text-white">{p.pay}
             <small className="block text-[9.5px] font-medium text-foam/55 tracking-[.08em] uppercase">{p.payNote}</small></span>
           <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] w-max transition-colors group-hover:bg-accent group-hover:border-accent">Explore</span>
         </div>

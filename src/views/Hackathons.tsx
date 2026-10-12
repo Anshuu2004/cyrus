@@ -40,11 +40,10 @@ export const REGISTER: Record<string, string> = {
 
 const daysTo = (iso: string) => Math.ceil((+new Date(iso) - +new Date("2026-10-03")) / 864e5);
 
-/* cover artwork: plain dark warm gradients - no motifs, no text on the
-   background. Each event gets a deterministic gradient direction plus one
-   soft glow in its own brand color, nothing else. */
+/* cover artwork: plain dark gradients with one soft white glow - no brand
+   colour, no motifs, no text on the background. Each event keeps only a
+   deterministic gradient direction. */
 function HackCover({ h, className = "" }: { h: Hack; className?: string }) {
-  const c = h.color;
   const seed = hash(h.id);
   const dir = seed % 4;
   const glow = [{ x: "22%", y: "16%" }, { x: "80%", y: "18%" }, { x: "50%", y: "84%" }, { x: "12%", y: "72%" }][dir];
@@ -55,7 +54,7 @@ function HackCover({ h, className = "" }: { h: Hack; className?: string }) {
           <stop offset="0" stopColor="#0a161b" /><stop offset="1" stopColor="#0e1f26" />
         </linearGradient>
         <radialGradient id={`hr-${seed}`} cx={glow.x} cy={glow.y} r="85%">
-          <stop offset="0" stopColor={c} stopOpacity=".4" /><stop offset=".55" stopColor={c} stopOpacity=".12" /><stop offset="1" stopColor={c} stopOpacity="0" />
+          <stop offset="0" stopColor="#ffffff" stopOpacity=".2" /><stop offset=".55" stopColor="#ffffff" stopOpacity=".06" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" />
         </radialGradient>
       </defs>
       <rect width="220" height="180" fill={`url(#hg-${seed})`} />
@@ -112,11 +111,11 @@ export function HackCard({ h }: { h: Hack }) {
         <span className={`font-mono text-[9.5px] font-bold tracking-[.1em] uppercase px-3 py-[5px] rounded-full border ${cls}`}>{label}</span>
       </div>
       <div className="mt-auto p-5 flex flex-col gap-2.5">
-        <span className="font-mono text-[10.5px] tracking-[.1em] uppercase text-ember">{h.org}</span>
+        <span className="font-mono text-[10.5px] tracking-[.1em] uppercase text-foam/70">{h.org}</span>
         <h3 className="card-title-xl text-white">{h.name}</h3>
         <p className="text-foam/75 text-[13.5px] leading-[1.6]">{h.theme}</p>
         <div className="flex items-center justify-between gap-2.5 mt-1.5">
-          <span className="font-mono text-[13px] font-bold text-[#eab261]">{h.prize.split("+")[0]}
+          <span className="font-mono text-[13px] font-bold text-white">{h.prize.split("+")[0]}
             <small className="block text-[9.5px] font-medium text-foam/55 tracking-[.08em] uppercase">{h.status === "open" || h.status === "rolling" ? (d > 0 ? `closes in ${d} days` : "closing") : `deadline ${h.deadline.slice(0, 7)}`}</small></span>
           <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] group-hover:bg-accent group-hover:border-accent transition-colors">Prep plan</span>
         </div>
