@@ -71,7 +71,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "gssoc", name: "GSSoC'26", owner: "GirlScript",
-    img: "/assets/prog-gsoc.jpg", url: "https://gssoc.girlscript.tech",
+    img: "/assets/prog/gssoc.jpg", url: "https://gssoc.girlscript.tech",
     tag: "Three-month open-source contribution sprint, biggest women-led program in India.",
     pay: "Leaderboard prizes", payNote: "SWAG + CERTS",
     status: "live", window: "Contributions Aug – Nov",
@@ -84,7 +84,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "kde", name: "Season of KDE", owner: "kde",
-    img: "/assets/prog-lfx.jpg", url: "https://season.kde.org",
+    img: "/assets/prog/kde.png", url: "https://season.kde.org",
     tag: "Winter mentoring program for KDE - design, code, docs, and community work.",
     pay: "€300 – €1,000", payNote: "PRIZES",
     status: "upcoming", window: "Registrations open December",
@@ -97,7 +97,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "sob", name: "Summer of Bitcoin", owner: "summerofbitcoin",
-    img: "/assets/prog-lfx.jpg", url: "https://www.summerofbitcoin.org",
+    img: "/assets/prog/sob.png", url: "https://www.summerofbitcoin.org",
     tag: "Eight mentored weeks building real Bitcoin and Lightning tech, with a stipend.",
     pay: "~$2,500 USD", payNote: "PER PROJECT",
     status: "upcoming", window: "Applications open December",
@@ -110,7 +110,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "nsoc", name: "Nexus Spring of Code", owner: "Nexus-Spring-of-Code",
-    img: "/assets/prog-gsoc.jpg", url: "https://nsoc.in",
+    img: "/assets/prog/nsoc.png", url: "https://nsoc.in",
     tag: "A 45-day spring sprint where orgs hand you live repos and you ship the issues.",
     pay: "Prizes + certs", payNote: "LEADERBOARD",
     status: "upcoming", window: "Registrations open on nsoc.in",
