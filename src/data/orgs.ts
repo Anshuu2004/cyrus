@@ -4,7 +4,7 @@ import { REAL_ORGS } from "./realOrgs";
 export const PROGRAMS: Program[] = [
   {
     id: "gsoc", name: "Google Summer of Code", owner: "google",
-    img: "assets/prog-gsoc.jpg", url: "https://summerofcode.withgoogle.com",
+    img: "/assets/prog-gsoc.jpg", url: "https://summerofcode.withgoogle.com",
     tag: "Write real code for open-source orgs, mentored full-time over the summer.",
     pay: "$1,500 – $3,300", payNote: "STIPEND",
     status: "closed", window: "Applications close April",
@@ -18,7 +18,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "outreachy", name: "Outreachy", owner: "outreachy",
-    img: "/assets/hack/covers/devpost-hack-new-year-2027.jpg", url: "https://www.outreachy.org",
+    img: "/assets/prog-outreachy.jpg", url: "https://www.outreachy.org",
     tag: "Paid remote internships in open source for people from under-represented groups.",
     pay: "$8,000 USD", payNote: "PER INTERNSHIP",
     status: "upcoming", window: "Dec cohort pairing opens Nov",
@@ -32,7 +32,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "lfx", name: "LFX Mentorship", owner: "linuxfoundation",
-    img: "assets/prog-lfx.jpg", url: "https://mentorship.lfx.linuxfoundation.org",
+    img: "/assets/prog-lfx.jpg", url: "https://mentorship.lfx.linuxfoundation.org",
     tag: "Cloud & ecosystem mentored projects across Linux Foundation host projects.",
     pay: "$1,500 – $3,000", payNote: "PER TERM",
     status: "live", window: "Term 3 running now · Sep – Nov",
@@ -45,7 +45,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "esoc", name: "Eclipse SoC", owner: "eclipse-foundation",
-    img: "assets/prog-esoc.jpg", url: "https://soc.eclipse.to",
+    img: "/assets/prog-esoc.jpg", url: "https://soc.eclipse.to",
     tag: "Summer contributions to Eclipse Foundation projects with structured mentoring.",
     pay: "€500 – €1,200", payNote: "PER PROJECT",
     status: "closed", window: "Runs May – August",
@@ -58,7 +58,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "mlh", name: "MLH Fellowship", owner: "MLH",
-    img: "assets/prog-alt-roorkee.jpg", url: "https://fellowship.mlh.io",
+    img: "/assets/prog-alt-roorkee.jpg", url: "https://fellowship.mlh.io",
     tag: "A remote, batch-based alternative to internships on real open-source teams.",
     pay: "Paid tracks", payNote: "UP TO $2K/MO",
     status: "live", window: "Fall batch in session",
@@ -71,7 +71,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "gssoc", name: "GSSoC'26", owner: "GirlScript",
-    img: "assets/prog-gsoc.jpg", url: "https://gssoc.girlscript.tech",
+    img: "/assets/prog-gsoc.jpg", url: "https://gssoc.girlscript.tech",
     tag: "Three-month open-source contribution sprint, biggest women-led program in India.",
     pay: "Leaderboard prizes", payNote: "SWAG + CERTS",
     status: "live", window: "Contributions Aug – Nov",
@@ -84,7 +84,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "kde", name: "Season of KDE", owner: "kde",
-    img: "assets/prog-lfx.jpg", url: "https://season.kde.org",
+    img: "/assets/prog-lfx.jpg", url: "https://season.kde.org",
     tag: "Winter mentoring program for KDE - design, code, docs, and community work.",
     pay: "€300 – €1,000", payNote: "PRIZES",
     status: "upcoming", window: "Registrations open December",
@@ -97,7 +97,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "sob", name: "Summer of Bitcoin", owner: "summerofbitcoin",
-    img: "assets/prog-lfx.jpg", url: "https://www.summerofbitcoin.org",
+    img: "/assets/prog-lfx.jpg", url: "https://www.summerofbitcoin.org",
     tag: "Eight mentored weeks building real Bitcoin and Lightning tech, with a stipend.",
     pay: "~$2,500 USD", payNote: "PER PROJECT",
     status: "upcoming", window: "Applications open December",
@@ -110,7 +110,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "nsoc", name: "Nexus Spring of Code", owner: "Nexus-Spring-of-Code",
-    img: "assets/prog-gsoc.jpg", url: "https://nsoc.in",
+    img: "/assets/prog-gsoc.jpg", url: "https://nsoc.in",
     tag: "A 45-day spring sprint where orgs hand you live repos and you ship the issues.",
     pay: "Prizes + certs", payNote: "LEADERBOARD",
     status: "upcoming", window: "Registrations open on nsoc.in",

@@ -7,20 +7,14 @@ import { PROGRAM_META, PROGRAM_REPOS } from "../data/programRepos";
 import type { ProgramName } from "../data/programRepos";
 import { PROGRAM_DETAILS, programLink } from "../data/programDetails";
 import { byStars, fmt, avatarOf } from "../lib/util";
-import type { Program, ProgramStatus } from "../lib/types";
-import { btn, Chip, LevelChip, OrgImg, SectionHead, Tag, Word } from "../components/ui";
+import type { Program } from "../lib/types";
+import { btn, Chip, OrgImg, SectionHead, Tag, Word } from "../components/ui";
 import NotFound from "./NotFound";
 
 const W = "max-w-[1240px] mx-auto px-6";
 
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const mon = (m: number) => MON[Math.min(11, Math.max(0, Math.floor(m)) % 12)];
-
-const STATUS_CLS: Record<ProgramStatus, string> = {
-  live: "bg-leaf/15 text-[#5d8a4f] border-[#5d8a4f]/40",
-  upcoming: "bg-[#e5c07b]/20 text-[#8a6d1f] border-[#8a6d1f]/35",
-  closed: "bg-clay text-cocoa border-line",
-};
 
 /* ── 12-month phase bar ────────────────────────────────────── */
 function MonthBar({ p }: { p: Program }) {
@@ -102,32 +96,33 @@ export default function ProgramDetail() {
 
   return (
     <>
-      {/* ── head ── */}
-      <header className="border-b border-liness">
-        <div className={`${W} py-12`}>
-          <p className="font-mono text-[10.5px] tracking-[.14em] uppercase text-dim mb-5">
-            <Link to="/" className="hover:text-accent">Home</Link> / <Link to="/organizations" className="hover:text-accent">Programs</Link> / <span className="text-cocoa">{p.name}</span>
+      {/* ── cover banner ── */}
+      <header className="relative overflow-hidden bg-coffee">
+        <img src={p.img} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+        <span aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#0f1012]/55 via-[#0f1012]/75 to-[#0f1012]/95" />
+        <div className={`${W} py-14 relative z-[1]`}>
+          <p className="font-mono text-[10.5px] tracking-[.14em] uppercase text-foam/55 mb-5">
+            <Link to="/" className="hover:text-white">Home</Link> / <Link to="/organizations" className="hover:text-white">Programs</Link> / <span className="text-foam/80">{p.name}</span>
           </p>
           <div className="flex items-center gap-4 flex-wrap">
-            <span className="w-14 h-14 rounded-[15px] overflow-hidden shrink-0 bg-white border border-line shadow-soft">
+            <span className="w-14 h-14 rounded-[15px] overflow-hidden shrink-0 bg-white border border-white/25 shadow-soft">
               <OrgImg src={avatarOf(p.owner, 96)} name={p.owner} className="w-full h-full object-cover" />
             </span>
             <div className="min-w-0">
-              <p className="font-mono text-[10.5px] tracking-[.12em] uppercase text-cocoa mb-1.5">
-                Organized by <b className="text-accent">{p.owner}</b>
+              <p className="font-mono text-[10.5px] tracking-[.12em] uppercase text-foam/70 mb-1.5">
+                Organized by <b className="text-[#eab261]">{p.owner}</b>
               </p>
-              <h1 className="font-display font-extrabold tracking-[-.02em] leading-[1.08] text-[clamp(26px,3.4vw,40px)]">{p.name}</h1>
+              <h1 className="font-display font-extrabold tracking-[-.02em] leading-[1.08] text-[clamp(26px,3.4vw,40px)] text-white">{p.name}</h1>
             </div>
             <div className="ml-auto flex gap-2.5 items-center flex-wrap">
-              <span className={`font-mono text-[10px] font-bold uppercase tracking-[.1em] px-2.5 py-1 rounded-full border ${STATUS_CLS[p.status]}`}>{p.status}</span>
-              <LevelChip level={d.level} />
-              <a href={p.url} target="_blank" rel="noopener" className={btn("dark", "md")}>Official website</a>
+              <span className={`font-mono text-[10px] font-bold uppercase tracking-[.1em] px-2.5 py-1 rounded-full border ${p.status === "live" ? "bg-[#3e7d4f]/25 text-[#9fd6ae] border-[#9fd6ae]/40" : p.status === "upcoming" ? "bg-[#eab261]/15 text-[#eab261] border-[#eab261]/40" : "bg-white/5 text-foam/60 border-white/20"}`}>{p.status}</span>
+              <a href={p.url} target="_blank" rel="noopener" className={btn("primary", "md")}>Official website</a>
             </div>
           </div>
-          <p className="text-cocoa mt-4 max-w-[760px] text-[15.5px] leading-[1.65]">{p.tag}</p>
+          <p className="text-foam/80 mt-4 max-w-[760px] text-[15.5px] leading-[1.65]">{p.tag}</p>
           <div className="flex gap-1.5 flex-wrap mt-4">
             {d.tags.map((t) => (
-              <span key={t} className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-leaf">
+              <span key={t} className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#9fd6ae]">
                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
                 {t}
               </span>

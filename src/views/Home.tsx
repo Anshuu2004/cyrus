@@ -105,7 +105,7 @@ function ProgCard({ p }: { p: Program }) {
     <a href={p.url} target="_blank" rel="noopener"
       className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[460px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(23, 24, 26,.5)]">
       <img src={p.img} alt="" loading="lazy" className="absolute inset-0 -z-20 w-full h-full object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-95" />
-      <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/30 via-coffee/60 to-[#140e09]/95" />
+      <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/30 via-coffee/60 to-[#0f1012]/95" />
       <div className="flex items-center justify-between px-5 pt-[18px]">
         <span className="w-11 h-11 rounded-xl bg-white grid place-items-center overflow-hidden shadow-[0_8px_18px_-6px_rgba(0,0,0,.5)]">
           <img src={avatarOf(p.owner, 64)} alt={p.owner} className="w-[30px] h-[30px] object-contain" loading="lazy" />
@@ -402,8 +402,8 @@ function HowItWorks() {
 
 /* ── hackathon roadmap: 6-step blueprint (copied card design, our content) ── */
 const BP = {
-  indigo: "#4338ca", green: "#0f8a4d", cyan: "#0e7490",
-  amber: "#b45309", violet: "#7c3aed", orange: "#c2410c",
+  indigo: "#2c5f8a", green: "#0f8a4d", cyan: "#0e7490",
+  amber: "#b45309", violet: "#475569", orange: "#c2410c",
 };
 const tint = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, var(--color-card))`;
 const inkOn = (c: string) => `color-mix(in srgb, ${c} 62%, var(--color-ink))`;
