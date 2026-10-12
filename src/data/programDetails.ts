@@ -31,6 +31,8 @@ export const PROGRAM_ID_BY_NAME: Record<string, string> = {
   "Season of KDE": "kde",
   "MLH Fellowship": "mlh",
   Hacktoberfest: "oct",
+  "Summer of Bitcoin": "sob",
+  "Nexus Spring of Code": "nsoc",
 };
 
 export const programLink = (name: string): string =>
@@ -347,6 +349,81 @@ export const PROGRAM_DETAILS: Record<string, ProgramDetailData> = {
       { year: 2019, n: 65 }, { year: 2020, n: 125 }, { year: 2021, n: 180 },
       { year: 2022, n: 95 }, { year: 2023, n: 72 }, { year: 2024, n: 80 },
       { year: 2025, n: 88 },
+    ],
+  },
+
+  sob: {
+    level: "intermediate",
+    duration: "~12 weeks: learning period in May - Jun, development Jul - Aug",
+    tier: "Tier 2 - single ecosystem, globally known",
+    difficulty: "Focused - one proposal into a Bitcoin org's project list",
+    eligibility: "Open worldwide; strong C++/Rust/Python or web skills expected",
+    tags: ["Stipended", "Mentored", "Remote", "Bitcoin", "Lightning"],
+    about: [
+      "Summer of Bitcoin is the crypto ecosystem's answer to GSoC: a mentored summer where contributors build Bitcoin Core, Lightning, wallets, explorers and infrastructure, each matched to a mentor from an org like Block, Bitcoin Optee or mempool.space. It relaunched in 2020 and has grown cohort by cohort since.",
+      "The program runs in two beats - a learning period with weekly lectures and PR reviews, then an 8-week development window where accepted contributors ship one project for a stipend around USD 2,500. No prior Bitcoin knowledge is required, but a genuine interest in the protocol helps the proposal read real.",
+    ],
+    howItWorks: [
+      ["Project lists (Jan - Feb)", "Participating orgs publish mentor-approved projects; introductions open on Telegram and the community calls."],
+      ["Application (Feb - Mar)", "Pick 1-3 projects and write short proposals explaining your approach. Small org, big signal - mentors actually read every one."],
+      ["Learning period (May - Jun)", "Accepted contributors work through starter tasks and weekly study groups while the orgs refine scopes."],
+      ["Development (Jul - Aug)", "Eight mentored weeks to ship the project; final evaluations gate the stipend and graduation."],
+    ],
+    whoFor: [
+      "Developers curious about Bitcoin protocol, Lightning or node tooling",
+      "C++, Rust and Python engineers who want a stipended summer with tight mentoring",
+      "Contributors who like small cohorts - ~50 seats means real mentor attention",
+    ],
+    outcomes: [
+      "~USD 2,500 stipend per completed project",
+      "Merged work into Bitcoin Core, Lightning implementations or major wallet infra",
+      "A standing relationship with the core dev community, not just a certificate",
+      "One of the most recognizable summer-program lines on an infrastructure résumé",
+    ],
+    stack: ["C++", "Rust", "Python", "JavaScript", "Lightning", "libp2p"],
+    focus: ["Bitcoin Core", "Lightning", "Wallets", "Node tooling", "Explorers"],
+    chartTitle: "Contributors per year",
+    chartUnit: "contributors",
+    projectsPerYear: [
+      { year: 2020, n: 10 }, { year: 2021, n: 25 }, { year: 2022, n: 34 },
+      { year: 2023, n: 40 }, { year: 2024, n: 46 }, { year: 2025, n: 50 },
+    ],
+  },
+
+  nsoc: {
+    level: "beginner",
+    duration: "45-day spring contribution sprint",
+    tier: "Tier 3 - community-run sprint",
+    difficulty: "None - register, pick repos, ship issues",
+    eligibility: "Open to developers worldwide via nsoc.in",
+    tags: ["Free", "Leaderboard", "Mentored", "India-led", "Cert-backed"],
+    about: [
+      "Nexus Spring of Code hands you live repositories for 45 days: partner orgs on GitHub queue up real issues, participants claim them through the program desk, and a leaderboard tracks merged work week by week. It reads like a season-long Hacktoberfest with matching built in.",
+      "Where the big stipend programs filter hard, nsoc filters low and paces high - the value is momentum. Orgs get reviewed PRs, contributors get issue intake that does not stall, and the prizes, swag and certificates land at the end of the evaluation window.",
+    ],
+    howItWorks: [
+      ["Registration (spring)", "Sign up on nsoc.in with your GitHub handle; participant and org tracks open together."],
+      ["Project selection", "Browse the partner-repo board, claim issues against your stack, and get matched to a maintainer contact."],
+      ["Contribution window (45 days)", "Quality PRs earn leaderboard points weekly; dead repos and duplicate claims are filtered out."],
+      ["Evaluation and rewards", "Top ranks take prizes and swag; every completed track gets a certificate you can cite in later proposals."],
+    ],
+    whoFor: [
+      "Students who want a supervised first season of real PRs",
+      "Builders stacking proof of consistency before GSoC or LFX applications",
+      "Orgs that need their issue backlog worked through a program desk",
+    ],
+    outcomes: [
+      "A 45-day streak of merged PRs across live partner repos",
+      "Leaderboard placement, prizes and a completion certificate",
+      "Maintainer references that carry into stipended programs",
+      "Early fluency with review, CI and issue etiquette",
+    ],
+    stack: ["JavaScript", "Python", "React", "HTML/CSS", "Any GitHub language"],
+    focus: ["Live issue sprints", "Web apps", "Developer tooling", "Docs"],
+    chartTitle: "Participants per edition",
+    chartUnit: "contributors (est.)",
+    projectsPerYear: [
+      { year: 2023, n: 120 }, { year: 2024, n: 310 }, { year: 2025, n: 540 },
     ],
   },
 };
