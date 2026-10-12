@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* keep the stored theme out of the first paint */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("agenthub.theme")==="dark")document.documentElement.classList.add("dark");}catch(e){}`,
+            __html: `try{var t=localStorage.getItem("agenthub.theme");if(t&&JSON.parse(t)==="dark")document.documentElement.classList.add("dark");}catch(e){}`,
           }}
         />
       </head>
