@@ -60,7 +60,7 @@ function langMix(login: string): { name: string; pct: number; color: string }[] 
   return all.map((x) => ({
     name: x.name,
     pct: Math.max(2, Math.round((x.v / sum) * 100)),
-    color: LANG_COLORS[x.name] ?? "#9b968d",
+    color: LANG_COLORS[x.name] ?? "#939dab",
   }));
 }
 
@@ -489,7 +489,7 @@ export default function OrgProfile() {
             </div>
             <div className="flex gap-3 flex-wrap items-center mb-6">
               <input value={ppQ} onChange={(e) => setPpQ(e.target.value)} placeholder="Search this org's projects…" aria-label="Search projects"
-                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(193, 115, 27,.12)]" />
+                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(37, 113, 200,.12)]" />
               <select value={ppDiff} onChange={(e) => setPpDiff(e.target.value)} aria-label="Filter by difficulty"
                 className="bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none select-warm pr-8 cursor-pointer">
                 <option value="all">All Difficulties</option>
@@ -598,7 +598,7 @@ export default function OrgProfile() {
                     <b className="card-title text-[14px] truncate">{r.repo.split("/")[1]}</b>
                     <span className="ml-auto flex items-center gap-3 font-mono text-[10.5px] text-dim shrink-0">
                       <span className="flex items-center gap-1.5">
-                        <i className="w-[9px] h-[9px] rounded-full not-italic" style={{ background: LANG_COLORS[r.lang] ?? "#9b968d" }} />
+                        <i className="w-[9px] h-[9px] rounded-full not-italic" style={{ background: LANG_COLORS[r.lang] ?? "#939dab" }} />
                         {r.lang}
                       </span>
                       <span className="flex items-center gap-1 text-honey"><Ic d={STAR_D} size={12} extra={<path d={STAR_D} fill="currentColor" stroke="none" opacity=".9" />} />{fmt(r.stars)}</span>

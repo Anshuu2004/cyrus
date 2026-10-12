@@ -94,7 +94,7 @@ export default function Projects() {
     return [...set.entries()].sort((a, b) => a[1].localeCompare(b[1]));
   }, []);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(193, 115, 27,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(37, 113, 200,.12)]";
   const label = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
 
   return (

@@ -122,10 +122,10 @@ export async function sendCodeEmail(email: string, code: string): Promise<SendRe
           `If you didn't ask to sign in, ignore this email.\n\n— cyrus.ai, the agent skill index`,
         html: `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f7f6f4;padding:32px">
   <div style="max-width:440px;margin:0 auto;background:#fff;border:1px solid #e3dfd8;border-radius:16px;padding:28px">
-    <div style="font-weight:800;font-size:15px;color:#1c1b19;letter-spacing:.02em">cyrus.ai</div>
-    <p style="color:#1c1b19;font-size:14px;margin:16px 0 8px">Your verification code is</p>
-    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#c1731b;margin:8px 0 16px">${code}</div>
-    <p style="color:#67645e;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
+    <div style="font-weight:800;font-size:15px;color:#1b2838;letter-spacing:.02em">cyrus.ai</div>
+    <p style="color:#1b2838;font-size:14px;margin:16px 0 8px">Your verification code is</p>
+    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#2571c8;margin:8px 0 16px">${code}</div>
+    <p style="color:#5c6674;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
   </div>
 </div>`,
       }),

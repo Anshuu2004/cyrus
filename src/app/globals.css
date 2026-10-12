@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════════
-   cyrus.ai — Tailwind v4 theme (Graphite + Amber system)
-   ivory-graphite surfaces · graphite ink · amber accent
-   dark slate islands · Plus Jakarta Sans / Inter / JetBrains Mono
-   preview branch graphite-amber - restore: git checkout next-migration
+   cyrus.ai — Tailwind v4 theme (Navy + Sky system)
+   warm sand surfaces · navy ink · sky-blue accent
+   dark navy islands · Plus Jakarta Sans / Inter / JetBrains Mono
+   preview branch navy-sky - restore: git checkout next-migration
    ═══════════════════════════════════════════════════════════ */
 @import "tailwindcss";
 
@@ -15,34 +15,34 @@
   --color-line: #e3dfd8;
   --color-liness: #ebe7e1;
   --color-rule: #c9c2b6;
-  --color-ink: #1c1b19;
-  --color-cocoa: #67645e;
-  --color-dim: #9b968d;
-  --color-accent: #c1731b;
-  --color-accentd: #a65f12;
-  --color-ember: #e0a23e;
-  --color-peach: #f9ecd9;
-  --color-rust: #8f5410;
+  --color-ink: #1b2838;
+  --color-cocoa: #5c6674;
+  --color-dim: #939dab;
+  --color-accent: #2571c8;
+  --color-accentd: #1c57a0;
+  --color-ember: #7fb4e6;
+  --color-peach: #e7f1fa;
+  --color-rust: #13508c;
   --color-leaf: #3e7d4f;
   --color-denim: #3b6ea5;
   --color-plum: #2f7d72;
   --color-brick: #b0433c;
   --color-honey: #a97b1f;
-  --color-coffee: #17181a;
-  --color-bean: #1e2023;
-  --color-bark: #26292d;
-  --color-roast: #383c42;
-  --color-foam: #f3f1ed;
-  --color-steam: #a8a49c;
-  --color-dimdk: #7d7a72;
+  --color-coffee: #101d31;
+  --color-bean: #16273e;
+  --color-bark: #1d314c;
+  --color-roast: #2a4463;
+  --color-foam: #eef3fa;
+  --color-steam: #a4b2c6;
+  --color-dimdk: #7b8ba2;
 
   --font-display: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
   --font-sans: "Inter", -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --shadow-soft: 0 4px 16px -6px rgba(40, 42, 46, 0.1);
-  --shadow-lift: 0 16px 44px -16px rgba(40, 42, 46, 0.22);
-  --shadow-dark: 0 26px 60px -24px rgba(23, 24, 26, 0.55);
+  --shadow-soft: 0 4px 16px -6px rgba(26, 39, 62, 0.1);
+  --shadow-lift: 0 16px 44px -16px rgba(26, 39, 62, 0.22);
+  --shadow-dark: 0 26px 60px -24px rgba(16, 29, 49, 0.55);
 
   --ease-silk: cubic-bezier(0.22, 0.8, 0.36, 1);
 
@@ -67,22 +67,22 @@
    Utilities compile to var(--color-x), so overriding the custom
    properties under .dark flips the whole site in one cascade. */
 .dark {
-  --color-paper: #0e0f11;
-  --color-sand: #16171a;
-  --color-cream: #1d1f23;
-  --color-card: #151619;
-  --color-clay: #24262b;
-  --color-line: #2b2e33;
-  --color-liness: #22242a;
-  --color-rule: #4a4d54;
-  --color-ink: #f3f1ed;
-  --color-cocoa: #b6b3ab;
-  --color-dim: #87847c;
-  --color-accent: #eaa64a;
-  --color-accentd: #f2b565;
-  --color-ember: #f0b45e;
-  --color-peach: #2a2317;
-  --color-rust: #f4bd7a;
+  --color-paper: #070d17;
+  --color-sand: #0d1725;
+  --color-cream: #131f30;
+  --color-card: #0f1a29;
+  --color-clay: #1a2738;
+  --color-line: #27374d;
+  --color-liness: #1f2f42;
+  --color-rule: #3e536d;
+  --color-ink: #eef3fa;
+  --color-cocoa: #aebcd0;
+  --color-dim: #7f8fa4;
+  --color-accent: #52a4f0;
+  --color-accentd: #7cbcff;
+  --color-ember: #6fb0f2;
+  --color-peach: #14263b;
+  --color-rust: #9acdff;
   --color-leaf: #57b06e;
   --color-denim: #6ba3d6;
   --color-plum: #7cc4b6;
@@ -90,23 +90,23 @@
   --color-honey: #e0b64a;
 }
 .dark body { background: var(--color-paper); }
-.dark ::selection { background: rgba(234, 166, 74, 0.3); }
+.dark ::selection { background: rgba(82, 164, 240, 0.3); }
 .dark .hero-glow {
   background:
-    radial-gradient(640px 380px at 12% 0%, rgba(234, 166, 74, 0.14), transparent 70%),
-    radial-gradient(700px 420px at 88% 10%, rgba(193, 115, 27, 0.12), transparent 70%),
+    radial-gradient(640px 380px at 12% 0%, rgba(82, 164, 240, 0.14), transparent 70%),
+    radial-gradient(700px 420px at 88% 10%, rgba(37, 113, 200, 0.12), transparent 70%),
     radial-gradient(900px 480px at 50% 118%, rgba(47,125,114, 0.12), transparent 70%);
 }
 .dark .hero-pattern {
   background-image:
-    linear-gradient(rgba(180, 178, 170, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(180, 178, 170, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(170, 190, 215, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(170, 190, 215, 0.05) 1px, transparent 1px);
 }
 .dark .tl-phase {
-  color: color-mix(in srgb, var(--pc) 78%, #f3f1ed);
-  background: color-mix(in srgb, var(--pc) 16%, #16171a);
+  color: color-mix(in srgb, var(--pc) 78%, #eef3fa);
+  background: color-mix(in srgb, var(--pc) 16%, #0d1725);
 }
-.dark .tl-phase.is-active { background: color-mix(in srgb, var(--pc) 26%, #16171a); }
+.dark .tl-phase.is-active { background: color-mix(in srgb, var(--pc) 26%, #0d1725); }
 
 html { scroll-behavior: smooth; overflow-x: clip; }
 body { @apply bg-paper text-ink font-sans antialiased; overflow-x: clip; }
@@ -118,7 +118,7 @@ h1, h2 { text-wrap: balance; }
 h3, h4 { text-wrap: pretty; }
 p { text-wrap: pretty; }
 .font-display { text-rendering: optimizeLegibility; font-variant-numeric: tabular-nums; }
-::selection { background: rgba(193, 115, 27, 0.22); }
+::selection { background: rgba(37, 113, 200, 0.22); }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 6px; }
 /* text fields never get the outline box - their surrounding pill shows focus instead */
 input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
@@ -159,8 +159,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .hero-glow {
   position: absolute; inset: -220px 0 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(640px 380px at 12% 0%, rgba(224, 162, 62, 0.16), transparent 70%),
-    radial-gradient(700px 420px at 88% 10%, rgba(193, 115, 27, 0.12), transparent 70%),
+    radial-gradient(640px 380px at 12% 0%, rgba(127, 180, 230, 0.16), transparent 70%),
+    radial-gradient(700px 420px at 88% 10%, rgba(37, 113, 200, 0.12), transparent 70%),
     radial-gradient(900px 480px at 50% 118%, rgba(47,125,114, 0.07), transparent 70%);
 }
 
@@ -194,7 +194,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   position: absolute; top: 7px; bottom: 7px; border-radius: 999px;
   display: flex; align-items: center; padding: 0 12px; overflow: hidden;
   font-size: 10.5px; font-weight: 700; white-space: nowrap;
-  color: color-mix(in srgb, var(--pc) 78%, #1c1b19);
+  color: color-mix(in srgb, var(--pc) 78%, #1b2838);
   background: color-mix(in srgb, var(--pc) 9%, white);
   border: 1px dashed color-mix(in srgb, var(--pc) 45%, transparent);
   transition: transform 0.18s var(--ease-silk), box-shadow 0.18s;

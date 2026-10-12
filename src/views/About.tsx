@@ -173,7 +173,7 @@ export default function About() {
     <>
       {/* ── manifesto hero + orbit ── */}
       <header className="relative overflow-hidden">
-        <span aria-hidden className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,rgba(193, 115, 27,.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(193, 115, 27,.055)_1px,transparent_1px)] [background-size:36px_36px] [mask-image:radial-gradient(760px_480px_at_68%_38%,#000_50%,transparent)]" />
+        <span aria-hidden className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,rgba(37, 113, 200,.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(37, 113, 200,.055)_1px,transparent_1px)] [background-size:36px_36px] [mask-image:radial-gradient(760px_480px_at_68%_38%,#000_50%,transparent)]" />
         <div className={`${W} relative pt-[72px] pb-4 grid grid-cols-[1.05fr_.95fr] gap-10 items-center max-[1020px]:grid-cols-1`}>
           <div>
             <Pill>About cyrus.ai</Pill>
