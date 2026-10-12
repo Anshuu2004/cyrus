@@ -206,22 +206,22 @@ export function ThemeToggle() {
       title={dark ? "Switch to light theme" : "Switch to dark theme"}
       className="group relative w-[68px] h-[34px] rounded-full cursor-pointer shrink-0 border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       style={{
-        borderColor: dark ? "#3d3020" : "#e5dccd",
-        background: dark ? "#241a0c" : "#efe8dc",
-        boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(150,130,100,.18)",
+        borderColor: dark ? "#2f3236" : "#dddad3",
+        background: dark ? "#1a1c1f" : "#eceae4",
+        boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(140, 138, 130,.18)",
       }}>
       {/* idle icon resting on the track (opposite side from the knob) */}
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ right: "9px", opacity: dark ? 0 : 1 }}>
-        {MOON("#a09282")}
+        {MOON("#9b968d")}
       </svg>
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ left: "9px", opacity: dark ? 1 : 0 }}>
-        {SUN("#d98546")}
+        {SUN("#e0a23e")}
       </svg>
       {/* knob: a clean white circle carrying the active glyph */}
       <span aria-hidden className="absolute top-[3px] left-[3px] w-[26px] h-[26px] rounded-full bg-white grid place-items-center transition-transform duration-400 ease-[cubic-bezier(.55,1.6,.45,1)] group-hover:scale-[1.06]"
-        style={{ boxShadow: "0 2px 6px rgba(60,42,24,.22), 0 0 0 1px rgba(60,42,24,.04)", transform: dark ? "translateX(34px)" : "none" }}>
+        style={{ boxShadow: "0 2px 6px rgba(40, 42, 46,.22), 0 0 0 1px rgba(40, 42, 46,.04)", transform: dark ? "translateX(34px)" : "none" }}>
         <svg width="19" height="19" viewBox="0 0 24 24" style={{ opacity: dark ? 0 : 1, position: "absolute", transition: "opacity .3s" }}>
           <circle cx="12" cy="12" r="4.8" fill="#f0913a" />
           <g stroke="#f0913a" strokeWidth="1.7" strokeLinecap="round">
@@ -231,7 +231,7 @@ export function ThemeToggle() {
           </g>
         </svg>
         <svg width="14" height="14" viewBox="0 0 24 24" style={{ opacity: dark ? 1 : 0, position: "absolute", transition: "opacity .3s" }}>
-          {MOON("#5a4632")}
+          {MOON("#4c4a45")}
         </svg>
       </span>
     </button>

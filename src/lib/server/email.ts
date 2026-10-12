@@ -106,8 +106,9 @@ export const __mem = mem;
 export type SendResult = { sent: true } | { sent: false; demo: true; code: string } | { sent: false; error: string };
 
 export async function sendCodeEmail(email: string, code: string): Promise<SendResult> {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || "cyrus.ai <onboarding@resend.dev>";
+  const key = (process.env.RESEND_API_KEY ?? "").trim();
+  const from = (process.env.EMAIL_FROM ?? "").trim() || "cyrus.ai <onboarding@resend.dev>";
+  email = email.trim();
   if (!key) return { sent: false, demo: true, code }; // demo mode: caller shows the code
   try {
     const r = await fetch("https://api.resend.com/emails", {
@@ -119,12 +120,12 @@ export async function sendCodeEmail(email: string, code: string): Promise<SendRe
         subject: `${code} is your cyrus.ai sign-in code`,
         text: `Your cyrus.ai verification code is ${code}. It expires in 10 minutes. ` +
           `If you didn't ask to sign in, ignore this email.\n\n— cyrus.ai, the agent skill index`,
-        html: `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f5efe7;padding:32px">
-  <div style="max-width:440px;margin:0 auto;background:#fff;border:1px solid #e7dccd;border-radius:16px;padding:28px">
-    <div style="font-weight:800;font-size:15px;color:#241b13;letter-spacing:.02em">cyrus.ai</div>
-    <p style="color:#241b13;font-size:14px;margin:16px 0 8px">Your verification code is</p>
-    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#b4602c;margin:8px 0 16px">${code}</div>
-    <p style="color:#6e6153;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
+        html: `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f7f6f4;padding:32px">
+  <div style="max-width:440px;margin:0 auto;background:#fff;border:1px solid #e3dfd8;border-radius:16px;padding:28px">
+    <div style="font-weight:800;font-size:15px;color:#1c1b19;letter-spacing:.02em">cyrus.ai</div>
+    <p style="color:#1c1b19;font-size:14px;margin:16px 0 8px">Your verification code is</p>
+    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#c1731b;margin:8px 0 16px">${code}</div>
+    <p style="color:#67645e;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
   </div>
 </div>`,
       }),

@@ -102,7 +102,7 @@ export function HackCard({ h }: { h: Hack }) {
   const [showCredit, setShowCredit] = useState(false);
   const cr = creditFor(h);
   return (
-    <div className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[430px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(34,26,19,.55)]">
+    <div className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[430px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(23, 24, 26,.55)]">
       <HackCover h={h} className="absolute inset-0 -z-20 w-full h-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]" />
       <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/25 via-coffee/55 to-[#140e09]/95" />
       <div className="flex items-center justify-between gap-2 px-5 pt-[18px]">
@@ -116,7 +116,7 @@ export function HackCard({ h }: { h: Hack }) {
         <h3 className="card-title-xl text-white">{h.name}</h3>
         <p className="text-foam/75 text-[13.5px] leading-[1.6]">{h.theme}</p>
         <div className="flex items-center justify-between gap-2.5 mt-1.5">
-          <span className="font-mono text-[13px] font-bold text-[#f0a35c]">{h.prize.split("+")[0]}
+          <span className="font-mono text-[13px] font-bold text-[#eab261]">{h.prize.split("+")[0]}
             <small className="block text-[9.5px] font-medium text-foam/55 tracking-[.08em] uppercase">{h.status === "open" || h.status === "rolling" ? (d > 0 ? `closes in ${d} days` : "closing") : `deadline ${h.deadline.slice(0, 7)}`}</small></span>
           <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] group-hover:bg-accent group-hover:border-accent transition-colors">Prep plan</span>
         </div>
@@ -163,7 +163,7 @@ export default function Hackathons() {
     (!q.trim() || (h.name + " " + h.org + " " + h.theme + " " + h.tags.join(" ")).toLowerCase().includes(q.trim().toLowerCase()))
   ), [q, status, tag]);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180,96,44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(193, 115, 27,.12)]";
 
   return (
     <div className="max-w-[1240px] mx-auto px-6 pt-14 pb-4">

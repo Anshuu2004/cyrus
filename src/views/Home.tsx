@@ -37,7 +37,7 @@ function Hero() {
             Your one-stop catalog of company hackathons, mentored open-source programs and agent skills for your coding agent.
           </p>
           <div className="reveal" style={{ animationDelay: ".66s" }}>
-          <form className="mt-7 flex items-center gap-2 bg-card border border-line rounded-full py-[7px] pl-[18px] pr-[7px] max-w-[520px] shadow-lift transition-all focus-within:border-accent focus-within:shadow-[0_0_0_3px_rgba(180,96,44,.14),0_18px_40px_-18px_rgba(36,27,19,.25)] search-pulse"
+          <form className="mt-7 flex items-center gap-2 bg-card border border-line rounded-full py-[7px] pl-[18px] pr-[7px] max-w-[520px] shadow-lift transition-all focus-within:border-accent focus-within:shadow-[0_0_0_3px_rgba(193, 115, 27,.14),0_18px_40px_-18px_rgba(36,27,19,.25)] search-pulse"
             onSubmit={(e) => { e.preventDefault(); nav(`/projects${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ""}`); }}>
             <SearchIcon size={17} />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search skills, orgs, stacks…"
@@ -103,7 +103,7 @@ const PSTATUS: Record<Program["status"], [string, string]> = {
 function ProgCard({ p }: { p: Program }) {
   return (
     <a href={p.url} target="_blank" rel="noopener"
-      className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[460px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(34,26,19,.5)]">
+      className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[460px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(23, 24, 26,.5)]">
       <img src={p.img} alt="" loading="lazy" className="absolute inset-0 -z-20 w-full h-full object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-95" />
       <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/30 via-coffee/60 to-[#140e09]/95" />
       <div className="flex items-center justify-between px-5 pt-[18px]">
@@ -117,7 +117,7 @@ function ProgCard({ p }: { p: Program }) {
         <h3 className="card-title-xl text-white">{p.name}</h3>
         <p className="text-foam/75 text-[13.5px] leading-[1.6]">{p.tag}</p>
         <div className="flex items-center justify-between gap-2.5 mt-1.5">
-          <span className="font-mono text-[13px] font-bold text-[#f0a35c]">{p.pay}
+          <span className="font-mono text-[13px] font-bold text-[#eab261]">{p.pay}
             <small className="block text-[9.5px] font-medium text-foam/55 tracking-[.08em] uppercase">{p.payNote}</small></span>
           <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] w-max transition-colors group-hover:bg-accent group-hover:border-accent">Explore</span>
         </div>
@@ -197,7 +197,7 @@ function Timeline() {
             </div>
           ))}
           <div className="flex gap-5 flex-wrap pt-4 font-mono text-[10.5px] text-cocoa">
-            {[["#3b6ea5", "Applications"], ["#b4602c", "Selection"], ["#7a5aa8", "Bonding / outreach"], ["#3e7d4f", "Coding & internships"]].map(([c, l]) => (
+            {[["#3b6ea5", "Applications"], ["#c1731b", "Selection"], ["#7a5aa8", "Bonding / outreach"], ["#3e7d4f", "Coding & internships"]].map(([c, l]) => (
               <span key={l}><i className="inline-block w-2.5 h-2.5 rounded-[4px] mr-1.5 align-[-1px]" style={{ background: c }} />{l}</span>
             ))}
           </div>
@@ -804,7 +804,7 @@ function Cta() {
   return (
     <section className="cta-close mt-[110px] relative overflow-hidden bg-coffee text-foam">
       <span aria-hidden className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,rgba(244,238,227,.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(244,238,227,.05)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:radial-gradient(900px_520px_at_50%_42%,#000_40%,transparent)]" />
-      <span aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(720px_340px_at_50%_-12%,rgba(217,133,70,.20),transparent_70%),radial-gradient(560px_300px_at_90%_108%,rgba(122,90,168,.14),transparent_70%),radial-gradient(520px_280px_at_5%_104%,rgba(180,96,44,.18),transparent_70%)]" />
+      <span aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(720px_340px_at_50%_-12%,rgba(224, 162, 62,.20),transparent_70%),radial-gradient(560px_300px_at_90%_108%,rgba(122,90,168,.14),transparent_70%),radial-gradient(520px_280px_at_5%_104%,rgba(193, 115, 27,.18),transparent_70%)]" />
       <div className="relative max-w-[920px] mx-auto px-6 pt-[104px] pb-[120px]">
         <div className="rounded-[30px] border border-white/12 bg-white/[.055] backdrop-blur-[6px] px-10 py-14 max-[700px]:px-6 max-[700px]:py-10 text-center shadow-[0_44px_100px_-44px_rgba(0,0,0,.7)]">
           <div className="footer-arc w-[120px] mx-auto" />
