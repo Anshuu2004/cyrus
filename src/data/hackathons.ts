@@ -61,7 +61,7 @@ export const HACKS: Hack[] = [
     ],
     stack: { languages: ["TypeScript", "Python"], frameworks: ["Copilot SDK", "Actions", "Codespaces"], tools: ["GitHub Models", "Codespaces", "Actions", "vscode"], why: "Build directly on the surfaces the sponsor is launching that week" },
     perks: "Copilot access, cloud credits for winners, feature at Universe keynote",
-    color: "#4c6b86", art: "flag",
+    color: "#3b6ea5", art: "flag",
   },
   {
     id: "anthropic-claude-code-hackathon", name: "Claude Code Agentic Hackathon", org: "Anthropic", orgLogo: "anthropics",

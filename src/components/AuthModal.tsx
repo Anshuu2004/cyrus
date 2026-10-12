@@ -187,7 +187,7 @@ export default function AuthModal() {
   };
 
   const label = "block font-mono text-[11px] tracking-[.12em] uppercase text-cocoa mb-2";
-  const fin = "w-full bg-card border border-line rounded-[14px] px-4 py-3.5 text-[15px] outline-none transition-all placeholder:text-dim focus:border-accent focus:shadow-[0_0_0_3px_rgba(18, 104, 121,.14)]";
+  const fin = "w-full bg-card border border-line rounded-[14px] px-4 py-3.5 text-[15px] outline-none transition-all placeholder:text-dim focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.14)]";
 
   return (
     <div className="fixed inset-0 z-[100] overflow-y-auto" style={{ background: "var(--color-paper)" }}
@@ -268,7 +268,7 @@ export default function AuthModal() {
                   <input className={fin} type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
                 </div>
                 <button type="submit" disabled={busyMail}
-                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(18, 104, 121,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180, 96, 44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
                   {busyMail ? "Sending code..." : tab === "login" ? "Send Login Code" : "Send Sign-Up Code"}
                 </button>
                 <p className="text-center font-mono text-[10.5px] tracking-[.08em] text-dim -mt-1">
@@ -284,7 +284,7 @@ export default function AuthModal() {
                     value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} autoFocus />
                 </div>
                 <button type="submit" disabled={busyMail}
-                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(18, 104, 121,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180, 96, 44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
                   {busyMail ? "Verifying..." : "Verify & Continue"}
                 </button>
                 <div className="flex items-center justify-between font-mono text-[11px] font-bold tracking-[.08em]">

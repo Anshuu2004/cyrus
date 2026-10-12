@@ -99,7 +99,7 @@ export default function ProgramDetail() {
       {/* ── cover banner ── */}
       <header className="relative overflow-hidden bg-coffee">
         <img src={p.img} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
-        <span aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#0a161b]/55 via-[#0a161b]/75 to-[#0a161b]/95" />
+        <span aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#0f1012]/55 via-[#0f1012]/75 to-[#0f1012]/95" />
         <div className={`${W} py-14 relative z-[1]`}>
           <p className="font-mono text-[10.5px] tracking-[.14em] uppercase text-foam/55 mb-5">
             <Link to="/" className="hover:text-white">Home</Link> / <Link to="/organizations" className="hover:text-white">Programs</Link> / <span className="text-foam/80">{p.name}</span>

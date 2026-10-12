@@ -51,7 +51,7 @@ function HackCover({ h, className = "" }: { h: Hack; className?: string }) {
     <svg viewBox="0 0 220 180" className={className} preserveAspectRatio="xMidYMid slice" aria-hidden>
       <defs>
         <linearGradient id={`hg-${seed}`} x1="0" y1="0" x2={dir % 2 ? 1 : 0.8} y2={dir > 1 ? 0.75 : 1}>
-          <stop offset="0" stopColor="#0a161b" /><stop offset="1" stopColor="#0e1f26" />
+          <stop offset="0" stopColor="#0f1012" /><stop offset="1" stopColor="#1e2024" />
         </linearGradient>
         <radialGradient id={`hr-${seed}`} cx={glow.x} cy={glow.y} r="85%">
           <stop offset="0" stopColor="#ffffff" stopOpacity=".2" /><stop offset=".55" stopColor="#ffffff" stopOpacity=".06" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" />
@@ -101,9 +101,9 @@ export function HackCard({ h }: { h: Hack }) {
   const [showCredit, setShowCredit] = useState(false);
   const cr = creditFor(h);
   return (
-    <div className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[430px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(11, 26, 31,.55)]">
+    <div className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[430px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(34, 26, 19,.55)]">
       <HackCover h={h} className="absolute inset-0 -z-20 w-full h-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]" />
-      <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/25 via-coffee/55 to-[#0a161b]/95" />
+      <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/25 via-coffee/55 to-[#0f1012]/95" />
       <div className="flex items-center justify-between gap-2 px-5 pt-[18px]">
         <span className="w-11 h-11 rounded-xl bg-white grid place-items-center overflow-hidden shadow-[0_8px_18px_-6px_rgba(0,0,0,.5)]">
           <OrgImg src={avatarOf(h.orgLogo, 64)} name={h.orgLogo} className="w-[30px] h-[30px] object-contain" />
@@ -127,7 +127,7 @@ export function HackCard({ h }: { h: Hack }) {
       <Link to={`/hackathons/${h.id}`} aria-label={`${h.name} prep plan`}
         className="absolute inset-0 z-10 rounded-[22px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" />
       <button type="button" onClick={() => setShowCredit((v) => !v)} aria-label="Event credit"
-        className="absolute right-3.5 bottom-[42px] z-20 font-mono text-[9px] font-bold tracking-[.08em] uppercase text-foam/65 bg-[#0a161b]/65 border border-white/20 rounded-full px-2.5 py-[4px] hover:text-white hover:border-accent cursor-pointer transition-colors">
+        className="absolute right-3.5 bottom-[42px] z-20 font-mono text-[9px] font-bold tracking-[.08em] uppercase text-foam/65 bg-[#0f1012]/65 border border-white/20 rounded-full px-2.5 py-[4px] hover:text-white hover:border-accent cursor-pointer transition-colors">
         event ©
       </button>
       {showCredit && (
@@ -162,7 +162,7 @@ export default function Hackathons() {
     (!q.trim() || (h.name + " " + h.org + " " + h.theme + " " + h.tags.join(" ")).toLowerCase().includes(q.trim().toLowerCase()))
   ), [q, status, tag]);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(18, 104, 121,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
 
   return (
     <div className="max-w-[1240px] mx-auto px-6 pt-14 pb-4">
