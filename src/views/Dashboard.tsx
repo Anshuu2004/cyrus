@@ -531,13 +531,13 @@ export default function Dashboard() {
             <label className="block">
               <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim block mb-1.5">GitHub username</span>
               <input value={ghIn} onChange={(e) => setGhIn(e.target.value)} placeholder="yourhandle" spellCheck={false}
-                className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(15, 125, 83,.12)]" />
+                className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(18, 104, 121,.12)]" />
             </label>
             <label className="block">
               <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim block mb-1.5">Skills (or drop your resume)</span>
               <div className="flex gap-2">
                 <input value={skillsIn} onChange={(e) => setSkillsIn(e.target.value)} placeholder="python, react, kubernetes…"
-                  className="flex-1 min-w-0 bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(15, 125, 83,.12)]" />
+                  className="flex-1 min-w-0 bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(18, 104, 121,.12)]" />
                 <label className={btn("outline", "sm") + " shrink-0 cursor-pointer flex items-center gap-1.5"}>
                   <input type="file" accept=".md,.txt,.json,.csv,.pdf,text/*,application/pdf" className="hidden" onChange={(e) => parseResume(e.target.files?.[0] ?? null)} />
                   Resume
@@ -660,7 +660,7 @@ export default function Dashboard() {
           <h3 className="panel-h-lg mb-4 flex items-center gap-2.5">{IC_SCALE} Compare organisations</h3>
           <div className="relative mb-4 max-w-[380px]">
             <input value={cmpQ} onChange={(e) => setCmpQ(e.target.value)} placeholder="Search orgs to compare (up to 3)…" aria-label="Search organizations"
-              className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(15, 125, 83,.12)]" />
+              className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(18, 104, 121,.12)]" />
             {cmpMatches.length > 0 && (
               <div className="absolute z-10 top-full mt-1.5 left-0 right-0 bg-card border border-line rounded-[14px] shadow-lift overflow-hidden">
                 {cmpMatches.map((o) => (

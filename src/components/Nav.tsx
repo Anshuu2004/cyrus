@@ -213,15 +213,15 @@ export function ThemeToggle() {
       {/* idle icon resting on the track (opposite side from the knob) */}
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ right: "9px", opacity: dark ? 0 : 1 }}>
-        {MOON("#98a199")}
+        {MOON("#9b9e97")}
       </svg>
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ left: "9px", opacity: dark ? 1 : 0 }}>
-        {SUN("#63c292")}
+        {SUN("#4aa8b8")}
       </svg>
       {/* knob: a clean white circle carrying the active glyph */}
       <span aria-hidden className="absolute top-[3px] left-[3px] w-[26px] h-[26px] rounded-full bg-white grid place-items-center transition-transform duration-400 ease-[cubic-bezier(.55,1.6,.45,1)] group-hover:scale-[1.06]"
-        style={{ boxShadow: "0 2px 6px rgba(21, 36, 27,.22), 0 0 0 1px rgba(21, 36, 27,.04)", transform: dark ? "translateX(34px)" : "none" }}>
+        style={{ boxShadow: "0 2px 6px rgba(27, 36, 38,.22), 0 0 0 1px rgba(27, 36, 38,.04)", transform: dark ? "translateX(34px)" : "none" }}>
         <svg width="19" height="19" viewBox="0 0 24 24" style={{ opacity: dark ? 0 : 1, position: "absolute", transition: "opacity .3s" }}>
           <circle cx="12" cy="12" r="4.8" fill="#f0913a" />
           <g stroke="#f0913a" strokeWidth="1.7" strokeLinecap="round">

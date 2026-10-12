@@ -10,9 +10,9 @@ export const PROGRAMS: Program[] = [
     status: "closed", window: "Applications close April",
     orgs: "900+ orgs", slots: "~3,800 students",
     phases: [
-      { label: "Org applications", s: 0, e: 1.6, c: "#3b6ea5" },
+      { label: "Org applications", s: 0, e: 1.6, c: "#4c6b86" },
       { label: "Student applications", s: 2.1, e: 3.8, c: "#a97b1f" },
-      { label: "Community bonding", s: 3.8, e: 4.6, c: "#4a5c6b" },
+      { label: "Community bonding", s: 3.8, e: 4.6, c: "#566e78" },
       { label: "Coding period", s: 4.6, e: 8.2, c: "#3e7d4f" },
     ],
   },
@@ -24,10 +24,10 @@ export const PROGRAMS: Program[] = [
     status: "upcoming", window: "Dec cohort pairing opens Nov",
     orgs: "150+ communities", slots: "~120 interns",
     phases: [
-      { label: "Outreach period", s: 10.2, e: 11.2, c: "#3b6ea5" },
+      { label: "Outreach period", s: 10.2, e: 11.2, c: "#4c6b86" },
       { label: "Applications", s: 1.6, e: 3.1, c: "#a97b1f" },
       { label: "Internship (May cohort)", s: 4, e: 8, c: "#3e7d4f" },
-      { label: "Internship (Dec cohort)", s: 11, e: 12, c: "#4a5c6b" },
+      { label: "Internship (Dec cohort)", s: 11, e: 12, c: "#566e78" },
     ],
   },
   {
@@ -38,8 +38,8 @@ export const PROGRAMS: Program[] = [
     status: "live", window: "Term 3 running now · Sep – Nov",
     orgs: "100+ projects", slots: "300+ mentees",
     phases: [
-      { label: "Term 1", s: 2, e: 5, c: "#3b6ea5" },
-      { label: "Term 2", s: 5, e: 8, c: "#4a5c6b" },
+      { label: "Term 1", s: 2, e: 5, c: "#4c6b86" },
+      { label: "Term 2", s: 5, e: 8, c: "#566e78" },
       { label: "Term 3", s: 8.3, e: 11, c: "#3e7d4f", active: true },
     ],
   },
@@ -51,7 +51,7 @@ export const PROGRAMS: Program[] = [
     status: "closed", window: "Runs May – August",
     orgs: "40+ projects", slots: "~60 contributors",
     phases: [
-      { label: "Project proposals", s: 2.8, e: 4.2, c: "#3b6ea5" },
+      { label: "Project proposals", s: 2.8, e: 4.2, c: "#4c6b86" },
       { label: "Teams formed", s: 4.2, e: 4.9, c: "#a97b1f" },
       { label: "Coding & demos", s: 4.9, e: 7.6, c: "#3e7d4f" },
     ],
@@ -64,8 +64,8 @@ export const PROGRAMS: Program[] = [
     status: "live", window: "Fall batch in session",
     orgs: "30+ partner orgs", slots: "Small cohorts",
     phases: [
-      { label: "Spring batch", s: 2.5, e: 5, c: "#3b6ea5" },
-      { label: "Summer batch", s: 5.3, e: 7.8, c: "#4a5c6b" },
+      { label: "Spring batch", s: 2.5, e: 5, c: "#4c6b86" },
+      { label: "Summer batch", s: 5.3, e: 7.8, c: "#566e78" },
       { label: "Fall batch", s: 8.2, e: 10.8, c: "#3e7d4f", active: true },
     ],
   },
@@ -77,7 +77,7 @@ export const PROGRAMS: Program[] = [
     status: "live", window: "Contributions Aug – Nov",
     orgs: "200+ projects", slots: "Open to all",
     phases: [
-      { label: "Registration", s: 6.3, e: 7.4, c: "#3b6ea5" },
+      { label: "Registration", s: 6.3, e: 7.4, c: "#4c6b86" },
       { label: "Contribution period", s: 7.4, e: 10.6, c: "#a97b1f", active: true },
       { label: "Evaluation", s: 10.6, e: 11.2, c: "#a97b1f" },
     ],
@@ -90,7 +90,7 @@ export const PROGRAMS: Program[] = [
     status: "upcoming", window: "Registrations open December",
     orgs: "KDE ecosystem", slots: "Global",
     phases: [
-      { label: "Ideas list", s: 9.4, e: 10.6, c: "#3b6ea5" },
+      { label: "Ideas list", s: 9.4, e: 10.6, c: "#4c6b86" },
       { label: "Registration", s: 11, e: 12, c: "#a97b1f" },
       { label: "Mentoring", s: 0, e: 2.9, c: "#3e7d4f" },
     ],
@@ -103,7 +103,7 @@ export const PROGRAMS: Program[] = [
     status: "upcoming", window: "Applications open December",
     orgs: "Bitcoin ecosystem", slots: "~50 contributors",
     phases: [
-      { label: "Applications", s: 11, e: 12, c: "#3b6ea5" },
+      { label: "Applications", s: 11, e: 12, c: "#4c6b86" },
       { label: "Learning period", s: 0.5, e: 2.5, c: "#a97b1f" },
       { label: "Development", s: 4.5, e: 7.5, c: "#3e7d4f" },
     ],
@@ -116,10 +116,10 @@ export const PROGRAMS: Program[] = [
     status: "upcoming", window: "Registrations open on nsoc.in",
     orgs: "Partner repos on GitHub", slots: "Open to developers",
     phases: [
-      { label: "Registrations", s: 1.5, e: 2.5, c: "#3b6ea5" },
+      { label: "Registrations", s: 1.5, e: 2.5, c: "#4c6b86" },
       { label: "Project selection", s: 2.5, e: 3.2, c: "#a97b1f" },
       { label: "Contribution window", s: 3.2, e: 4.7, c: "#3e7d4f" },
-      { label: "Evaluation", s: 4.7, e: 5.2, c: "#4a5c6b" },
+      { label: "Evaluation", s: 4.7, e: 5.2, c: "#566e78" },
     ],
   },
   {
@@ -130,7 +130,7 @@ export const PROGRAMS: Program[] = [
     status: "live", window: "All of October · you are here",
     orgs: "All of GitHub", slots: "Millions",
     phases: [
-      { label: "Prep & first-timer issues", s: 8.3, e: 9, c: "#4a5c6b" },
+      { label: "Prep & first-timer issues", s: 8.3, e: 9, c: "#566e78" },
       { label: "Hacktoberfest", s: 9, e: 10, c: "#3e7d4f", active: true },
     ],
   },

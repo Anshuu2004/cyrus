@@ -120,12 +120,12 @@ export async function sendCodeEmail(email: string, code: string): Promise<SendRe
         subject: `${code} is your cyrus.ai sign-in code`,
         text: `Your cyrus.ai verification code is ${code}. It expires in 10 minutes. ` +
           `If you didn't ask to sign in, ignore this email.\n\n— cyrus.ai, the agent skill index`,
-        html: `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f7f6f4;padding:32px">
-  <div style="max-width:440px;margin:0 auto;background:#fff;border:1px solid #dfe3da;border-radius:16px;padding:28px">
-    <div style="font-weight:800;font-size:15px;color:#17221b;letter-spacing:.02em">cyrus.ai</div>
-    <p style="color:#17221b;font-size:14px;margin:16px 0 8px">Your verification code is</p>
-    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#0f7d53;margin:8px 0 16px">${code}</div>
-    <p style="color:#57625a;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
+        html: `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f6f5f3;padding:32px">
+  <div style="max-width:440px;margin:0 auto;background:#fff;border:1px solid #d9d6cd;border-radius:16px;padding:28px">
+    <div style="font-weight:800;font-size:15px;color:#1b2426;letter-spacing:.02em">cyrus.ai</div>
+    <p style="color:#1b2426;font-size:14px;margin:16px 0 8px">Your verification code is</p>
+    <div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:700;letter-spacing:.28em;color:#126879;margin:8px 0 16px">${code}</div>
+    <p style="color:#5d6365;font-size:13px;margin:0">It expires in 10 minutes. If you didn't ask to sign in to cyrus.ai, you can safely ignore this email.</p>
   </div>
 </div>`,
       }),
