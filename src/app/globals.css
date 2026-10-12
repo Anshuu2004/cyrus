@@ -25,7 +25,7 @@
   --color-rust: #8f5410;
   --color-leaf: #3e7d4f;
   --color-denim: #3b6ea5;
-  --color-plum: #7a5aa8;
+  --color-plum: #2f7d72;
   --color-brick: #b0433c;
   --color-honey: #a97b1f;
   --color-coffee: #17181a;
@@ -85,7 +85,7 @@
   --color-rust: #f4bd7a;
   --color-leaf: #57b06e;
   --color-denim: #6ba3d6;
-  --color-plum: #a98fd6;
+  --color-plum: #7cc4b6;
   --color-brick: #d9695f;
   --color-honey: #e0b64a;
 }
@@ -95,7 +95,7 @@
   background:
     radial-gradient(640px 380px at 12% 0%, rgba(234, 166, 74, 0.14), transparent 70%),
     radial-gradient(700px 420px at 88% 10%, rgba(193, 115, 27, 0.12), transparent 70%),
-    radial-gradient(900px 480px at 50% 118%, rgba(122, 90, 168, 0.12), transparent 70%);
+    radial-gradient(900px 480px at 50% 118%, rgba(47,125,114, 0.12), transparent 70%);
 }
 .dark .hero-pattern {
   background-image:
@@ -161,7 +161,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   background:
     radial-gradient(640px 380px at 12% 0%, rgba(224, 162, 62, 0.16), transparent 70%),
     radial-gradient(700px 420px at 88% 10%, rgba(193, 115, 27, 0.12), transparent 70%),
-    radial-gradient(900px 480px at 50% 118%, rgba(122, 90, 168, 0.07), transparent 70%);
+    radial-gradient(900px 480px at 50% 118%, rgba(47,125,114, 0.07), transparent 70%);
 }
 
 /* ── logocell float (per-cell rotation + delay via CSS vars) ─ */
