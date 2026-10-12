@@ -243,6 +243,116 @@ const PALETTES: Palette[] = [
       dimdk: ["#83979b", "#83979b"],
     },
   },
+  {
+    id: "jade",
+    name: "Ink + Jade",
+    note: "Crisp near-black neutrals, luminous jade green, fintech calm",
+    t: {
+      paper: ["#f6f7f6", "#050807"], sand: ["#ebeeea", "#0a0f0c"],
+      cream: ["#fbfcfb", "#0f1612"], card: ["#ffffff", "#0c120e"],
+      clay: ["#e8ede7", "#131c15"], line: ["#d7ded5", "#1f2d23"],
+      liness: ["#e0e7de", "#17231a"], rule: ["#bec7bb", "#364a39"],
+      ink: ["#101512", "#eef4ef"], cocoa: ["#4d574f", "#b4c4b6"],
+      dim: ["#8d978e", "#83937f"], accent: ["#0e9f6e", "#34d399"],
+      accentd: ["#0a7d55", "#5eeab5"], ember: ["#45cfa0", "#3fdca4"],
+      peach: ["#e0f5eb", "#0b1f16"], rust: ["#0a7d55", "#5eeab5"],
+      leaf: ["#3e7d4f", "#57b06e"], denim: ["#3b6ea5", "#6ba3d6"],
+      plum: ["#4a5c6b", "#9fb2c4"], brick: ["#b0433c", "#d9695f"],
+      honey: ["#a97b1f", "#e0b64a"],
+      coffee: ["#0a0f0c", "#0a0f0c"], bean: ["#0f1612", "#0f1612"],
+      bark: ["#151f19", "#151f19"], roast: ["#223328", "#223328"],
+      foam: ["#eef4ef", "#eef4ef"], steam: ["#a3b5a6", "#a3b5a6"],
+      dimdk: ["#7e9080", "#7e9080"],
+    },
+  },
+  {
+    id: "lime",
+    name: "Graphite + Lime",
+    note: "Cool graphite build tools feel, electric chartreuse pop",
+    t: {
+      paper: ["#f6f6f6", "#08090b"], sand: ["#ebecee", "#101114"],
+      cream: ["#fcfcfd", "#16181c"], card: ["#ffffff", "#121317"],
+      clay: ["#e9eaec", "#1b1e23"], line: ["#d8dadf", "#2a2e35"],
+      liness: ["#e2e4e8", "#20242a"], rule: ["#c1c4cb", "#454b55"],
+      ink: ["#17181c", "#f1f3ef"], cocoa: ["#56585f", "#c0c3c9"],
+      dim: ["#93969d", "#8d9199"], accent: ["#5f8f0e", "#a3e635"],
+      accentd: ["#4c730a", "#bcf06a"], ember: ["#9ccf3f", "#ade84d"],
+      peach: ["#eef5df", "#16210a"], rust: ["#4c730a", "#bcf06a"],
+      leaf: ["#55893e", "#7fc26a"], denim: ["#64748b", "#8ea3b8"],
+      plum: ["#6c6f78", "#a7abb5"], brick: ["#b0503c", "#d9695f"],
+      honey: ["#a3822c", "#e0b64a"],
+      coffee: ["#131417", "#131417"], bean: ["#1a1c20", "#1a1c20"],
+      bark: ["#22252a", "#22252a"], roast: ["#343941", "#343941"],
+      foam: ["#f1f3ef", "#f1f3ef"], steam: ["#adb2b8", "#adb2b8"],
+      dimdk: ["#878c92", "#878c92"],
+    },
+  },
+  {
+    id: "cyan",
+    name: "Arctic + Cyan",
+    note: "Glacial ice neutrals, electric cyan highlight, deep sea islands",
+    t: {
+      paper: ["#f5f8fa", "#04080c"], sand: ["#e9f0f4", "#091219"],
+      cream: ["#fafcfd", "#0f1b23"], card: ["#ffffff", "#0b141b"],
+      clay: ["#e6eef2", "#14232e"], line: ["#d5e2e8", "#203847"],
+      liness: ["#dfeaf0", "#182b36"], rule: ["#b7c9d2", "#37586c"],
+      ink: ["#101e26", "#ecf4f8"], cocoa: ["#4a606c", "#aecbd8"],
+      dim: ["#88a0ab", "#7c9cab"], accent: ["#0891b2", "#22d3ee"],
+      accentd: ["#06708c", "#67e3f4"], ember: ["#4dc7de", "#3ed3e8"],
+      peach: ["#e0f4f9", "#08222b"], rust: ["#06708c", "#67e3f4"],
+      leaf: ["#3e7d4f", "#57b06e"], denim: ["#64748b", "#8ea9c9"],
+      plum: ["#2f7d72", "#7cc4b6"], brick: ["#b0433c", "#d9695f"],
+      honey: ["#a97b1f", "#e0b64a"],
+      coffee: ["#08141c", "#08141c"], bean: ["#0d1c26", "#0d1c26"],
+      bark: ["#132835", "#132835"], roast: ["#1e4054", "#1e4054"],
+      foam: ["#ecf4f8", "#ecf4f8"], steam: ["#a4bcc8", "#a4bcc8"],
+      dimdk: ["#7f9aa6", "#7f9aa6"],
+    },
+  },
+  {
+    id: "racing",
+    name: "Racing Green + Bone",
+    note: "Heritage bone paper, very deep green ink and accent, brass warmth",
+    t: {
+      paper: ["#f7f5ef", "#060a07"], sand: ["#edeade", "#0c120d"],
+      cream: ["#fcfbf6", "#121a13"], card: ["#ffffff", "#0e1510"],
+      clay: ["#e9e5d6", "#161f17"], line: ["#d9d4c1", "#243326"],
+      liness: ["#e2ddcc", "#1b261d"], rule: ["#c0b99f", "#3f5341"],
+      ink: ["#131b15", "#eef1e7"], cocoa: ["#4f5a4e", "#b6c2ad"],
+      dim: ["#989a85", "#85927d"], accent: ["#14532d", "#6fbf84"],
+      accentd: ["#0e3d20", "#92d3a2"], ember: ["#4f8f62", "#7ac88e"],
+      peach: ["#e3ecdf", "#122114"], rust: ["#0e3d20", "#92d3a2"],
+      leaf: ["#3e7d4f", "#6fbf78"], denim: ["#4c6b86", "#8ea9c9"],
+      plum: ["#5c6653", "#a8b49a"], brick: ["#a84a38", "#d96e58"],
+      honey: ["#9a7b2e", "#e0c25e"],
+      coffee: ["#0b140d", "#0b140d"], bean: ["#101a12", "#101a12"],
+      bark: ["#16241a", "#16241a"], roast: ["#233726", "#233726"],
+      foam: ["#eef1e7", "#eef1e7"], steam: ["#aab4a1", "#aab4a1"],
+      dimdk: ["#868f7c", "#868f7c"],
+    },
+  },
+  {
+    id: "tangerine",
+    name: "Tangerine + Espresso",
+    note: "Rich espresso browns, vivid tangerine spark, cafe warmth",
+    t: {
+      paper: ["#f8f6f3", "#0d0906"], sand: ["#efeae3", "#141009"],
+      cream: ["#fcfbf8", "#1b150e"], card: ["#ffffff", "#151009"],
+      clay: ["#ece5db", "#1e1710"], line: ["#ddd4c7", "#30261a"],
+      liness: ["#e5ded2", "#251d13"], rule: ["#c5b9a8", "#4e4030"],
+      ink: ["#221a13", "#f5efe6"], cocoa: ["#645444", "#cfbda4"],
+      dim: ["#9d8d7a", "#9d8a72"], accent: ["#ea580c", "#fb923c"],
+      accentd: ["#c24a0a", "#fda65f"], ember: ["#f98d4f", "#f98f45"],
+      peach: ["#fdeadd", "#271507"], rust: ["#c24a0a", "#fda65f"],
+      leaf: ["#4e7d4a", "#6fb06a"], denim: ["#4c6b86", "#7fa8c9"],
+      plum: ["#6e5f4d", "#c2ad8c"], brick: ["#b0433c", "#d96e58"],
+      honey: ["#b08a2e", "#e6c25e"],
+      coffee: ["#1a120b", "#1a120b"], bean: ["#221810", "#221810"],
+      bark: ["#2b1f15", "#2b1f15"], roast: ["#40301f", "#40301f"],
+      foam: ["#f5efe6", "#f5efe6"], steam: ["#c0ad95", "#c0ad95"],
+      dimdk: ["#98876f", "#98876f"],
+    },
+  },
 ];
 
 function applyPalette(id: string) {
@@ -300,7 +410,7 @@ export default function PaletteLab() {
   return (
     <div className="fixed bottom-5 left-5 z-[90] print:hidden">
       {open && (
-        <div className="mb-3 w-[300px] max-h-[min(560px,75vh)] overflow-y-auto rounded-2xl border border-line bg-card shadow-lift p-2 animate-rise">
+        <div className="mb-3 w-[300px] max-h-[min(660px,80vh)] overflow-y-auto rounded-2xl border border-line bg-card shadow-lift p-2 animate-rise">
           <p className="px-3 pt-1 pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-dim font-mono">
             Palette Lab
           </p>
@@ -337,7 +447,7 @@ export default function PaletteLab() {
         <span
           aria-hidden
           className="h-3.5 w-3.5 rounded-full ring-2 ring-card"
-          style={{ background: `conic-gradient(${dot} 0 16.6%, #0e7c7b 0 33.3%, #d9b45f 0 50%, #c1121f 0 66.6%, #1358c9 0 83.3%, #b4552d 0 100%)` }}
+          style={{ background: `conic-gradient(${dot} 0 10%, #0e7c7b 0 20%, #d9b45f 0 30%, #c1121f 0 40%, #1358c9 0 50%, #b4552d 0 60%, #0e9f6e 0 70%, #a3e635 0 80%, #22d3ee 0 90%, #ea580c 0 100%)` }}
         />
         Palette Lab
       </button>
