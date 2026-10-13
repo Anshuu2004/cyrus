@@ -251,6 +251,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 @property --orbit { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes orbitSpin { to { --orbit: 360deg; } }
 
+/* ── mobile menu: hamburger sheet + backdrop ── */
+@keyframes sheetIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 .search-pulse, .pulse-grid > * { position: relative; }
 .search-pulse::after,
 .pulse-grid > *::after {
