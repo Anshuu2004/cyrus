@@ -8,6 +8,7 @@ import type { Hack } from "../data/hackathons";
 import { HACKS_LIVE } from "../data/hackathonsLive";
 import type { HackLive } from "../data/hackathonsLive";
 import { LIVE_CREDITS } from "../data/liveCovers";
+import { HACK_ART } from "../data/hackArt";
 import { REPOS } from "../data/repos";
 import { avatarOf, byStars, hash } from "../lib/util";
 import { Word, SectionTag, btn, OrgImg, Chip } from "../components/ui";
@@ -45,8 +46,7 @@ const daysTo = (iso: string) => Math.ceil((+new Date(iso) - +new Date("2026-10-0
    that fits its theme; the live Devpost listings rotate through all eight by
    seed. Every composition is re-rolled per event, so no two covers match,
    and all palettes stay deep enough that the cream card text always reads. */
-type Series = "nebula" | "aurora" | "circuit" | "ink" | "ridge" | "prism" | "bloom" | "wave";
-const SERIES_LIST: Series[] = ["nebula", "aurora", "circuit", "ink", "ridge", "prism", "bloom", "wave"];
+type Series = "silk" | "nebula" | "aurora" | "circuit" | "ink" | "ridge" | "prism" | "bloom" | "wave";
 const SERIES_FOR: Record<string, Series> = {
   "github-universe-ai-hackathon-2026": "nebula",
   "devpost-hack-new-year-2027": "nebula",
@@ -67,6 +67,7 @@ const SERIES_FOR: Record<string, Series> = {
   "hackon-with-amazon": "wave",
 };
 const PAL: Record<Series, { bg: [string, string]; c: [string, string, string] }> = {
+  silk:   { bg: ["#171425", "#221a2c"], c: ["#bfe3d2", "#f6cfae", "#cfc3ea"] },
   nebula: { bg: ["#100b16", "#1b1222"], c: ["#f4bd77", "#a98bd0", "#e8c9a0"] },
   aurora: { bg: ["#0d110f", "#161a14"], c: ["#8fd0a8", "#f0c27f", "#6fb3b8"] },
   circuit: { bg: ["#12100a", "#1d150c"], c: ["#d9a441", "#7fb069", "#e07a4a"] },
@@ -81,15 +82,34 @@ export function HackCover({ h, className = "" }: { h: Hack; className?: string }
   const seed = Math.abs(hash(h.id)) + 7;
   let s = (seed * 2654435761) % 2147483647 || 12345;
   const rnd = () => (s = (s * 48271) % 2147483647) / 2147483647;
-  const series: Series = SERIES_FOR[h.id] ?? SERIES_LIST[seed % SERIES_LIST.length];
+  const series: Series = SERIES_FOR[h.id] ?? "silk";
   const { bg, c } = PAL[series];
   const uid = `${series}-${seed}`;
+  /* silk re-rolls its pastel set per event so 140+ live covers never repeat */
+  const PASTELS = [
+    ["#bfe3d2", "#f6cfae", "#cfc3ea"], ["#a8d8ea", "#f7c8d4", "#ffe1a8"],
+    ["#d4c5f9", "#bde0fe", "#ffc8dd"], ["#cdb4db", "#a2e3a4", "#ffd6a5"],
+    ["#b5e2fa", "#e0c3fc", "#f6d6a0"], ["#c2e59c", "#f8c8dc", "#bde0fe"],
+    ["#f5c6aa", "#b8c0ff", "#d6eadb"], ["#e2c6ff", "#b8e0d2", "#ffccb6"],
+  ];
+  const pc = PASTELS[seed % PASTELS.length];
   const stars = (n: number, maxY = 180) => Array.from({ length: n }, () => (
     <circle key={rnd()} cx={rnd() * 220} cy={rnd() * maxY} r={.4 + rnd() * .9} fill="#f6e7c9" opacity={.12 + rnd() * .45} />
   ));
 
   let art: ReactNode = null;
-  if (series === "nebula") {
+  if (series === "silk") {
+    art = (<>
+      {[0, 1, 2, 3].map((i) => {
+        const y = 24 + i * (30 + rnd() * 14);
+        const bend = 24 + rnd() * 40;
+        return <path key={i} d={`M-30 ${(y + rnd() * 14).toFixed(1)} C 50 ${(y - bend).toFixed(1)}, 150 ${(y + bend).toFixed(1)}, 250 ${(y - bend * .5).toFixed(1)}`}
+          fill="none" stroke={`url(#k-${uid}-${i})`} strokeWidth={(26 + rnd() * 26).toFixed(1)} strokeLinecap="round"
+          opacity={.48 + rnd() * .3} filter={`url(#kblur-${uid})`} />;
+      })}
+      {stars(6, 60)}
+    </>);
+  } else if (series === "nebula") {
     const px = 138 + rnd() * 44, py = 34 + rnd() * 34, pr = 20 + rnd() * 12;
     art = (<>
       {stars(26)}
@@ -204,6 +224,17 @@ export function HackCover({ h, className = "" }: { h: Hack; className?: string }
             <stop offset="0" stopColor={c[i]} stopOpacity=".85" /><stop offset=".6" stopColor={c[i]} stopOpacity=".28" /><stop offset="1" stopColor={c[i]} stopOpacity="0" />
           </linearGradient>
         ))}
+        {series === "silk" && [0, 1, 2, 3].map((i) => (
+          <linearGradient key={i} id={`k-${uid}-${i}`} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor={pc[i % 3]} stopOpacity="0" />
+            <stop offset=".3" stopColor={pc[i % 3]} stopOpacity=".9" />
+            <stop offset=".7" stopColor={pc[(i + 1) % 3]} stopOpacity=".85" />
+            <stop offset="1" stopColor={pc[(i + 1) % 3]} stopOpacity="0" />
+          </linearGradient>
+        ))}
+        {series === "silk" && (
+          <filter id={`kblur-${uid}`} x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6.5" /></filter>
+        )}
         <filter id={`b-${uid}`} x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2" /></filter>
       </defs>
       <rect width="220" height="180" fill={`url(#bg-${uid})`} />
@@ -249,10 +280,14 @@ export function HackCard({ h }: { h: Hack }) {
   const d = daysTo(h.deadline);
   const [showCredit, setShowCredit] = useState(false);
   const cr = creditFor(h);
+  const art = HACK_ART[h.id];
+  const coverCls = "absolute inset-0 -z-20 w-full h-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]";
   return (
     <div className="group relative rounded-[22px] overflow-hidden flex flex-col min-h-[430px] text-foam isolate bg-coffee border border-bean transition-all duration-300 hover:-translate-y-[7px] hover:shadow-[0_34px_66px_-22px_rgba(34, 26, 19,.55)]">
-      <HackCover h={h} className="absolute inset-0 -z-20 w-full h-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]" />
-      <span className="absolute inset-0 -z-10 bg-gradient-to-b from-coffee/25 via-coffee/55 to-[#0f1012]/95" />
+      {art
+        ? <img src={art} alt="" aria-hidden loading="lazy" className={`${coverCls} object-cover`} />
+        : <HackCover h={h} className={coverCls} />}
+      <span className={`absolute inset-0 -z-10 bg-gradient-to-b ${art ? "from-white/30 via-coffee/55 to-[#0f1012]/95" : "from-coffee/25 via-coffee/55 to-[#0f1012]/95"}`} />
       <div className="flex items-center justify-between gap-2 px-5 pt-[18px]">
         <span className="w-11 h-11 rounded-xl bg-white grid place-items-center overflow-hidden shadow-[0_8px_18px_-6px_rgba(0,0,0,.5)]">
           <OrgImg src={avatarOf(h.orgLogo, 64)} name={h.orgLogo} className="w-[30px] h-[30px] object-contain" />
