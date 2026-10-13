@@ -40,25 +40,174 @@ export const REGISTER: Record<string, string> = {
 
 const daysTo = (iso: string) => Math.ceil((+new Date(iso) - +new Date("2026-10-03")) / 864e5);
 
-/* cover artwork: plain dark gradients with one soft white glow - no brand
-   colour, no motifs, no text on the background. Each event keeps only a
-   deterministic gradient direction. */
-function HackCover({ h, className = "" }: { h: Hack; className?: string }) {
-  const seed = hash(h.id);
-  const dir = seed % 4;
-  const glow = [{ x: "22%", y: "16%" }, { x: "80%", y: "18%" }, { x: "50%", y: "84%" }, { x: "12%", y: "72%" }][dir];
+/* cover artwork: eight generative art series - nebula, aurora, circuit, ink,
+   ridge, prism, bloom, wave. Each curated hackathon is mapped to the series
+   that fits its theme; the live Devpost listings rotate through all eight by
+   seed. Every composition is re-rolled per event, so no two covers match,
+   and all palettes stay deep enough that the cream card text always reads. */
+type Series = "nebula" | "aurora" | "circuit" | "ink" | "ridge" | "prism" | "bloom" | "wave";
+const SERIES_LIST: Series[] = ["nebula", "aurora", "circuit", "ink", "ridge", "prism", "bloom", "wave"];
+const SERIES_FOR: Record<string, Series> = {
+  "github-universe-ai-hackathon-2026": "nebula",
+  "devpost-hack-new-year-2027": "nebula",
+  "google-solution-challenge-2027": "aurora",
+  "google-cloud-agents-for-impact": "aurora",
+  "mlh-global-hack-week": "aurora",
+  "nvidia-jetson-physical-ai-hackathon": "circuit",
+  "nebius-x-nvidia-global-ai-hackathon": "circuit",
+  "smart-india-hackathon-2026": "circuit",
+  "openai-build-week": "ink",
+  "anthropic-claude-code-hackathon": "ink",
+  "hugging-face-open-model-hackathon": "ink",
+  "microsoft-imagine-cup-2027": "ridge",
+  "microsoft-ai-tour-hackathon": "prism",
+  "kaggle-playground-series": "prism",
+  "hacktoberfest-2026": "bloom",
+  "meta-global-ai-developer-hackathon": "wave",
+  "hackon-with-amazon": "wave",
+};
+const PAL: Record<Series, { bg: [string, string]; c: [string, string, string] }> = {
+  nebula: { bg: ["#100b16", "#1b1222"], c: ["#f4bd77", "#a98bd0", "#e8c9a0"] },
+  aurora: { bg: ["#0d110f", "#161a14"], c: ["#8fd0a8", "#f0c27f", "#6fb3b8"] },
+  circuit: { bg: ["#12100a", "#1d150c"], c: ["#d9a441", "#7fb069", "#e07a4a"] },
+  ink:    { bg: ["#140d0d", "#221214"], c: ["#e8b48a", "#b4602c", "#8a5560"] },
+  ridge:  { bg: ["#171008", "#241a10"], c: ["#f6d9a2", "#cf7426", "#8c4a2a"] },
+  prism:  { bg: ["#101016", "#1a1520"], c: ["#f4bd77", "#a3b8cc", "#cf7426"] },
+  bloom:  { bg: ["#150d07", "#241209"], c: ["#e07a4a", "#f0c27f", "#8c3a34"] },
+  wave:   { bg: ["#100e0a", "#1e150c"], c: ["#df9355", "#f6d9a2", "#96491f"] },
+};
+
+export function HackCover({ h, className = "" }: { h: Hack; className?: string }) {
+  const seed = Math.abs(hash(h.id)) + 7;
+  let s = (seed * 2654435761) % 2147483647 || 12345;
+  const rnd = () => (s = (s * 48271) % 2147483647) / 2147483647;
+  const series: Series = SERIES_FOR[h.id] ?? SERIES_LIST[seed % SERIES_LIST.length];
+  const { bg, c } = PAL[series];
+  const uid = `${series}-${seed}`;
+  const stars = (n: number, maxY = 180) => Array.from({ length: n }, () => (
+    <circle key={rnd()} cx={rnd() * 220} cy={rnd() * maxY} r={.4 + rnd() * .9} fill="#f6e7c9" opacity={.12 + rnd() * .45} />
+  ));
+
+  let art: ReactNode = null;
+  if (series === "nebula") {
+    const px = 138 + rnd() * 44, py = 34 + rnd() * 34, pr = 20 + rnd() * 12;
+    art = (<>
+      {stars(26)}
+      <circle cx={px} cy={py} r={pr * 2.6} fill={`url(#g-${uid})`} />
+      <circle cx={px} cy={py} r={pr} fill={`url(#p-${uid})`} />
+      <ellipse cx={px} cy={py} rx={pr * 1.9} ry={pr * .38} fill="none" stroke={c[0]} strokeOpacity=".5"
+        strokeWidth="1.6" transform={`rotate(${-18 + rnd() * 36} ${px} ${py})`} />
+      <ellipse cx={px} cy={py} rx={pr * 1.55} ry={pr * .3} fill="none" stroke={c[2]} strokeOpacity=".35"
+        strokeWidth="1" transform={`rotate(${-18 + rnd() * 36} ${px} ${py})`} />
+    </>);
+  } else if (series === "aurora") {
+    const x0 = 20 + rnd() * 30;
+    art = (<>
+      {stars(10, 70)}
+      {[0, 1, 2].map((i) => {
+        const x = x0 + i * (44 + rnd() * 22), w = 26 + rnd() * 26;
+        return <path key={i} d={`M${x} -6 C ${x + w} 50, ${x - w * .6} 100, ${x + w * .5} 190 L ${x + w * 1.5} 190 C ${x + w * .4} 100, ${x + w * 1.6} 50, ${x + w} -6 Z`}
+          fill={`url(#a-${uid}-${i})`} opacity={.5 + rnd() * .3} />;
+      })}
+      <rect y="150" width="220" height="30" fill={`url(#f-${uid})`} />
+    </>);
+  } else if (series === "circuit") {
+    const nodes = Array.from({ length: 7 }, () => ({ x: 16 + rnd() * 188, y: 14 + rnd() * 150 }));
+    art = (<>
+      {nodes.map((n, i) => {
+        const m = nodes[(i + 1) % nodes.length];
+        return <path key={i} d={`M${n.x} ${n.y} H${m.x} V${m.y}`} fill="none" stroke={c[i % 3]} strokeOpacity=".38" strokeWidth="1.1" />;
+      })}
+      {nodes.map((n, i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r="4.6" fill={`url(#n-${uid})`} opacity=".8" />
+          <circle cx={n.x} cy={n.y} r="1.7" fill={c[i % 3]} opacity=".95" />
+        </g>
+      ))}
+      <rect x={54 + rnd() * 90} y={52 + rnd() * 56} width="34" height="26" rx="4" fill="none" stroke={c[0]} strokeOpacity=".55" strokeWidth="1.3" />
+    </>);
+  } else if (series === "ink") {
+    const y0 = 50 + rnd() * 60;
+    art = (<>
+      {[0, 1, 2].map((i) => {
+        const y = y0 + i * (18 + rnd() * 16);
+        return <path key={i} d={`M-16 ${y} C 50 ${y - 40 - rnd() * 30}, 130 ${y + 34 + rnd() * 26}, 236 ${y - 12 - rnd() * 24}`}
+          fill="none" stroke={c[i]} strokeWidth={9 + rnd() * 13} strokeLinecap="round"
+          opacity={.34 + rnd() * .2} filter={`url(#b-${uid})`} />;
+      })}
+      <path d={`M-16 ${y0 + 16} C 60 ${y0 - 22}, 140 ${y0 + 44}, 236 ${y0 + 4}`} fill="none" stroke={c[0]} strokeWidth="1.3" strokeLinecap="round" opacity=".65" />
+      {stars(6, 60)}
+    </>);
+  } else if (series === "ridge") {
+    const sx = 60 + rnd() * 100, sy = 40 + rnd() * 18;
+    const layer = (base: number, amp: number, o: number, fill: string, key: number) => {
+      let d = `M0 180 L0 ${base}`;
+      for (let x = 0; x <= 220; x += 44) d += ` L${x + 22} ${base - amp * (.5 + rnd())} L${x + 44} ${base - amp * rnd() * .4}`;
+      return <path key={key} d={`${d} L220 180 Z`} fill={fill} opacity={o} />;
+    };
+    art = (<>
+      <circle cx={sx} cy={sy} r="26" fill={`url(#s-${uid})`} />
+      <circle cx={sx} cy={sy} r="8.5" fill={c[0]} opacity=".9" />
+      {layer(118, 34, .5, c[2], 1)}
+      {layer(140, 30, .72, "#241a12", 2)}
+      {layer(160, 22, .95, "#120c07", 3)}
+    </>);
+  } else if (series === "prism") {
+    art = (<>
+      {Array.from({ length: 6 }, (_, i) => {
+        const x = 12 + rnd() * 180, y = 10 + rnd() * 130, r = 16 + rnd() * 30, rot = rnd() * 360;
+        return <path key={i} d={`M${x} ${y} L${x + r} ${y + r * (.6 + rnd())} L${x - r * (.4 + rnd())} ${y + r} Z`}
+          transform={`rotate(${rot} ${x} ${y})`} fill={c[i % 3]} opacity={.1 + rnd() * .16}
+          stroke={c[i % 3]} strokeOpacity=".3" strokeWidth=".8" />;
+      })}
+      <path d={`M${30 + rnd() * 40} -8 L${120 + rnd() * 60} 190`} stroke={`url(#r-${uid})`} strokeWidth="26" opacity=".3" filter={`url(#b-${uid})`} />
+      {stars(8)}
+    </>);
+  } else if (series === "bloom") {
+    const cx = 70 + rnd() * 90, cy = 54 + rnd() * 40;
+    art = (<>
+      {Array.from({ length: 6 }, (_, i) => {
+        const ang = i * 60 + rnd() * 18, rx = 30 + rnd() * 18, ry = 11 + rnd() * 6;
+        return <ellipse key={i} cx={cx + rx * .72} cy={cy} rx={rx} ry={ry} fill={c[i % 3]} opacity={.2 + rnd() * .18}
+          transform={`rotate(${ang} ${cx} ${cy})`} />;
+      })}
+      <circle cx={cx} cy={cy} r={5 + rnd() * 3} fill={c[1]} opacity=".9" />
+      {stars(9)}
+    </>);
+  } else {
+    const y0 = 44 + rnd() * 40;
+    art = (<>
+      {[0, 1, 2, 3].map((i) => {
+        const y = y0 + i * (26 + rnd() * 10), amp = 12 + rnd() * 16, ph = rnd() * 40;
+        return <path key={i} d={`M-14 ${y} Q ${40 + ph} ${y - amp}, ${92 + ph} ${y} T ${206 + ph} ${y} L 236 ${y + amp * .4}`}
+          fill="none" stroke={`url(#w-${uid})`} strokeWidth={2 + rnd() * 5} strokeLinecap="round" opacity={.42 + rnd() * .4} />;
+      })}
+      {stars(7, 40)}
+    </>);
+  }
+
   return (
     <svg viewBox="0 0 220 180" className={className} preserveAspectRatio="xMidYMid slice" aria-hidden>
       <defs>
-        <linearGradient id={`hg-${seed}`} x1="0" y1="0" x2={dir % 2 ? 1 : 0.8} y2={dir > 1 ? 0.75 : 1}>
-          <stop offset="0" stopColor="#0f1012" /><stop offset="1" stopColor="#1e2024" />
+        <linearGradient id={`bg-${uid}`} x1="0" y1="0" x2=".4" y2="1">
+          <stop offset="0" stopColor={bg[0]} /><stop offset="1" stopColor={bg[1]} />
         </linearGradient>
-        <radialGradient id={`hr-${seed}`} cx={glow.x} cy={glow.y} r="85%">
-          <stop offset="0" stopColor="#ffffff" stopOpacity=".2" /><stop offset=".55" stopColor="#ffffff" stopOpacity=".06" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" />
-        </radialGradient>
+        <radialGradient id={`g-${uid}`}><stop offset="0" stopColor={c[1]} stopOpacity=".4" /><stop offset="1" stopColor={c[1]} stopOpacity="0" /></radialGradient>
+        <radialGradient id={`p-${uid}`} cx="35%" cy="30%"><stop offset="0" stopColor={c[2]} /><stop offset=".7" stopColor={c[0]} stopOpacity=".75" /><stop offset="1" stopColor={c[1]} stopOpacity=".5" /></radialGradient>
+        <radialGradient id={`n-${uid}`}><stop offset="0" stopColor={c[0]} stopOpacity=".7" /><stop offset="1" stopColor={c[0]} stopOpacity="0" /></radialGradient>
+        <radialGradient id={`s-${uid}`} cx="50%" cy="50%"><stop offset="0" stopColor={c[0]} stopOpacity=".85" /><stop offset=".5" stopColor={c[1]} stopOpacity=".35" /><stop offset="1" stopColor={c[1]} stopOpacity="0" /></radialGradient>
+        <linearGradient id={`f-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={c[0]} stopOpacity="0" /><stop offset="1" stopColor={c[0]} stopOpacity=".16" /></linearGradient>
+        <linearGradient id={`r-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={c[0]} stopOpacity=".7" /><stop offset="1" stopColor={c[2]} stopOpacity="0" /></linearGradient>
+        <linearGradient id={`w-${uid}`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor={c[2]} stopOpacity="0" /><stop offset=".25" stopColor={c[0]} /><stop offset=".7" stopColor={c[1]} /><stop offset="1" stopColor={c[2]} stopOpacity="0" /></linearGradient>
+        {series === "aurora" && [0, 1, 2].map((i) => (
+          <linearGradient key={i} id={`a-${uid}-${i}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={c[i]} stopOpacity=".85" /><stop offset=".6" stopColor={c[i]} stopOpacity=".28" /><stop offset="1" stopColor={c[i]} stopOpacity="0" />
+          </linearGradient>
+        ))}
+        <filter id={`b-${uid}`} x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2" /></filter>
       </defs>
-      <rect width="220" height="180" fill={`url(#hg-${seed})`} />
-      <rect width="220" height="180" fill={`url(#hr-${seed})`} />
+      <rect width="220" height="180" fill={`url(#bg-${uid})`} />
+      {art}
     </svg>
   );
 }
