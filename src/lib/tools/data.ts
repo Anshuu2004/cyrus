@@ -10,6 +10,17 @@ import { BACKEND_DATA_TOOLS } from "../../data/tools/backend-data";
 import { AUTH_PAYMENTS_SECURITY_TOOLS } from "../../data/tools/auth-payments-security";
 import { DEPLOY_LAUNCH_TOOLS } from "../../data/tools/deploy-launch";
 import { AI_PROMPTING_TOOLS } from "../../data/tools/ai-prompting";
+/* the expanded catalog: generated font and colour artifacts, plus curated
+   seed rows for every category (src/lib/tools/expand.ts) */
+import { FONT_TOOLS } from "../../data/tools/fonts";
+import { PALETTE_TOOLS } from "../../data/tools/palettes";
+import { EXTRA_UI_TOOLS } from "../../data/tools/extra-ui";
+import { EXTRA_TYPOCOLOUR_TOOLS } from "../../data/tools/extra-typocolour";
+import { EXTRA_FRONTEND_TOOLS } from "../../data/tools/extra-frontend";
+import { EXTRA_BACKEND_TOOLS } from "../../data/tools/extra-backend";
+import { EXTRA_AUTH_TOOLS } from "../../data/tools/extra-auth";
+import { EXTRA_DEPLOY_TOOLS } from "../../data/tools/extra-deploy";
+import { EXTRA_AI_TOOLS } from "../../data/tools/extra-ai";
 
 export const ALL_TOOLS: Tool[] = [
   ...UI_DESIGN_TOOLS,
@@ -19,6 +30,15 @@ export const ALL_TOOLS: Tool[] = [
   ...AUTH_PAYMENTS_SECURITY_TOOLS,
   ...DEPLOY_LAUNCH_TOOLS,
   ...AI_PROMPTING_TOOLS,
+  ...FONT_TOOLS,
+  ...PALETTE_TOOLS,
+  ...EXTRA_UI_TOOLS,
+  ...EXTRA_TYPOCOLOUR_TOOLS,
+  ...EXTRA_FRONTEND_TOOLS,
+  ...EXTRA_BACKEND_TOOLS,
+  ...EXTRA_AUTH_TOOLS,
+  ...EXTRA_DEPLOY_TOOLS,
+  ...EXTRA_AI_TOOLS,
 ];
 
 const BY_ID = new Map(ALL_TOOLS.map((t) => [t.id, t]));

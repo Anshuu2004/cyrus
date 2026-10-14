@@ -9,6 +9,7 @@ import { Eyebrow, btn } from "@/components/ui";
 import type { PromptTarget } from "@/lib/tools/types";
 import { toolById } from "@/lib/tools/data";
 import { defaultValues, fillTool } from "@/lib/tools/fill";
+import AssistantChat from "@/components/AssistantChat";
 import { Bread, CopyBtn } from "./shared";
 
 interface Slot { key: string; label: string; help: string; picks: string[] }
@@ -179,6 +180,25 @@ export default function ToolsBuilder() {
               </div>
             </div>
           )}
+
+          {/* prompt coach - same open-source model as the site assistant */}
+          <div className="bg-card border border-line rounded-[18px] p-5 shadow-soft">
+            <div className="flex items-center gap-2.5 mb-3">
+              <h3 className="text-[13px] font-bold">Prompt coach</h3>
+              <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.1em] text-dim ml-auto">open-source model</span>
+            </div>
+            <p className="text-[12px] text-dim mb-2 leading-[1.55]">
+              Describe the app you want - the coach recommends artifact picks for the slots above and you apply them in one tap.
+            </p>
+            <AssistantChat
+              mode="builder"
+              compact
+              context={`Project: ${projectType}${extra.trim() ? ` - ${extra.trim()}` : ""}. Target tool: ${TARGETS.find((t) => t.id === target)?.label}. Picked so far: ${SLOTS.map((s) => choice[s.key] ? `${s.key}=${choice[s.key]}` : s.key + "=empty").join(", ")}.`}
+              starters={["Make it a SaaS dashboard with charts", "A portfolio that feels editorial", "What should a landing page pick?"]}
+              placeholder="Tell the coach what you're building…"
+              onApplyPlan={(plan) => setChoice((c) => ({ ...c, ...plan.slots }))}
+            />
+          </div>
         </div>
 
         {/* output */}

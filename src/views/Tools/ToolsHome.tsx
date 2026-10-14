@@ -4,8 +4,11 @@ import { useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { Eyebrow, SectionHead, btn } from "@/components/ui";
 import { TOOL_CATEGORIES } from "@/lib/tools/types";
-import { TOOLS_TOTAL, countOfCategory, searchTools, toolById, toolPath } from "@/lib/tools/data";
+import { TOOLS_TOTAL, ALL_TOOLS, countOfCategory, searchTools, toolById, toolPath } from "@/lib/tools/data";
 import { CatIcon, useFavs, FavBtn } from "./shared";
+
+/* how many artifacts render a live demo rather than a written walkthrough */
+const VISUAL = ALL_TOOLS.filter((t) => t.cssTemplate && t.demoHtml).length;
 
 export default function ToolsHome() {
   const [q, setQ] = useState("");
@@ -19,9 +22,18 @@ export default function ToolsHome() {
         Every design and build trick, <span className="text-accent">in plain English</span>
       </h1>
       <p className="text-cocoa text-[16.5px] leading-[1.65] mt-4 max-w-[640px]">
-        {TOOLS_TOTAL} artifacts across {TOOL_CATEGORIES.length} areas - each one explained without jargon, with a live demo you can
-        touch, code you can copy, and a ready-made prompt for Cursor, Claude, ChatGPT or Lovable that already contains your exact values.
+        {TOOLS_TOTAL} artifacts across {TOOL_CATEGORIES.length} areas - each one explained without jargon, with the values you can
+        change, the code you can copy, and a ready-made prompt for Cursor, Claude, ChatGPT or Lovable that already contains them.
       </p>
+
+      <div className="flex flex-wrap items-center gap-2 mt-5 text-[13px] text-cocoa">
+        <Link to="/tools/browse" className="inline-flex items-center gap-1.5 bg-coffee text-foam rounded-full px-4 py-2 font-semibold hover:bg-roast transition-colors">
+          Browse all {TOOLS_TOTAL}
+        </Link>
+        <span className="font-mono text-[11px] text-dim">
+          {VISUAL} with a live demo you can touch · {TOOLS_TOTAL - VISUAL} written guides · filter by level, tag or plain words
+        </span>
+      </div>
 
       {/* global search, aliases included */}
       <div className="mt-9 max-w-[560px]">

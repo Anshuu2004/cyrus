@@ -1,9 +1,10 @@
 "use client";
 /* ══ shared bits for the Artifacts (/tools) pages ═══════════════════ */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "@/lib/router";
 import { useStored } from "@/lib/util";
 import type { Tool } from "@/lib/tools/types";
+import { findCategory } from "@/lib/tools/types";
 import { fillTool } from "@/lib/tools/fill";
 import { toolPath } from "@/lib/tools/data";
 
@@ -86,23 +87,51 @@ export function DemoFrame({ css, html, compact = false }: { css: string; html: s
   );
 }
 
-/* small preview shown on subcategory cards (visual tools only) */
+/* small preview shown on subcategory cards (visual tools only).
+   The demo is laid out on a fixed 680px stage and scaled into the tile,
+   so tall demos never clip their own headline. */
 export function MiniPreview({ tool }: { tool: Tool }) {
   const filled = useMemo(() => fillTool(tool, {}), [tool]);
   if (!tool.cssTemplate || !tool.demoHtml) return <CardTile tool={tool} />;
   return (
-    <div className="h-[128px] overflow-hidden rounded-[14px] border border-line pointer-events-none">
-      <DemoFrame css={filled.css} html={filled.demoHtml} compact />
+    <div className="h-[128px] overflow-hidden rounded-[14px] border border-line pointer-events-none bg-sand">
+      <style dangerouslySetInnerHTML={{ __html: filled.css }} />
+      <div
+        className="demo-root w-[680px] h-[278px] origin-top-left scale-[.46] flex items-start justify-center overflow-hidden pt-6 px-8"
+        dangerouslySetInnerHTML={{ __html: filled.demoHtml }}
+      />
     </div>
   );
 }
 
 const TONES = ["from-peach to-sand", "from-clay to-sand", "from-[#e8e0f4] to-sand", "from-[#dcebe2] to-sand", "from-[#f3e3da] to-clay"];
+
+/* Cover for artifacts that are written guides rather than CSS demos:
+   a tinted plate with the category mark, the name set in the display
+   face, and what you actually get inside. Deterministic per id. */
 export function CardTile({ tool }: { tool: Tool }) {
-  const tone = TONES[Math.abs(tool.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % TONES.length];
+  const h = Math.abs(tool.id.split("").reduce((a, c) => a * 31 + c.charCodeAt(0), 7));
+  const tone = TONES[h % TONES.length];
+  const cat = findCategory(tool.category);
+  const hasDemo = Boolean(tool.cssTemplate && tool.demoHtml);
   return (
-    <div className={`h-[128px] rounded-[14px] border border-line bg-gradient-to-br ${tone} grid place-items-center`}>
-      <span className="font-mono text-[11px] tracking-[.14em] uppercase text-cocoa/70 px-4 text-center">{tool.tags.slice(0, 3).join(" · ") || tool.name}</span>
+    <div className={`relative h-[128px] overflow-hidden rounded-[14px] border border-line bg-gradient-to-br ${tone}`}>
+      <span aria-hidden className="absolute inset-0" style={{ backgroundImage: "radial-gradient(rgba(90,60,38,.14) 1px, transparent 1px)", backgroundSize: "13px 13px" }} />
+      <span aria-hidden className="absolute -right-6 -top-8 w-24 h-24 rounded-full border border-cocoa/10" />
+      <span aria-hidden className="absolute -right-2 -top-4 w-16 h-16 rounded-full border border-cocoa/10" />
+      <div className="relative h-full flex flex-col justify-between p-3.5">
+        <span className="w-8 h-8 rounded-[10px] bg-card/85 border border-line grid place-items-center text-rust">
+          <CatIcon d={cat?.icon ?? ""} className="w-4 h-4" />
+        </span>
+        <div>
+          <b className="font-display block text-[15.5px] font-bold leading-[1.15] text-cocoa line-clamp-2">{tool.name}</b>
+          <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-[.12em] text-cocoa/70">
+            {hasDemo ? "live demo" : "plain-english guide"}
+            <span aria-hidden className="w-[3px] h-[3px] rounded-full bg-cocoa/40" />
+            {tool.difficulty}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -153,5 +182,123 @@ export function ToolCard({ tool, fav }: { tool: Tool; fav?: { toggle: (id: strin
         )}
       </div>
     </Link>
+  );
+}
+
+/* ══ finder: the filter + sort + show-more logic shared by the
+   subcategory shelves and /tools/browse. One hook, one control bar. ══ */
+export type SortKey = "curated" | "az" | "level";
+const LEVEL = { beginner: 0, intermediate: 1, advanced: 2 } as const;
+
+export function useFinder(all: Tool[]) {
+  const [q, setQ] = useState("");
+  const [diff, setDiff] = useState("all");
+  const [tag, setTag] = useState("all");
+  const [kind, setKind] = useState("all");
+  const [sort, setSort] = useState<SortKey>("curated");
+  const [limit, setLimit] = useState(24);
+
+  const tags = useMemo(() => [...new Set(all.flatMap((t) => t.tags))].sort(), [all]);
+
+  const shown = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    const words = needle.split(/\s+/).filter(Boolean);
+    const out = all.filter((t) =>
+      (diff === "all" || t.difficulty === diff) &&
+      (tag === "all" || t.tags.includes(tag)) &&
+      (kind === "all" || (kind === "demo" ? Boolean(t.cssTemplate && t.demoHtml) : !t.cssTemplate)) &&
+      (words.length === 0 || words.every((w) =>
+        t.name.toLowerCase().includes(w) || t.summary.toLowerCase().includes(w) || t.description.toLowerCase().includes(w) ||
+        t.aliases.some((a) => a.toLowerCase().includes(w)) || t.tags.some((g) => g.includes(w)))),
+    );
+    if (sort === "az") out.sort((a, b) => a.name.localeCompare(b.name));
+    if (sort === "level") out.sort((a, b) => LEVEL[a.difficulty] - LEVEL[b.difficulty] || a.name.localeCompare(b.name));
+    return out;
+  }, [all, q, diff, tag, kind, sort]);
+
+  useEffect(() => setLimit(24), [q, diff, tag, kind, sort]);
+
+  const dirty = q !== "" || diff !== "all" || tag !== "all" || kind !== "all";
+  const reset = () => { setQ(""); setDiff("all"); setTag("all"); setKind("all"); setSort("curated"); };
+
+  return { q, setQ, diff, setDiff, tag, setTag, kind, setKind, sort, setSort, tags, shown, limit, more: () => setLimit((n) => n + 24), dirty, reset };
+}
+
+export type Finder = ReturnType<typeof useFinder>;
+
+const PILL = "text-[12.5px] font-semibold rounded-full px-3.5 py-[7px] border transition-colors";
+const pillOn = "bg-coffee text-foam border-coffee";
+const pillOff = "bg-card text-cocoa border-line hover:border-accent";
+
+export function FilterBar({ f, searchLabel, children }: { f: Finder; searchLabel: string; children?: ReactNode }) {
+  const active = (n: string) => (n === "all" ? "Any level" : n);
+  return (
+    <div className="rounded-[18px] border border-line bg-cream/70 p-3 md:p-3.5">
+      {children}
+      <div className="flex flex-wrap items-center gap-2.5">
+        <label className="flex items-center gap-2 bg-card border border-line rounded-full px-4 py-2 w-full sm:w-[250px] focus-within:border-accent transition-colors">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-dim shrink-0" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input
+            value={f.q} onChange={(e) => f.setQ(e.target.value)} aria-label={searchLabel} placeholder="Filter by name, tag or plain words…"
+            className="flex-1 min-w-0 border-0 outline-none bg-transparent text-[13.5px] placeholder:text-dim" autoComplete="off"
+          />
+        </label>
+        <div className="flex gap-1.5 flex-wrap" role="group" aria-label="Difficulty">
+          {["all", "beginner", "intermediate", "advanced"].map((d) => (
+            <button key={d} onClick={() => f.setDiff(d)} aria-pressed={f.diff === d} className={`${PILL} ${f.diff === d ? pillOn : pillOff}`}>{active(d)}</button>
+          ))}
+        </div>
+        <div className="flex gap-1.5 flex-wrap" role="group" aria-label="What is inside">
+          {[["all", "Anything"], ["demo", "Live demo"], ["guide", "Written guide"]].map(([v, l]) => (
+            <button key={v} onClick={() => f.setKind(v)} aria-pressed={f.kind === v} className={`${PILL} ${f.kind === v ? pillOn : pillOff}`}>{l}</button>
+          ))}
+        </div>
+        {f.tags.length > 1 && (
+          <select value={f.tag} onChange={(e) => f.setTag(e.target.value)} aria-label="Tag filter"
+            className="bg-card border border-line rounded-full px-3.5 py-[8px] text-[12.5px] font-semibold text-cocoa outline-none focus:border-accent max-w-[46vw] sm:max-w-[170px]">
+            <option value="all">All tags</option>
+            {f.tags.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        )}
+        <select value={f.sort} onChange={(e) => f.setSort(e.target.value as SortKey)} aria-label="Sort artifacts"
+          className="bg-card border border-line rounded-full px-3.5 py-[8px] text-[12.5px] font-semibold text-cocoa outline-none focus:border-accent max-w-[46vw]">
+          <option value="curated">Curated order</option>
+          <option value="level">Easiest first</option>
+          <option value="az">A to Z</option>
+        </select>
+        <span className="ml-auto flex items-center gap-2.5 max-sm:w-full max-sm:justify-between">
+          <span aria-live="polite" className="font-mono text-[11px] text-dim">{f.shown.length} match{f.shown.length === 1 ? "" : "es"}</span>
+          {f.dirty && (
+            <button onClick={f.reset} className="font-mono text-[11px] font-semibold text-rust hover:underline">Clear</button>
+          )}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* show-more: the shelves hold hundreds of cards, nobody scrolls that */
+const btnShell = "inline-flex items-center justify-center";
+
+export function ShowMore({ f }: { f: Finder }) {
+  const left = f.shown.length - f.limit;
+  if (left <= 0) return null;
+  return (
+    <div className="mt-8 flex flex-col items-center gap-2.5">
+      <button onClick={f.more} className={`${btnShell} gap-2 px-6 py-3 rounded-full border-2 border-coffee text-[14px] font-semibold hover:bg-coffee hover:text-foam transition-colors`}>
+        Show {Math.min(24, left)} more
+      </button>
+      <span className="font-mono text-[11px] text-dim">Showing {Math.min(f.limit, f.shown.length)} of {f.shown.length}</span>
+    </div>
+  );
+}
+
+export function ToolGrid({ f, fav }: { f: Finder; fav?: { toggle: (id: string) => void; isFav: (id: string) => boolean; mounted: boolean } }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      {f.shown.slice(0, f.limit).map((t) => (
+        <ToolCard key={t.id} tool={t} fav={fav?.mounted ? { toggle: fav.toggle, isFav: fav.isFav(t.id), mounted: true } : undefined} />
+      ))}
+    </div>
   );
 }

@@ -42,7 +42,7 @@ function Workflow() {
       <div>
         <Pill>Contributor workflow</Pill>
         <h2 className="font-display font-extrabold tracking-[-.025em] leading-[1.08] text-[clamp(30px,3.8vw,46px)] mt-6">
-          Your prep lives on the platform. <span className="text-clay">Not across twelve tabs.</span>
+          Your prep lives on the platform. <span className="text-accent">Not across twelve tabs.</span>
         </h2>
         <p className="text-cocoa text-[15.5px] leading-[1.7] mt-6">
           Sign in once and cyrus keeps the whole picture in one place: what you saved, what
@@ -78,7 +78,7 @@ function Workflow() {
                 <div className="flex-1 bg-card border border-line rounded-[16px] px-5 py-4 shadow-soft">
                   <div className="flex items-baseline gap-3">
                     <b className="card-title text-[15.5px]">{b}</b>
-                    <span className="ml-auto font-mono text-[13px] font-bold text-clay/80">0{i + 1}</span>
+                    <span className="ml-auto font-mono text-[13px] font-bold text-dim">0{i + 1}</span>
                   </div>
                   <p className="card-desc text-[13px] mt-1.5">{p}</p>
                 </div>

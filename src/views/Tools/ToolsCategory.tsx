@@ -33,20 +33,30 @@ export default function ToolsCategory({ catId }: { catId: ToolCategoryId }) {
 
       {cat.subcategories.map((s) => {
         const tools = toolsOfSub(cat.id, s.id);
+        /* a shelf can hold hundreds of artifacts, so this overview shows a
+           handful and hands the rest to the subcategory page */
+        const peek = tools.slice(0, 6);
         return (
           <section key={s.id} id={s.id} className="mt-14 scroll-mt-24">
             <SectionHead
               tag={`${tools.length} tools`}
               title={s.label}
               sub={s.blurb}
-              side={<Link to={subPath(cat.id, s.id)} className="text-[13px] font-semibold text-rust hover:underline shrink-0">Browse all ›</Link>}
+              side={<Link to={subPath(cat.id, s.id)} className="text-[13px] font-semibold text-rust hover:underline shrink-0">Browse all {tools.length}</Link>}
             />
             {tools.length > 0 ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                {tools.map((t) => (
-                  <ToolCard key={t.id} tool={t} fav={mounted ? { toggle, isFav: favs.includes(t.id), mounted } : undefined} />
-                ))}
-              </div>
+              <>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                  {peek.map((t) => (
+                    <ToolCard key={t.id} tool={t} fav={mounted ? { toggle, isFav: favs.includes(t.id), mounted } : undefined} />
+                  ))}
+                </div>
+                {tools.length > peek.length && (
+                  <Link to={subPath(cat.id, s.id)} className="mt-4 inline-block text-[13px] font-semibold text-cocoa hover:text-rust transition-colors">
+                    <span className="border border-line rounded-full px-3.5 py-[7px] hover:border-accent">Show the other {tools.length - peek.length}</span>
+                  </Link>
+                )}
+              </>
             ) : (
               <p className="mt-6 text-[13.5px] text-cocoa bg-cream border border-dashed border-line rounded-[14px] px-4 py-3.5">
                 Landing soon - meanwhile the other shelves are stocked. Try the <Link to="/tools/builder" className="text-rust font-semibold hover:underline">prompt builder</Link>.
