@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Nova from "@/views/Nova";
 
-export const metadata: Metadata = { title: "nova.ai", description: "The nova.ai recommender: describe what you want to build, get matched skills, orgs and programs." };
+export const metadata: Metadata = { title: "Co-pilot", description: "Co-pilot is the one AI on cyrus: describe your stack, get matched hackathons, skills and programs - or just ask it anything." };
 
 export default function Page() {
   return <Nova />;

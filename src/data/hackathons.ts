@@ -657,9 +657,9 @@ export const HACKS: Hack[] = [
 ];
 
 export const HACK_STATUS: Record<Hack["status"], [string, string]> = {
-  open: ["● Open now", "text-[#7ee2a8] border-[rgba(126,226,168,.4)] bg-[rgba(97,207,138,.16)]"],
-  rolling: ["● Rolling", "text-[#7ee2a8] border-[rgba(126,226,168,.4)] bg-[rgba(97,207,138,.16)]"],
-  upcoming: ["Upcoming", "text-foam border-white/20 bg-white/10"],
-  recurring: ["Recurring", "text-foam border-white/20 bg-white/10"],
-  closed: ["Closed", "text-cocoa border-line bg-cream"],
+  open: ["● Open now", "text-[#8ff0ba] border-[#8ff0ba]/45 bg-[#0e1512]/82 backdrop-blur-[3px]"],
+  rolling: ["● Rolling", "text-[#8ff0ba] border-[#8ff0ba]/45 bg-[#0e1512]/82 backdrop-blur-[3px]"],
+  upcoming: ["Upcoming", "text-white/90 border-white/28 bg-[#120e09]/78 backdrop-blur-[3px]"],
+  recurring: ["Recurring", "text-white/90 border-white/28 bg-[#120e09]/78 backdrop-blur-[3px]"],
+  closed: ["Closed", "text-white/65 border-white/22 bg-[#120e09]/72 backdrop-blur-[3px]"],
 };

@@ -95,9 +95,9 @@ function HackathonShelf() {
 
 /* ── developer programs shelf (restored, next to hackathons) ─ */
 const PSTATUS: Record<Program["status"], [string, string]> = {
-  live: ["● Live now", "bg-[rgba(97,207,138,.16)] text-[#7ee2a8] border-[rgba(126,226,168,.4)]"],
-  upcoming: ["Upcoming", "bg-white/10 text-foam border-white/20"],
-  closed: ["Closed", "bg-white/8 text-steam border-white/14"],
+  live: ["● Live now", "bg-[#0e1512]/82 text-[#8ff0ba] border-[#8ff0ba]/45"],
+  upcoming: ["Upcoming", "bg-[#120e09]/78 text-white/90 border-white/28"],
+  closed: ["Closed", "bg-[#120e09]/72 text-white/65 border-white/22"],
 };
 
 function ProgCard({ p }: { p: Program }) {

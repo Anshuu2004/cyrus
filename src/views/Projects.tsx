@@ -11,6 +11,60 @@ import { btn, Chip, LevelChip, OrgImg, Tag, Word } from "../components/ui";
 
 const W = "max-w-[1240px] mx-auto px-6";
 const LANGS = ["TypeScript", "Python", "JavaScript", "Go", "Rust", "Shell"];
+const FRAMEWORKS = ["React", "Next.js", "Django", "Flutter"];
+
+/* ── filter groups, matched over name + description + tags ── */
+type MatchGroup = { id: string; label: string; kws: string[]; not?: boolean };
+const DOMAINS: MatchGroup[] = [
+  { id: "writing", label: "Writing & docs", kws: ["writing", "writer", "copywrit", "blog", "documentation", "docs", "summariz", "translat", "paraphras", "essay", "content writ", "grammar", "note"] },
+  { id: "design", label: "UI & design", kws: ["frontend", "front end", "design system", "figma", "css", "tailwind", "accessib", "a11y", "component", "landing", "website", "ui kit", "mockup", "ux"] },
+  { id: "coding", label: "Coding", kws: ["backend", "code review", "refactor", "debug", "testing", "test generat", "code generat", "codegen", "api", "database", "programming", "pair program"] },
+  { id: "data", label: "Data & analytics", kws: ["sql", "spreadsheet", "data analy", "data sci", "data visuali", "chart", "dashboard", "analytics", "pandas", "etl", "pipeline", "dataframe"] },
+  { id: "devops", label: "DevOps & cloud", kws: ["devops", "ci cd", "docker", "kubernetes", "k8s", "terraform", "infra", "aws", "cloud", "deploy", "monitoring", "observab"] },
+  { id: "security", label: "Security", kws: ["security", "pentest", "pen test", "vulnerab", "secret", "audit", "owasp", "threat", "malware", "guardrail"] },
+  { id: "documents", label: "Documents", kws: ["pdf", "word", "powerpoint", "pptx", "docx", "xlsx", "excel", "slides", "invoice", "resume", "contract"] },
+  { id: "research", label: "Research", kws: ["research", "citation", "literatur", "academic", "paper", "arxiv", "web search", "search engine", "scrap", "scholar"] },
+  { id: "marketing", label: "Marketing & sales", kws: ["marketing", "seo", "sale", "sales", "lead generat", "campaign", "advertis", "social media", "newsletter", "growth"] },
+  { id: "product", label: "Product & project mgmt", kws: ["project manag", "task manag", "jira", "spec ", "ticket", "roadmap", "agile", "scrum", "backlog", "planning"] },
+  { id: "media", label: "Image, video & audio", kws: ["image", "video", "audio", "music", "voice", "speech", "3d", "animation", "podcast", "photo", "thumbnail"] },
+  { id: "automation", label: "Productivity & automation", kws: ["automation", "workflow", "email", "calendar", "slack", "todo", "reminder", "productiv", "personal assistant", "schedul"] },
+];
+const TOOLS: MatchGroup[] = [
+  { id: "claude", label: "Claude", kws: ["claude", "anthropic"] },
+  { id: "chatgpt", label: "ChatGPT / Codex", kws: ["chatgpt", "openai", "gpt", "codex"] },
+  { id: "gemini", label: "Gemini", kws: ["gemini"] },
+  { id: "cursor", label: "Cursor", kws: ["cursor"] },
+  { id: "copilot", label: "Copilot", kws: ["copilot"] },
+  { id: "windsurf", label: "Windsurf", kws: ["windsurf"] },
+  { id: "open", label: "Open models", kws: ["llama", "mistral", "deepseek", "ollama", "huggingface", "hugging face"] },
+  { id: "agnostic", label: "Model-agnostic", kws: [], not: true },
+];
+const ALL_BRAND_KWS = TOOLS.filter((t) => !t.not).flatMap((t) => t.kws);
+const KINDS: (MatchGroup & { cat?: string })[] = [
+  { id: "skill", label: "Agent skill", kws: ["skill"] },
+  { id: "mcp", label: "MCP server", kws: ["mcp"] },
+  { id: "cursorrules", label: "Cursor rules", kws: ["cursor rule", "cursorrules"], cat: "cursor" },
+  { id: "agentsmd", label: "AGENTS.md", kws: ["agents md", "agents.md", "claude md"], cat: "agentsmd" },
+  { id: "prompt", label: "Prompt pack", kws: ["prompt"] },
+  { id: "plugin", label: "Plugin or extension", kws: ["plugin", "extension"] },
+  { id: "agent", label: "Full agent", kws: ["ai agent", "autonomous", "agentic"] },
+  { id: "cli", label: "CLI tool", kws: ["cli", "command line", "terminal"] },
+  { id: "lib", label: "Library or SDK", kws: ["sdk", "library"] },
+];
+
+const HAY = new Map<string, string>();
+function hay(r: Repo): string {
+  let h = HAY.get(r.repo);
+  if (!h) {
+    h = " " + `${r.repo} ${r.desc} ${r.tags.join(" ")}`.toLowerCase().replace(/[-_/]/g, " ").replace(/[^a-z0-9 .]/g, " ").replace(/\s+/g, " ") + " ";
+    HAY.set(r.repo, h);
+  }
+  return h;
+}
+const inGroup = (r: Repo, g: MatchGroup): boolean =>
+  g.not ? !ALL_BRAND_KWS.some((k) => hay(r).includes(" " + k)) : g.kws.some((k) => hay(r).includes(" " + k));
+const inKind = (r: Repo, g: MatchGroup & { cat?: string }): boolean =>
+  (g.cat !== undefined && r.cat === g.cat) || g.kws.some((k) => hay(r).includes(" " + k));
 
 type Sort = "stars" | "forks" | "issues" | "recent" | "name" | "dl";
 const SORTERS: Record<Exclude<Sort, "dl">, (a: Repo, b: Repo) => number> = {
@@ -74,19 +128,30 @@ export default function Projects() {
   const [cat, setCat] = useState("all");
   const [org, setOrg] = useState("all");
   const [langs, setLangs] = useState<string[]>([]);
+  const [fw, setFw] = useState<string[]>([]);
+  const [domain, setDomain] = useState("all");
+  const [tool, setTool] = useState("all");
+  const [kind, setKind] = useState("all");
   const [sort, setSort] = useState<Sort>("stars");
   const [shown, setShown] = useState(48);
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
+    const dg = DOMAINS.find((d) => d.id === domain);
+    const tg = TOOLS.find((t) => t.id === tool);
+    const kg = KINDS.find((k) => k.id === kind);
     return REPOS.filter((r) =>
       (level === "all" || levelOf(r.stars) === level) &&
       (cat === "all" || r.cat === cat) &&
       (org === "all" || r.repo.split("/")[0].toLowerCase() === org) &&
       (!langs.length || langs.includes(r.lang)) &&
+      (!fw.length || fw.some((f) => hay(r).includes(" " + f.toLowerCase()))) &&
+      (!dg || inGroup(r, dg)) &&
+      (!tg || inGroup(r, tg)) &&
+      (!kg || inKind(r, kg)) &&
       (!term || (r.repo + " " + r.desc + " " + r.tags.join(" ") + " " + r.lang).toLowerCase().includes(term))
     ).sort((a, b) => sort === "dl" ? (downloads[b.repo] || 0) - (downloads[a.repo] || 0) || byStars(a, b) : SORTERS[sort](a, b));
-  }, [q, level, cat, org, langs, sort, downloads]);
+  }, [q, level, cat, org, langs, fw, domain, tool, kind, sort, downloads]);
 
   const orgLogins = useMemo(() => {
     const set = new Map<string, string>();
@@ -96,6 +161,8 @@ export default function Projects() {
 
   const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
   const label = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
+  const rchip = (on: boolean) => `text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${on ? "bg-coffee border-coffee text-foam shadow-soft" : "bg-paper border-line text-cocoa hover:border-accent hover:text-rust"}`;
+  const tog = (cur: string, id: string, set: (v: string) => void) => { set(cur === id ? "all" : id); setShown(48); };
 
   return (
     <>
@@ -107,18 +174,56 @@ export default function Projects() {
           GitHub skills your <Word>AI tools</Word> plug into.
         </h1>
         <p className="text-ink font-medium max-w-[640px] text-[16.5px] leading-[1.6]">
-          Agent skills, Cursor rules, MCP servers and AGENTS.md files - {REPOS.length} repos for Claude Code, Cursor,
-          Codex and any coding agent. Hit <b>Download .zip</b> on any card, unzip into <code className="font-mono text-[13px] text-rust">~/.claude/skills</code>
-          or <code className="font-mono text-[13px] text-rust">.cursor/rules</code>, done. Mentored programs live on the <Link to="/opensource" className="text-accent font-semibold hover:underline">open source page</Link>.
+          Agent skills, Cursor rules and MCP servers for any coding agent. Hit <b>Download .zip</b> on a card,
+          unzip it into your project, done. <b>{REPOS.length} repos</b> to pick from. Mentored programs live on the <Link to="/opensource" className="text-accent font-semibold hover:underline">open source page</Link>.
         </p>
       </header>
 
       <div className={`${W} pt-9 grid grid-cols-[280px_1fr] gap-7 items-start max-[980px]:grid-cols-1`}>
         {/* ── filter rail ── */}
-        <aside className="sticky top-[86px] max-[980px]:static bg-card border border-line rounded-[22px] p-[22px] shadow-soft grid gap-5">
+        <aside className="sticky top-[86px] max-[980px]:static max-h-[calc(100vh-110px)] overflow-y-auto max-[980px]:max-h-none bg-card border border-line rounded-[22px] p-[22px] shadow-soft grid gap-5">
           <div>
             <span className={label}>Search</span>
             <input className={fin} placeholder="name, tag, description…" value={q} onChange={(e) => { setQ(e.target.value); setShown(48); }} />
+          </div>
+          <div>
+            <span className={label}>What do you want to do</span>
+            <div className="flex flex-wrap gap-[7px]">
+              {DOMAINS.map((d) => (
+                <button key={d.id} onClick={() => tog(domain, d.id, setDomain)} className={rchip(domain === d.id)}>{d.label}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className={label}>Works with</span>
+            <div className="flex flex-wrap gap-[7px]">
+              {TOOLS.map((t) => (
+                <button key={t.id} onClick={() => tog(tool, t.id, setTool)} className={rchip(tool === t.id)}>{t.label}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className={label}>Format</span>
+            <div className="flex flex-wrap gap-[7px]">
+              {KINDS.map((k) => (
+                <button key={k.id} onClick={() => tog(kind, k.id, setKind)} className={rchip(kind === k.id)}>{k.label}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className={label}>Tech stack</span>
+            <div className="flex flex-wrap gap-[7px]">
+              {[...LANGS, ...FRAMEWORKS].map((l) => {
+                const on = langs.includes(l) || fw.includes(l);
+                return (
+                  <button key={l} onClick={() => {
+                    if (FRAMEWORKS.includes(l)) setFw((s) => s.includes(l) ? s.filter((x) => x !== l) : [...s, l]);
+                    else setLangs((s) => s.includes(l) ? s.filter((x) => x !== l) : [...s, l]);
+                    setShown(48);
+                  }} className={rchip(on)}>{l}</button>
+                );
+              })}
+            </div>
           </div>
           <div>
             <span className={label}>Difficulty</span>
@@ -143,18 +248,7 @@ export default function Projects() {
               {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
             </select>
           </div>
-          <div>
-            <span className={label}>Popular stacks</span>
-            <div className="flex flex-wrap gap-[7px]">
-              {LANGS.map((l) => (
-                <button key={l} onClick={() => { setLangs((s) => s.includes(l) ? s.filter((x) => x !== l) : [...s, l]); setShown(48); }}
-                  className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${langs.includes(l) ? "bg-coffee border-coffee text-foam" : "bg-paper border-line text-cocoa hover:border-accent hover:text-rust"}`}>
-                  {l}
-                </button>
-              ))}
-            </div>
-          </div>
-          <button className={btn("primary", "md", "w-full")} onClick={() => { setQ(""); setLevel("all"); setCat("all"); setOrg("all"); setLangs([]); setSort("stars"); setShown(48); }}>
+          <button className={btn("primary", "md", "w-full")} onClick={() => { setQ(""); setLevel("all"); setCat("all"); setOrg("all"); setLangs([]); setFw([]); setDomain("all"); setTool("all"); setKind("all"); setSort("stars"); setShown(48); }}>
             Reset filters
           </button>
         </aside>

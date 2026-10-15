@@ -238,7 +238,7 @@ const SHELVES: [string, string, string, string, string][] = [
   ["Hackathon plans", "/hackathons", "flag", "brick", "Timelines, prizes, ideas and prep plans for every tracked event."],
   ["Project archive", "/opensource", "layers", "leaf", "6,600+ accepted program projects, filterable by year, stack and difficulty."],
   ["Learning resources", "/resources", "check", "honey", "58 company-grade courses and docs, each with an in-site breakdown."],
-  ["Nova AI", "/platform/nova", "spark", "plum", "Ask your saved stack a question and get the next move, not a lecture."],
+  ["Co-pilot", "/platform/nova", "spark", "plum", "The site's one AI: stack matches, deadline answers and build plans."],
 ];
 function Shelves() {
   return (
@@ -291,7 +291,7 @@ export default function Features() {
           <h2 className="font-display font-extrabold tracking-[-.02em] text-[clamp(26px,3.2vw,38px)]">
             Ready to see it on <Word>your</Word> stack?
           </h2>
-          <PlatCTA to="/dashboard" label="Open the dashboard" also={["/platform/nova", "Meet Nova AI"]} />
+          <PlatCTA to="/dashboard" label="Open the dashboard" also={["/platform/nova", "Meet Co-pilot"]} />
         </section>
         <CompanyBand />
       </div>

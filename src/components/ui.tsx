@@ -16,9 +16,7 @@ export function Logo({ size = 30 }: { size?: number }) {
 }
 
 export const Brand = () => (
-  <span className="font-display font-extrabold text-[19px] tracking-[-.02em]">
-    cyrus<span className="text-accent">.ai</span>
-  </span>
+  <span className="font-display font-extrabold text-[19px] tracking-[-.02em]">cyrus</span>
 );
 
 export function Word({ children }: { children: ReactNode }) {
@@ -27,7 +25,10 @@ export function Word({ children }: { children: ReactNode }) {
 
 export const Eyebrow = ({ children }: { children: ReactNode }) => (
   <span className="inline-flex items-center gap-2 font-mono text-[11.5px] font-medium text-rust bg-peach border border-accent/20 rounded-full px-4 py-2">
-    <span className="w-[7px] h-[7px] rounded-full bg-leaf shadow-[0_0_0_3px_rgba(62,125,79,.16)] animate-blink-soft" />
+    <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden className="shrink-0 animate-diamond">
+      <path d="M12 1.8c.95 4.9 3.32 8.1 8.4 9.5.6.16.6 1.04 0 1.2-5.08 1.4-7.45 4.6-8.4 9.5-.16.6-1.04.6-1.2 0-.95-4.9-3.32-8.1-8.4-9.5-.6-.16-.6-1.04 0-1.2 5.08-1.4 7.45-4.6 8.4-9.5.16-.6 1.04-.6 1.2 0z" fill="#b4602c" />
+      <path d="M18.6 3.2c.4 2.05 1.35 3.4 3.6 4.05.26.07.26.45 0 .52-2.25.65-3.2 2-3.6 4.05-.07.26-.45.26-.52 0-.4-2.05-1.35-3.4-3.6-4.05a.28.28 0 0 1 0-.52c2.25-.65 3.2-2 3.6-4.05.07-.26.45-.26.52 0z" fill="#d98546" opacity=".8" />
+    </svg>
     {children}
   </span>
 );

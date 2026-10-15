@@ -145,8 +145,7 @@ export function DashShell({ dash, active, children }: { dash: Dash; active: stri
         </div>
 
         <div className="border-t border-bean mt-2 pt-3.5 grid gap-1">
-          <Link to="/nova" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-white bg-accent/85 hover:bg-accent transition-colors"><Ic d={DP.spark} size={15} /> Ask nova.ai</Link>
-          <Link to="/assistant" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.target} size={15} /> Ask the helper</Link>
+          <Link to="/nova" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-white bg-accent/85 hover:bg-accent transition-colors"><Ic d={DP.spark} size={15} /> Ask Co-pilot</Link>
           <Link to="/projects" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.plus} size={15} /> Find something to save</Link>
           <Link to="/organizations" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.building} size={15} /> Pick an organization</Link>
           <Link to="/tools" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.gem} size={15} /> Browse the Artifacts</Link>

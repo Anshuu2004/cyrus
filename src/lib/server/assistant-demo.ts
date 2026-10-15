@@ -1,6 +1,6 @@
 /* ══ assistant-demo.ts — offline replies for the AI assistant ═════
    Used whenever HF_TOKEN is missing or the router call fails, so
-   /assistant and the builder coach are never dead ends. Same shape
+   the Co-pilot page and the builder coach are never dead ends. Same shape
    as a real answer, including the ```cyrus-plan block the builder
    can apply. Kept honest: it never pretends to be the Llama model. ═ */
 import type { ChatMsg } from "./hf";
@@ -83,7 +83,7 @@ export function demoReply(mode: "assistant" | "builder", history: ChatMsg[]): st
     return "The mentor finder caches mentor handles and contact channels straight from archived project pages - follow or watch an org and its people surface on your dashboard. Verify each channel on the org's community page before first contact.";
   }
   return [
-    "I am cyrus's built-in helper, running on an open-source Llama model when one is connected.",
+    "I am Co-pilot, cyrus's one AI, running on an open-source Llama model when one is connected.",
     "",
     "Things you can ask me: which hackathon fits your stack, how the org matcher works, where to find free APIs, how to build a prompt for a specific AI tool, or how sign-in and sync behave.",
     "",

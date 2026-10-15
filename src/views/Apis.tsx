@@ -68,7 +68,21 @@ export default function Apis() {
   }, [cat, auth, corsOnly, q]);
 
   const noKey = useMemo(() => FREE_APIS.filter((a) => a.auth === "no").length, []);
-  const pill = (on: boolean) => `font-mono text-[11px] font-bold tracking-[.06em] uppercase rounded-full px-3.5 py-[7px] border transition-all cursor-pointer ${on ? "bg-coffee border-coffee text-foam" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`;
+  const corsN = useMemo(() => FREE_APIS.filter((a) => a.cors).length, []);
+  const authN = useMemo(() => {
+    const c: Record<FreeApi["auth"], number> = { no: 0, oauth: 0, apiKey: 0 };
+    for (const a of FREE_APIS) c[a.auth]++;
+    return c;
+  }, []);
+  const catN = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const a of FREE_APIS) m.set(a.cat, (m.get(a.cat) ?? 0) + 1);
+    return m;
+  }, []);
+  const pill = (on: boolean) => `font-mono text-[11px] font-bold tracking-[.05em] uppercase rounded-full px-3 py-[7px] border transition-all cursor-pointer inline-flex items-center gap-1.5 ${on ? "bg-coffee border-coffee text-foam shadow-soft" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`;
+  const catPill = (on: boolean) => `font-mono text-[11px] font-semibold rounded-full px-3 py-[6px] border transition-all cursor-pointer inline-flex items-center gap-1.5 ${on ? "bg-accent border-accent text-foam shadow-soft" : "bg-cream border-line text-cocoa hover:border-accent hover:text-rust"}`;
+  const num = "tabular-nums opacity-65 text-[10px]";
+  const anyFilter = cat !== "All" || auth !== "All" || corsOnly || q.trim() !== "";
 
   const visible = list.slice(0, shown);
 
@@ -84,11 +98,10 @@ export default function Apis() {
             {fmt(FREE_APIS.length)} <Word>free APIs</Word>, ready to call
           </h1>
           <p className="text-steam mt-5 mx-auto max-w-[580px] text-[15.5px] leading-[1.7]">
-            Weather, finance, images, text, science - every endpoint from the community-maintained
-            public-apis catalog that answers over HTTPS today. {fmt(noKey)} of them need no key at all.
+            Weather, finance, images, text, science. Free APIs you can call from the browser right now.
           </p>
           <div className="flex gap-2.5 justify-center flex-wrap mt-7">
-            <button onClick={() => { setAuth("no"); setCat("All"); }} className={btn("primary", "md")}>{fmt(noKey)} no-key APIs</button>
+            <button onClick={() => { setAuth("no"); setCat("All"); }} className={btn("primary", "md")}>Start with no-key APIs</button>
             <button onClick={() => { setCorsOnly(true); }} className={btn("dark", "md")}>Browser-callable</button>
           </div>
         </div>
@@ -96,28 +109,39 @@ export default function Apis() {
 
       {/* ── overlapping filter bar ── */}
       <div className={`${W} relative z-[2] -mt-11`}>
-        <div className="bg-card border border-line rounded-[22px] shadow-lift px-4 py-3.5 flex items-center gap-3 flex-wrap">
-          <span className="relative flex-1 min-w-[220px] flex items-center">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden className="absolute left-4 text-dim pointer-events-none">
-              <circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" />
-            </svg>
-            <input value={q} onChange={(e) => { setQ(e.target.value); setShown(60); }} placeholder="Search APIs by name or what they do…"
-              aria-label="Search APIs"
-              className="w-full bg-sand border border-line rounded-full pl-10 pr-4 py-2.5 text-[14px] outline-none focus:border-accent placeholder:text-dim" />
-          </span>
-          <button className={pill(auth === "no")} onClick={() => setAuth(auth === "no" ? "All" : "no")}>No key</button>
-          <button className={pill(auth === "oauth")} onClick={() => setAuth(auth === "oauth" ? "All" : "oauth")}>OAuth</button>
-          <button className={pill(auth === "apiKey")} onClick={() => setAuth(auth === "apiKey" ? "All" : "apiKey")}>Free key</button>
-          <button className={pill(corsOnly)} onClick={() => setCorsOnly(!corsOnly)}>CORS</button>
+        <div className="bg-card border border-line rounded-[22px] shadow-lift px-4 py-4 grid gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="relative flex-1 min-w-[220px] flex items-center">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden className="absolute left-4 text-dim pointer-events-none">
+                <circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" />
+              </svg>
+              <input value={q} onChange={(e) => { setQ(e.target.value); setShown(60); }} placeholder="Search APIs by name or what they do…"
+                aria-label="Search APIs"
+                className="w-full bg-sand border border-line rounded-full pl-10 pr-4 py-2.5 text-[14px] outline-none focus:border-accent placeholder:text-dim" />
+            </span>
+            {anyFilter && (
+              <button onClick={() => { setQ(""); setCat("All"); setAuth("All"); setCorsOnly(false); setShown(60); }}
+                className="font-mono text-[10.5px] font-bold uppercase tracking-[.08em] text-dim hover:text-rust transition-colors cursor-pointer px-2 py-2">
+                Clear all
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] text-dim mr-1 w-[74px] shrink-0 max-[520px]:w-full">Access</span>
+            <button className={pill(auth === "no")} onClick={() => setAuth(auth === "no" ? "All" : "no")}>No key <span className={num}>{fmt(noKey)}</span></button>
+            <button className={pill(auth === "apiKey")} onClick={() => setAuth(auth === "apiKey" ? "All" : "apiKey")}>Free key <span className={num}>{fmt(authN.apiKey)}</span></button>
+            <button className={pill(auth === "oauth")} onClick={() => setAuth(auth === "oauth" ? "All" : "oauth")}>OAuth <span className={num}>{fmt(authN.oauth)}</span></button>
+            <button className={pill(corsOnly)} onClick={() => setCorsOnly(!corsOnly)}>Works in browser <span className={num}>{fmt(corsN)}</span></button>
+          </div>
         </div>
       </div>
 
       {/* ── category rail ── */}
       <div className={`${W} pt-7`}>
-        <div className={`flex gap-2 flex-wrap ${catOpen ? "" : "max-h-[104px]"} ${catOpen ? "" : "overflow-hidden"} transition-[max-height]`}>
-          <button className={pill(cat === "All")} onClick={() => { setCat("All"); setShown(60); }}>All</button>
+        <div className={`flex gap-1.5 flex-wrap ${catOpen ? "" : "max-h-[76px] overflow-hidden"} transition-[max-height]`}>
+          <button className={catPill(cat === "All")} onClick={() => { setCat("All"); setShown(60); }}>All <span className={num}>{fmt(FREE_APIS.length)}</span></button>
           {CATS.map((c) => (
-            <button key={c} className={pill(cat === c)} onClick={() => { setCat(cat === c ? "All" : c); setShown(60); }}>{c}</button>
+            <button key={c} className={catPill(cat === c)} onClick={() => { setCat(cat === c ? "All" : c); setShown(60); }}>{c} <span className={num}>{catN.get(c) ?? 0}</span></button>
           ))}
         </div>
         <button onClick={() => setCatOpen((v) => !v)} className="mt-2.5 font-mono text-[10.5px] font-bold uppercase tracking-[.08em] text-accent hover:text-rust transition-colors cursor-pointer">

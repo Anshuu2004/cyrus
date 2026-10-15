@@ -144,7 +144,7 @@ export default function How() {
         {/* STEP 03 */}
         <Step step="03" label="Turn a shortlist into a merged PR" d={D.check} tone="honey"
           h2="Work the board, not the tabs."
-          sub="This is where seasons are actually won: five orgs on your watchlist, the exact skills their maintainers use, starter issues you can claim this week, and a checklist that ticks itself as you go. Nova answers the questions in between without ever leaving the index."
+          sub="This is where seasons are actually won: five orgs on your watchlist, the exact skills their maintainers use, starter issues you can claim this week, and a checklist that ticks itself as you go. Co-pilot answers the questions in between without ever leaving the index."
           behind={[
             "Watchlist statuses track researching › preparing › applied",
             "Mentor finder surfaces handles and live channels",

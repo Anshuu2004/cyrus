@@ -354,7 +354,7 @@ export default function OrgProfile() {
               </div>
               <div className="flex flex-col gap-2 shrink-0 ml-auto">
                 <a href={`https://github.com/${org.login}`} target="_blank" rel="noopener" className={btn("dark", "sm")}>Visit official site</a>
-                <Link to="/nova" className={btn("outline", "sm")}>Ask Nova AI about {org.login}</Link>
+                <Link to="/nova" className={btn("outline", "sm")}>Ask Co-pilot about {org.login}</Link>
               </div>
             </div>
 

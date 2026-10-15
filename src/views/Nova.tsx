@@ -1,6 +1,7 @@
 "use client"
-/* ══ Nova.tsx — nova.ai: tell it your stack, it ranks your next
-   hackathon, project and program match off the live catalog.     ═ */
+/* ══ Nova.tsx — Co-pilot: the site's one AI. Tell it your stack, it
+   ranks your next hackathon, project and program match off the live
+   catalog - and below the matches you can just ask it anything.    ═ */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@/lib/router";
 import { PROGRAMS } from "../data/orgs";
@@ -14,8 +15,17 @@ import type { Hack } from "../data/hackathons";
 import { btn, Chip, Eyebrow, Word } from "../components/ui";
 import { useStore } from "../lib/store";
 import { api } from "../lib/api";
+import AssistantChat from "../components/AssistantChat";
 
 const W = "max-w-[1240px] mx-auto px-6";
+
+const STARTERS = [
+  "Which hackathon fits a TypeScript + React stack?",
+  "How does the org matcher score organizations?",
+  "What is the master prompt builder?",
+  "Where do I find free APIs to build with?",
+  "How does sign-in and cross-device sync work?",
+];
 
 /* ── application desk: one pipeline per target, next move at every stage ── */
 type DeskApp = { kind: "program" | "hackathon"; targetId: string; title: string; status: string; serverId?: string | null };
@@ -25,7 +35,7 @@ const STAGES: Record<DeskApp["kind"], string[]> = {
 };
 const HINT: Record<string, string> = {
   drafting: "Line up three small issues on the target's repo that your stack could close this week.",
-  roadmap: "nova's plan: two merged PRs first, then one mentor conversation before the window closes.",
+  roadmap: "Co-pilot's plan: two merged PRs first, then one mentor conversation before the window closes.",
   drafting_done: "Have someone read the draft - a community channel or a builder who applied last season.",
   submitted: "Keep the issues you opened alive while reviewers dig, and answer fast on your PRs.",
   interview: "Prep the demo: show what you built, not what you read.",
@@ -167,11 +177,11 @@ export default function Nova() {
             <span className="w-[38px] h-[38px] rounded-[11px] bg-accent grid place-items-center shadow-[0_8px_20px_-6px_rgba(217, 133, 70,.7)]">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.4 6.4l2.8 2.8M14.8 14.8l2.8 2.8M17.6 6.4l-2.8 2.8M9.2 14.8l-2.8 2.8" /></svg>
             </span>
-            <h1 className="font-display font-extrabold text-[clamp(24px,3vw,34px)] tracking-[-.02em] text-white">nova<span className="text-ember">.ai</span></h1>
-            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-foam/70 border border-foam/25 rounded-full px-3 py-1">matching engine</span>
+            <h1 className="font-display font-extrabold text-[clamp(24px,3vw,34px)] tracking-[-.02em] text-white">Co-pilot</h1>
+            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-foam/70 border border-foam/25 rounded-full px-3 py-1">matches and answers</span>
           </div>
           <p className="text-foam/80 mt-3.5 max-w-[560px] text-[15px] leading-[1.65]">
-            Tell nova what you work with - languages, tools, the kind of thing you want to ship - and it ranks the right hackathons, projects and mentored programs for <em className="not-italic text-white font-semibold">you</em>, off the same catalog the rest of cyrus.ai uses.
+            Tell Co-pilot what you work with - languages, tools, the kind of thing you want to ship - and it ranks the right hackathons, projects and mentored programs for <em className="not-italic text-white font-semibold">you</em>, off the same catalog the rest of cyrus uses. It also answers plain-language questions about any page of the site.
           </p>
 
           <div className="mt-7 grid gap-5">
@@ -210,7 +220,7 @@ export default function Nova() {
               </div>
               <button onClick={run} disabled={!skills.length}
                 className={`${btn("primary", "lg")} disabled:opacity-40 disabled:cursor-not-allowed !bg-accent !border-accent`}>
-                {ran ? "Re-run nova" : "Find my matches"}
+                {ran ? "Re-run Co-pilot" : "Find my matches"}
               </button>
               {prof.skills.length > 0 && (
                 <button onClick={() => { setProf(DEFAULT); setFree(""); setRan(false); }}
@@ -221,14 +231,32 @@ export default function Nova() {
         </div>
       </div>
 
+      {/* ── ask anything ── */}
+      <div className="bg-card border border-line rounded-[26px] p-6 md:p-7 mt-6 shadow-soft">
+        <div className="flex items-center gap-2.5 pb-4 mb-2 border-b border-line flex-wrap">
+          <span className="w-[30px] h-[30px] rounded-[9px] bg-accent grid place-items-center shrink-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" aria-hidden><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.4 6.4l2.8 2.8M14.8 14.8l2.8 2.8M17.6 6.4l-2.8 2.8M9.2 14.8l-2.8 2.8" /></svg>
+          </span>
+          <div className="min-w-0">
+            <b className="block font-display text-[14.5px]">Ask Co-pilot anything</b>
+            <span className="font-mono text-[10px] text-dim">open-source model - answers stay about this site</span>
+          </div>
+          <Link to="/tools/builder" className={btn("outline", "sm") + " ml-auto shrink-0 max-[560px]:hidden"}>Prompt coach</Link>
+        </div>
+        <AssistantChat mode="assistant" starters={STARTERS} placeholder="Ask Co-pilot…" />
+        <p className="font-mono text-[10px] text-dim mt-3 leading-[1.6]">
+          Questions are sent to an open-weights Llama model through Hugging Face Inference and answered on the spot - nothing is stored. Without a model token the page falls back to a built-in offline answer, and it always says which one replied.
+        </p>
+      </div>
+
       {/* ── results ── */}
       <div ref={resRef} className="scroll-mt-28 pt-10">
         {!ran ? (
           <div className="text-center py-16 border border-dashed border-line rounded-[22px] bg-cream/60 text-dim">
-            Pick at least one skill above and hit "Find my matches" - nova scores {ALL_HACKS.length} hackathons and {CATALOG.length} projects against your stack.
+            Pick at least one skill above and hit "Find my matches" - Co-pilot scores {ALL_HACKS.length} hackathons and {CATALOG.length} projects against your stack.
           </div>
         ) : !skills.length ? (
-          <p className="text-cocoa text-center py-10">nova needs at least one skill to work with - add one above.</p>
+          <p className="text-cocoa text-center py-10">Co-pilot needs at least one skill to work with - add one above.</p>
         ) : (
           <>
             <Eyebrow>{`tuned to: ${skills.join(" · ")}`}</Eyebrow>
@@ -328,7 +356,7 @@ export default function Nova() {
                       <b className="font-display text-[15px] truncate">{a.title}</b>
                       <Chip tone="cat">{a.kind}</Chip>
                     </div>
-                    <p className="text-cocoa text-[12.5px] leading-[1.55] mt-1.5">{HINT[a.status] ?? "nova will flag the next move once this stage lands."}</p>
+                    <p className="text-cocoa text-[12.5px] leading-[1.55] mt-1.5">{HINT[a.status] ?? "Co-pilot will flag the next move once this stage lands."}</p>
                   </div>
                   <div className="flex items-center gap-1.5 flex-wrap max-[860px]:order-3">
                     {cycle.map((st, idx) => (
@@ -345,7 +373,7 @@ export default function Nova() {
           </section>
         ) : (
           <div className="text-center py-12 border border-dashed border-line rounded-[22px] bg-cream/60 text-dim leading-relaxed">
-            Hit "Apply" on any hackathon or program match above - nova opens one pipeline per target and shows the next move at every stage.
+            Hit "Apply" on any hackathon or program match above - Co-pilot opens one pipeline per target and shows the next move at every stage.
             <span className="block mt-1.5 text-[12.5px]">{serverUser ? "Your desk is synced to your account across devices." : "Sign in and your desk follows you across devices."}</span>
           </div>
         )}

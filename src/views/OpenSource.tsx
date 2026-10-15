@@ -234,10 +234,10 @@ export default function OpenSource() {
         <div className="min-w-[280px] flex-1">
           <h2 className="card-title-xl">Confused which project to choose or don't know which one you are most suitable to work on?</h2>
           <p className="text-cocoa text-[13.5px] leading-[1.6] mt-2 max-w-[560px]">
-            Use our Nova AI Matcher to find out! Get instant matching scores based on your developer skills, preferred frameworks, and contribution experience.
+            Ask Co-pilot. It scores every project against your skills, frameworks and contribution experience - instantly.
           </p>
         </div>
-        <Link to="/nova" className={btn("primary", "lg") + " shrink-0"}>Match with Nova AI</Link>
+        <Link to="/nova" className={btn("primary", "lg") + " shrink-0"}>Match with Co-pilot</Link>
       </div>
 
       {/* rail + results */}

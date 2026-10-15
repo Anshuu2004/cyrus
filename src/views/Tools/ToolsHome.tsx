@@ -22,8 +22,8 @@ export default function ToolsHome() {
         Every design and build trick, <span className="text-accent">in plain English</span>
       </h1>
       <p className="text-cocoa text-[16.5px] leading-[1.65] mt-4 max-w-[640px]">
-        {TOOLS_TOTAL} artifacts across {TOOL_CATEGORIES.length} areas - each one explained without jargon, with the values you can
-        change, the code you can copy, and a ready-made prompt for Cursor, Claude, ChatGPT or Lovable that already contains them.
+        {TOOLS_TOTAL} artifacts across {TOOL_CATEGORIES.length} areas. Every one is explained in plain words.
+        Change the values, copy the code, or paste the built-in prompt into Cursor, Claude or ChatGPT.
       </p>
 
       <div className="flex flex-wrap items-center gap-2 mt-5 text-[13px] text-cocoa">

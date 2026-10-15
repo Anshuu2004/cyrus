@@ -1,5 +1,6 @@
 "use client"
 /* ══ sections.tsx — the dashboard feature sections, rendered per page ══ */
+import { useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { REPOS } from "../../data/repos";
 import { ORGS } from "../../data/orgs";
@@ -69,6 +70,8 @@ export function OrgsSection({ d }: { d: Dash }) {
 
 export function MatcherSection({ d }: { d: Dash }) {
   const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const [drag, setDrag] = useState(false);
+  const take = (f: File | null | undefined) => { if (f) d.parseResume(f); };
   return (
     <Card>
       <h3 className="panel-h-lg mb-1 flex items-center gap-2.5"><Ic d={DP.target} size={16} /> Personalised org selection</h3>
@@ -82,18 +85,39 @@ export function MatcherSection({ d }: { d: Dash }) {
           <input value={d.ghIn} onChange={(e) => d.setGhIn(e.target.value)} placeholder="yourhandle" spellCheck={false} className={fin} />
         </label>
         <label className="block">
-          <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim block mb-1.5">Skills (or drop your resume)</span>
-          <div className="flex gap-2">
-            <input value={d.skillsIn} onChange={(e) => d.setSkillsIn(e.target.value)} placeholder="python, react, kubernetes…" className={fin + " flex-1 min-w-0"} />
-            <label className={btn("outline", "sm") + " shrink-0 cursor-pointer flex items-center gap-1.5"}>
-              <input type="file" accept=".md,.txt,.json,.csv,.pdf,text/*,application/pdf" className="hidden" onChange={(e) => d.parseResume(e.target.files?.[0] ?? null)} />
-              Resume
-            </label>
-          </div>
+          <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim block mb-1.5">Skills</span>
+          <input value={d.skillsIn} onChange={(e) => d.setSkillsIn(e.target.value)} placeholder="python, react, kubernetes…" className={fin} />
         </label>
         <button onClick={d.runMatch} className={btn("primary", "md")}>Match me</button>
       </div>
-      {d.fileNote && <p className="font-mono text-[10.5px] text-leaf mt-2">{d.fileNote}</p>}
+
+      {/* resume upload - parsed in the browser, nothing leaves the page */}
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={(e) => { e.preventDefault(); setDrag(false); take(e.dataTransfer.files?.[0]); }}
+        className={`mt-3 border border-dashed rounded-[16px] px-4 py-4 flex items-center gap-3.5 transition-colors ${drag ? "border-accent bg-peach/50" : "border-line bg-cream hover:border-accent/50"}`}
+      >
+        <span className="w-10 h-10 rounded-[12px] bg-white border border-line grid place-items-center shrink-0 text-rust">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M12 16V4m-5 5 5-5 5 5" /><path d="M4 15v4a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-4" />
+          </svg>
+        </span>
+        <div className="min-w-0">
+          <b className="block card-title text-[13.5px]">Upload your resume</b>
+          <span className="text-[11.5px] text-dim">PDF, TXT or MD - drop it here or pick a file. It is read in your browser and only the skill keywords fill the box above.</span>
+        </div>
+        <label className={btn("outline", "sm") + " ml-auto shrink-0 cursor-pointer max-[560px]:hidden"}>
+          Choose file
+          <input type="file" accept=".md,.txt,.json,.csv,.pdf,text/*,application/pdf" className="hidden" onChange={(e) => take(e.target.files?.[0])} />
+        </label>
+      </div>
+      {d.fileNote && (
+        <p className="font-mono text-[10.5px] text-leaf mt-2 flex items-center gap-2 flex-wrap">
+          {d.fileNote}
+          <button onClick={() => d.setFileNote("")} className="text-dim hover:text-brick underline cursor-pointer">dismiss</button>
+        </p>
+      )}
       {d.prof.done && (
         <div className="mt-5 border-t border-liness pt-4">
           <div className="flex items-center gap-3 flex-wrap mb-3">
@@ -212,10 +236,22 @@ export function MentorsSection({ d }: { d: Dash }) {
   );
 }
 
+const CMP_METRICS: [string, (r: { o: { stars: number; repos: number }; followers: number; projects: number; years: number }) => number, (n: number) => string][] = [
+  ["GitHub stars", (r) => r.o.stars, fmt],
+  ["Public repos", (r) => r.o.repos, fmt],
+  ["Followers", (r) => r.followers, (n) => (n ? fmt(n) : "-")],
+  ["Archive projects", (r) => r.projects, fmt],
+  ["Program years", (r) => r.years, (n) => String(n || "-")],
+];
+
 export function CompareSection({ d }: { d: Dash }) {
+  const rows = d.cmpRows;
+  const maxes = CMP_METRICS.map(([, get]) => Math.max(0, ...rows.map(get)));
+  const suggestions = useMemo(() => ORGS.slice().sort((a, b) => b.stars - a.stars).slice(0, 6).filter((o) => !d.cmpIds.includes(o.login)).slice(0, 3), [d.cmpIds]);
   return (
     <Card>
-      <h3 className="panel-h-lg mb-4 flex items-center gap-2.5"><Ic d={DP.scale} size={16} /> Compare organisations</h3>
+      <h3 className="panel-h-lg mb-1 flex items-center gap-2.5"><Ic d={DP.scale} size={16} /> Compare organisations</h3>
+      <p className="text-cocoa text-[13px] mb-4 max-w-[560px]">Put up to three side by side. The bar that stretches furthest on each row wins it - so the strongest host for your stack is obvious in one glance.</p>
       <div className="relative mb-4 max-w-[380px]">
         <input value={d.cmpQ} onChange={(e) => d.setCmpQ(e.target.value)} placeholder="Search orgs to compare (up to 3)…" aria-label="Search organizations"
           className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]" />
@@ -232,30 +268,73 @@ export function CompareSection({ d }: { d: Dash }) {
           </div>
         )}
       </div>
-      {d.cmpRows.length >= 2 ? (
-        <div className={d.cmpRows.length === 2 ? "grid grid-cols-2 gap-3 max-[900px]:grid-cols-1" : "grid grid-cols-3 gap-3 max-[1050px]:grid-cols-1"}>
-          {d.cmpRows.map(({ o, projects, years, topTech, tier, followers }) => (
-            <div key={o.login} className="bg-cream border border-line rounded-[16px] p-4">
-              <div className="flex items-center gap-2.5 mb-3">
-                <OrgImg src={avatarOf(o.login, 64)} name={o.login} className="w-8 h-8 rounded-[9px] object-cover bg-white border border-line shrink-0" />
-                <Link to={`/organizations/${o.login}`} className="card-title text-[13.5px] truncate hover:text-accent">{o.name}</Link>
-                <button aria-label={`Remove ${o.login}`} onClick={() => d.setCmpIds(d.cmpIds.filter((x) => x !== o.login))}
+
+      {/* selected chips */}
+      {rows.length > 0 && (
+        <div className="flex gap-2 flex-wrap mb-4">
+          {rows.map(({ o }) => (
+            <span key={o.login} className="inline-flex items-center gap-2 bg-coffee text-foam rounded-full pl-1.5 pr-2.5 py-1.5">
+              <OrgImg src={avatarOf(o.login, 48)} name={o.login} className="w-[22px] h-[22px] rounded-full object-cover bg-white shrink-0" />
+              <b className="text-[12px] max-w-[140px] truncate">{o.name}</b>
+              <button aria-label={`Remove ${o.login}`} onClick={() => d.setCmpIds(d.cmpIds.filter((x) => x !== o.login))}
+                className="text-foam/60 hover:text-white cursor-pointer grid place-items-center">{IC_X}</button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {rows.length >= 2 ? (
+        <div className={`grid gap-4 ${rows.length === 2 ? "grid-cols-2 max-[900px]:grid-cols-1" : "grid-cols-3 max-[1050px]:grid-cols-1"}`}>
+          {rows.map((r, ri) => (
+            <div key={r.o.login} className="bg-cream border border-line rounded-[18px] p-[18px] flex flex-col gap-3.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <OrgImg src={avatarOf(r.o.login, 64)} name={r.o.login} className="w-9 h-9 rounded-[10px] object-cover bg-white border border-line shrink-0" />
+                <div className="min-w-0">
+                  <Link to={`/organizations/${r.o.login}`} className="card-title text-[13.5px] truncate block hover:text-accent">{r.o.name}</Link>
+                  <span className="font-mono text-[10px] text-dim">@{r.o.login}</span>
+                </div>
+                <button aria-label={`Remove ${r.o.login}`} onClick={() => d.setCmpIds(d.cmpIds.filter((x) => x !== r.o.login))}
                   className="ml-auto text-dim hover:text-brick cursor-pointer shrink-0">{IC_X}</button>
               </div>
-              <dl className="grid gap-2 font-mono text-[11px]">
-                {([["GitHub stars", fmt(o.stars)], ["Public repos", fmt(o.repos)], ["Followers", followers ? fmt(followers) : "-"],
-                  ["Archive projects", fmt(projects)], ["Program years", String(years || "-")], ["Top stack", topTech], ["Tier", tier]] as [string, string][])
-                  .map(([k, v]) => (
-                    <div key={k} className="flex justify-between gap-3 border-b border-dashed border-line/70 pb-1.5 last:border-0">
-                      <dt className="text-dim">{k}</dt><dd className="text-ink font-bold text-right truncate">{v}</dd>
+              <div className="flex gap-1.5 flex-wrap">
+                <Chip tone={r.projects >= 150 ? "stars" : "cat"}>{r.tier}</Chip>
+                <Chip tone="lang">{r.topTech}</Chip>
+              </div>
+              <div className="grid gap-3">
+                {CMP_METRICS.map(([k, get, show], mi) => {
+                  const v = get(r);
+                  const win = maxes[mi] > 0 && v === maxes[mi] && rows.length > 1;
+                  return (
+                    <div key={k}>
+                      <div className="flex justify-between items-baseline font-mono text-[10.5px] mb-1">
+                        <span className="text-dim uppercase tracking-[.08em]">{k}</span>
+                        <span className={`font-bold ${win ? "text-accent" : "text-ink"}`}>{win ? "★ " : ""}{show(v)}</span>
+                      </div>
+                      <div className="w-full h-[5px] rounded-full bg-clay overflow-hidden">
+                        <i className={win ? "block h-full rounded-full" : "block h-full rounded-full bg-cocoa/35"}
+                          style={{ width: `${maxes[mi] ? Math.max(4, Math.round((v / maxes[mi]) * 100)) : 0}%`, background: win ? "linear-gradient(90deg, var(--color-accent), var(--color-ember))" : undefined, transition: "width .5s ease" }} />
+                      </div>
                     </div>
-                  ))}
-              </dl>
+                  );
+                })}
+              </div>
+              <Link to={`/organizations/${r.o.login}`} className={btn(ri === 0 ? "primary" : "outline", "sm") + " justify-center mt-auto"}>Open org page</Link>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-dim text-[13.5px]">Pick at least two organizations above - stars, repos, archive footprint, years and tier land side by side.</p>
+        <div className="text-center py-8 border border-dashed border-line rounded-[18px] bg-paper/60">
+          <p className="text-dim text-[13.5px] mb-3">{rows.length === 1 ? "One more to make a race -" : "Pick at least two organizations above."}</p>
+          <div className="flex gap-2 justify-center flex-wrap">
+            {suggestions.map((o) => (
+              <button key={o.login} onClick={() => d.setCmpIds([...d.cmpIds, o.login].slice(-3))}
+                className="inline-flex items-center gap-1.5 bg-card border border-line rounded-full px-3 py-1.5 text-[12px] font-semibold text-cocoa hover:border-accent hover:text-rust transition-colors cursor-pointer">
+                <OrgImg src={avatarOf(o.login, 48)} name={o.login} className="w-4 h-4 rounded-full object-cover bg-clay" />
+                {o.name}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </Card>
   );

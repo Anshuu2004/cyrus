@@ -1,7 +1,7 @@
 "use client"
-/* ══ NovaAI.tsx — /platform/nova, the marketing page for Nova.
+/* ══ NovaAI.tsx — /platform/nova, the marketing page for Co-pilot.
    Sections mirror a best-in-class AI-product page: question-card
-   scatter hero, hub-and-spoke capability grid, generic-AI vs Nova
+   scatter hero, hub-and-spoke capability grid, generic-AI vs Co-pilot
    split panel - rebuilt in the cyrus.ai coffee/honey theme.     ═ */
 import { Link } from "@/lib/router";
 import { btn, Word } from "../components/ui";
@@ -19,7 +19,7 @@ const D: Record<string, string> = {
   search: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm9 16-3.5-3.5",
 };
 
-/* ── hero: six scattered question cards around the Nova core (image 5) ── */
+/* ── hero: six scattered question cards around the Co-pilot core (image 5) ── */
 const QUESTIONS: [string, string, string, string, string][] = [
   ["Which orgs merge PRs in under 48 hours?", "3%", "10%", "-6deg", "rust"],
   ["What should I prioritize this quarter?", "44%", "2%", "4deg", "leaf"],
@@ -34,7 +34,7 @@ function AskCards() {
       {/* core tile */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[168px] rounded-[26px] bg-coffee text-foam p-6 text-center shadow-lift z-[2]">
         <span className="mx-auto mb-3 w-11 h-11 rounded-full border border-ember/50 text-ember grid place-items-center"><Ico d={D.spark} size={20} /></span>
-        <b className="font-display font-extrabold text-[19px] tracking-[-.02em] block">Nova</b>
+        <b className="font-display font-extrabold text-[19px] tracking-[-.02em] block">Co-pilot</b>
         <span className="font-mono text-[9.5px] font-bold tracking-[.16em] uppercase text-foam/55">answers from the archive</span>
       </div>
       <span aria-hidden className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-dashed border-accent/25" />
@@ -43,7 +43,7 @@ function AskCards() {
         <div key={q} className="absolute w-[215px] bg-card border border-line rounded-[16px] px-4 py-3.5 shadow-soft hover:shadow-lift transition-shadow"
           style={{ left: l, top: t, rotate: rot }}>
           <span className={`inline-block mb-1.5 font-mono text-[9.5px] font-bold tracking-[.14em] uppercase ${tone === "rust" ? "text-rust" : tone === "leaf" ? "text-leaf" : tone === "honey" ? "text-[#a97b1f]" : tone === "plum" ? "text-plum" : tone === "denim" ? "text-denim" : "text-brick"}`}>
-            <Ico d={D.search} size={10} sw={2.4} /> ask nova</span>
+            <Ico d={D.search} size={10} sw={2.4} /> ask co-pilot</span>
           <b className="block font-display font-bold text-[13.5px] leading-snug text-ink">{q}</b>
         </div>
       ))}
@@ -53,18 +53,18 @@ function AskCards() {
 
 /* ── hub-and-spoke capability grid (image 6) ── */
 const DOERS: [string, string, string, string][] = [
-  ["doc", "rust", "Draft a proposal outline", "Point Nova at a watchlist org and it assembles the structure, scope and schedule from five years of accepted projects."],
+  ["doc", "rust", "Draft a proposal outline", "Point Co-pilot at a watchlist org and it assembles the structure, scope and schedule from five years of accepted projects."],
   ["book", "leaf", "Explain program rules", "Stipends, hours, eligibility and timelines for GSoC, LFX, Outreachy and GSSoC - answered from the program records, not memory."],
   ["layers", "honey", "Recommend next skills", "The exact rule packs, AGENTS.md configs and MCP servers the orgs you target actually ship with."],
-  ["clock", "plum", "Flag deadline clashes", "Two applications due the same week? Nova spots the collision in your calendar before you commit to both."],
+  ["clock", "plum", "Flag deadline clashes", "Two applications due the same week? Co-pilot spots the collision in your calendar before you commit to both."],
   ["chart", "denim", "Build a prep report", "One scored summary of stack fit, saved repos, watched orgs and open PRs - ready to share or keep."],
   ["users", "brick", "Find mentor contacts", "Handles and channels harvested from accepted-project records, ranked by how recently they mentored."],
 ];
 function Hub() {
   return (
     <section className={`${W} mt-[54px]`}>
-      <CenterHead pill="What Nova answers" h2={<>Turn months of digging into <Word>minutes.</Word></>}
-        sub="Tell Nova your stack once. Every question you would have spread across READMEs, event pages and Discord history comes back ranked, sourced and honest about what it can't know." />
+      <CenterHead pill="What Co-pilot answers" h2={<>Turn months of digging into <Word>minutes.</Word></>}
+        sub="Tell Co-pilot your stack once. Every question you would have spread across READMEs, event pages and Discord history comes back ranked, sourced and honest about what it can't know." />
       <div className="relative mt-12">
         {/* connector spokes - desktop only */}
         <svg aria-hidden viewBox="0 0 300 240" preserveAspectRatio="none" className="absolute inset-0 w-full h-full hidden lg:block pointer-events-none">
@@ -80,12 +80,12 @@ function Hub() {
               <p className="text-cocoa text-[13px] leading-[1.6]">{p}</p>
             </div>
           ))}
-          {/* center row: spacer / Nova core / spacer */}
+          {/* center row: spacer / Co-pilot core / spacer */}
           <div className="hidden lg:block" />
           <Link to="/nova" className="rounded-[22px] bg-coffee text-foam border border-bean shadow-lift grid place-items-center text-center p-7 hover:-translate-y-1 transition-transform max-lg:col-span-2">
             <span>
               <span className="mx-auto mb-3 w-12 h-12 rounded-full border border-ember/50 text-ember grid place-items-center"><Ico d={D.spark} size={22} /></span>
-              <b className="font-display font-extrabold text-[20px] tracking-[-.02em] block">Nova</b>
+              <b className="font-display font-extrabold text-[20px] tracking-[-.02em] block">Co-pilot</b>
               <span className="font-mono text-[10px] font-bold tracking-[.14em] uppercase text-foam/55 block mt-1">Ask it anything ✦</span>
             </span>
           </Link>
@@ -103,7 +103,7 @@ function Hub() {
   );
 }
 
-/* ── generic AI vs Nova split panel (image 7) ── */
+/* ── generic AI vs Co-pilot split panel (image 7) ── */
 const GENERIC = [
   "Answers from whatever it memorized last training run",
   "Invents repo names, star counts and application dates",
@@ -120,7 +120,7 @@ function Versus() {
   return (
     <section className={`${W} mt-[54px]`}>
       <CenterHead pill="Why it isn't a chatbot" h2={<>Not a generic <Word>chatbot.</Word></>}
-        sub="A model guessing at open source will confidently name repos that don't exist. Nova takes the opposite bet: no generation, only ranking - against data you can open, click and verify." />
+        sub="A model guessing at open source will confidently name repos that don't exist. Co-pilot takes the opposite bet: no generation, only ranking - against data you can open, click and verify." />
       <div className="relative grid grid-cols-2 gap-6 mt-12 max-[860px]:grid-cols-1">
         <div className="bg-card border border-line rounded-[24px] p-8 shadow-soft">
           <p className="font-mono text-[10.5px] font-bold tracking-[.16em] uppercase text-dim mb-6">Generic AI</p>
@@ -134,7 +134,7 @@ function Versus() {
         </div>
         <div className="rounded-[24px] p-8 shadow-lift bg-coffee text-foam border border-bean">
           <p className="font-mono text-[10.5px] font-bold tracking-[.16em] uppercase text-ember mb-6 flex items-center gap-2">
-            <Ico d={D.spark} size={13} /> Nova
+            <Ico d={D.spark} size={13} /> Co-pilot
           </p>
           <ul className="grid gap-4 list-none">
             {NOVA_SIDE.map((x) => (
@@ -157,12 +157,12 @@ export default function NovaAI() {
       <div className="relative">
         <section className={`${W} pt-[64px] grid grid-cols-[1.05fr_.95fr] gap-12 items-center max-[1020px]:grid-cols-1 max-[1020px]:gap-6`}>
           <div>
-            <Pill>Ask Nova</Pill>
+            <Pill>Ask Co-pilot</Pill>
             <h1 className="font-display font-extrabold tracking-[-.025em] leading-[1.05] text-[clamp(36px,4.8vw,58px)] mt-6 max-w-[560px]">
               Instant answers from your <Word>open-source data.</Word>
             </h1>
             <p className="text-cocoa text-[16.5px] leading-[1.7] mt-6 max-w-[520px]">
-              Nova reads the full cyrus index - every skill shelf, org profile, program archive and
+              Co-pilot reads the full cyrus index - every skill shelf, org profile, program archive and
               hackathon deadline - and answers in the shape of a decision: which org, which skill,
               which week. Free, instant, and it never makes up a repository.
             </p>
@@ -172,7 +172,7 @@ export default function NovaAI() {
               ))}
             </div>
             <div className="flex gap-3 flex-wrap mt-9">
-              <Link to="/nova" className={btn("dark", "lg")}>Ask Nova now</Link>
+              <Link to="/nova" className={btn("dark", "lg")}>Ask Co-pilot now</Link>
               <Link to="/platform/how" className={btn("outline", "lg")}>See how cyrus works</Link>
             </div>
           </div>
@@ -195,7 +195,7 @@ export default function NovaAI() {
           <div className="max-w-[760px] mx-auto text-center">
             <p className="font-mono text-[10.5px] font-bold tracking-[.16em] uppercase text-dim mb-3">Straight answer</p>
             <h2 className="font-display font-extrabold tracking-[-.02em] text-[clamp(24px,3vw,34px)] leading-[1.2]">
-              Nova is <Word>matching, not generation.</Word>
+              Co-pilot is <Word>matching, not generation.</Word>
             </h2>
             <p className="text-cocoa text-[15.5px] leading-[1.7] mt-4">
               Under the hood it is the same deterministic recommender that powers your dashboard: tokenized
@@ -204,7 +204,7 @@ export default function NovaAI() {
               exactly why you can trust the shortlist it hands you.
             </p>
             <div className="flex gap-3 justify-center flex-wrap mt-8">
-              <Link to="/nova" className={btn("primary", "lg")}>Open Nova - free</Link>
+              <Link to="/nova" className={btn("primary", "lg")}>Open Co-pilot - free</Link>
               <Link to="/platform/features" className={btn("outline", "lg")}>All platform features</Link>
             </div>
           </div>

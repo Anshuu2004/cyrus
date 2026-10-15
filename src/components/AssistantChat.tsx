@@ -1,6 +1,6 @@
 "use client";
-/* ══ AssistantChat.tsx — the shared chat surface for the helper model ══
-   Used by /assistant (full page) and by the prompt builder (compact,
+/* ══ AssistantChat.tsx — the shared chat surface for Co-pilot ══
+   Used by the Co-pilot page and by the prompt builder (compact,
    with a one-click Apply when the reply contains a ```cyrus-plan). ══ */
 import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
@@ -54,7 +54,7 @@ export default function AssistantChat({
     setBusy(true);
     const res = await api.assistant(next.map((t) => ({ role: t.role, content: t.content })), mode, context);
     setBusy(false);
-    if (!res?.reply) { setErr("The helper didn't answer - try again in a moment."); return; }
+    if (!res?.reply) { setErr("Co-pilot didn't answer - try again in a moment."); return; }
     setTurns([...next, { role: "assistant", content: res.reply, model: res.model, demo: res.demo }]);
   };
 
@@ -67,7 +67,7 @@ export default function AssistantChat({
             <p className="text-cocoa text-[14px] leading-[1.65] max-w-[460px] mx-auto">
               {mode === "builder"
                 ? "Describe what you're building and the coach tunes the slots - then you apply its plan with one tap."
-                : "Ask about hackathons, the matcher, artifacts, free APIs or sign-in - the helper answers in plain language."}
+                : "Ask about hackathons, the matcher, artifacts, free APIs or sign-in - Co-pilot answers in plain language."}
             </p>
             {starters && (
               <div className="flex gap-2 flex-wrap justify-center mt-4">
@@ -120,8 +120,8 @@ export default function AssistantChat({
         onSubmit={(e) => { e.preventDefault(); void send(input); }}
         className="flex gap-2 pt-3 border-t border-line">
         <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)}
-          placeholder={placeholder ?? (mode === "builder" ? "I'm building a…" : "Ask the helper…")}
-          aria-label={mode === "builder" ? "Message the prompt coach" : "Message the assistant"}
+          placeholder={placeholder ?? (mode === "builder" ? "I'm building a…" : "Ask Co-pilot…")}
+          aria-label={mode === "builder" ? "Message the prompt coach" : "Message Co-pilot"}
           className="flex-1 min-w-0 bg-paper border border-line rounded-xl px-4 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180,96,44,.12)]" />
         <button type="submit" disabled={busy || !input.trim()} className={btn("primary", "md") + " disabled:opacity-40 disabled:cursor-not-allowed shrink-0"}>
           Send

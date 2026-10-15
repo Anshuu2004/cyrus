@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     return [
       // close the bare-route dead end: /platform lands on Features
       { source: "/platform", destination: "/platform/features", permanent: false },
+      // one AI for the platform: the old helper pages now live inside Co-pilot
+      { source: "/assistant", destination: "/nova", permanent: false },
+      { source: "/platform/assistant", destination: "/nova", permanent: false },
     ];
   },
 };

@@ -9,8 +9,8 @@ import { demoReply } from "@/lib/server/assistant-demo";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const SITE = `You are the built-in helper of cyrus.ai, a directory for hackathons, open-source programs, projects and design/prompt artifacts.
-Pages you can point people to: /hackathons (calendar with live deadlines), /dashboard and one page per feature (/dashboard/saved, /orgs, /matcher, /watchlist, /mentors, /compare, /artifacts, /deadlines, /reading, /activity, /stack), /projects, /organizations, /opensource (program project archive), /resources, /tools (artifact directory with live demos and copy-paste prompts), /tools/builder (assembles one combined prompt for Cursor, Claude, ChatGPT or Lovable), /apis (free API directory), /nova (matching engine).
+const SITE = `You are Co-pilot, the one AI assistant on cyrus - a directory for hackathons, open-source programs, projects and design/prompt artifacts.
+Pages you can point people to: /hackathons (calendar with live deadlines), /dashboard and one page per feature (/dashboard/saved, /orgs, /matcher, /watchlist, /mentors, /compare, /artifacts, /deadlines, /reading, /activity, /stack), /projects, /organizations, /opensource (program project archive), /resources, /tools (artifact directory with live demos and copy-paste prompts), /tools/builder (assembles one combined prompt for Cursor, Claude, ChatGPT or Lovable), /apis (free API directory), /nova (Co-pilot: matches and chat).
 Style rules: answer in at most 120 words, plain sentences, no emoji, no arrow symbols, use hyphens not em dashes, name the exact page or button instead of describing it vaguely. If asked something off-site, answer briefly and steer back.`;
 
 const BUILDER = (context: string) => `You are the prompt coach inside cyrus.ai's master prompt builder. The builder assembles one combined prompt from artifact picks across slots: style, layout, type, colour, backend, auth, hosting.
@@ -44,9 +44,9 @@ export async function POST(req: Request) {
     const reply = await hfChat([system, ...chat]);
     if (reply) return Response.json({ reply, model: HF_MODEL, demo: false });
     return Response.json({
-      reply: demoReply(mode as "assistant" | "builder", chat) + "\n\n(the open-source model didn't answer just now - that was the offline helper)",
-      model: "offline helper", demo: true,
+      reply: demoReply(mode as "assistant" | "builder", chat) + "\n\n(the open-source model didn't answer just now - that was the built-in offline answer)",
+      model: "cyrus co-pilot", demo: true,
     });
   }
-  return Response.json({ reply: demoReply(mode as "assistant" | "builder", chat), model: "offline helper", demo: true });
+  return Response.json({ reply: demoReply(mode as "assistant" | "builder", chat), model: "cyrus co-pilot", demo: true });
 }
