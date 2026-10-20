@@ -9,6 +9,7 @@
    Cron example (daily 06:00): 0 6 * * * cd ~/Desktop/agent-skills && npm run refresh -- devpost
    ═════════════════════════════════════════════════════════════════════ */
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { updateReadmeSnapshot } from "./readme-snapshot.mjs";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const EMOJI = /[\p{Extended_Pictographic}\p{Emoji_Presentation}\uFE0F\u200D]/gu;
@@ -180,4 +181,5 @@ async function refreshGsoc() {
 const which = (process.argv[2] || "all").toLowerCase();
 if (which === "devpost" || which === "all") await refreshDevpost();
 if (which === "gsoc" || which === "all") await refreshGsoc();
+updateReadmeSnapshot(ROOT);
 console.log("refresh done", today);
