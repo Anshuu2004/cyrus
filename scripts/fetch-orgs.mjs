@@ -16,6 +16,7 @@ import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { updateReadmeSnapshot } from "./readme-snapshot.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "src/data/realOrgs.ts");
@@ -112,4 +113,5 @@ ${rows.map((o) => `  "${o.login}": { followers: ${statsMap[o.login].followers}, 
 };
 `;
 writeFileSync(OUT, out);
+updateReadmeSnapshot(ROOT);
 console.log(`wrote ${rows.length} orgs -> src/data/realOrgs.ts (${fails} failed)`);

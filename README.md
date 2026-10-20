@@ -14,7 +14,7 @@
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/stars_tracked-33.8M-7f9a4e?style=for-the-badge" alt="Stars tracked"/></a>
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/program_projects-6%2C682-a1739b?style=for-the-badge" alt="Program projects"/></a>
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/hackathons-161-4e8f6b?style=for-the-badge" alt="Hackathons"/></a>
-  <img src="https://img.shields.io/badge/snapshot-12_Oct_2026-221a13?style=for-the-badge" alt="Data snapshot"/>
+  <img src="https://img.shields.io/badge/snapshot-3_Oct_2026-221a13?style=for-the-badge" alt="Data snapshot"/>
 </p>
 
 <p align="center">
@@ -153,7 +153,7 @@ Dark mode is one click away in the header - the same warm palette, roasted.
 - **Living shelves** - counter-drifting marquees for organizations and developer stories, hover to pause, click through to the real profile.
 - **Clear section seams** - full-bleed hairline rules divide every marketing section, tuned to stay visible in the light theme.
 - **Repo detail that answers questions** - stats, tags, related projects and an honest "why this is here" note on every listing.
-- **Self-refreshing data** - `npm run refresh` re-pulls Devpost and the catalog; `npm run orgs` regenerates org intel from live GitHub. The snapshot date is stamped on this README.
+- **Self-refreshing data** - `npm run refresh` re-pulls Devpost and the catalog; `npm run orgs` regenerates org intel from live GitHub. Both stamp this README with the newest repository `updated` date in `src/data/repos.ts`, not the refresh date.
 
 ## 🗺 Pages
 
