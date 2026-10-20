@@ -30,6 +30,11 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
+  },
   title: {
     default: "cyrus.ai - find your open-source contribution",
     template: "%s · cyrus.ai",
