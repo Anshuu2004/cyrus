@@ -108,6 +108,9 @@ export default function AuthModal() {
       }
       toast(r.reason === "too_soon" ? "A code was just sent - give it half a minute, then try again."
         : r.reason === "invalid_email" ? "That email doesn't look right."
+        : r.reason === "rate_limited" ? "Too many attempts from this network - try again in a few minutes."
+        : r.reason === "daily_limit" ? "That address has used its codes for today - try again tomorrow, or sign in with GitHub or Google."
+        : r.reason === "mail_unconfigured" ? "Email sign-in is not available right now - GitHub or Google work instantly."
         : "Couldn't send the code right now - GitHub or Google sign-in work instantly.");
     } finally {
       setBusyMail(false);
@@ -128,6 +131,7 @@ export default function AuthModal() {
         return;
       }
       toast(!r ? "Sign-in didn't complete - try again."
+        : r.reason === "rate_limited" ? "Too many attempts from this network - give it a few minutes."
         : r.reason === "expired" ? "That code expired - send yourself a new one."
         : r.reason === "locked" || r.reason === "no_code" ? "That code is no longer active - send a new one."
         : "That code doesn't match - check the email and try again.");
@@ -145,7 +149,10 @@ export default function AuthModal() {
         setResendIn(30);
         toast(r.demo && r.code ? `Demo mode - your new code is ${r.code}` : "A fresh code is on its way.");
       } else {
-        toast(r?.reason === "too_soon" ? "Almost - give it a few more seconds." : "Couldn't resend right now - try again.");
+        toast(r?.reason === "too_soon" ? "Almost - give it a few more seconds."
+          : r?.reason === "rate_limited" || r?.reason === "daily_limit"
+            ? "Too many codes requested from here - try again in a few minutes."
+            : "Couldn't resend right now - try again.");
       }
     } finally {
       setBusyMail(false);

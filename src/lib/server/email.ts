@@ -5,7 +5,8 @@
    Storage prefers the Neon email_codes table; without DATABASE_URL it
    falls back to an in-memory Map so the flow still works per server
    instance. Without RESEND_API_KEY the routes run in demo mode and hand
-   the code back to the UI instead of emailing it.                      ═ */
+   the code back to the UI instead of emailing it - but only outside a
+   production deploy, where a missing key fails closed.               ═ */
 import { createHash, randomInt } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { getDb } from "../db";
@@ -105,11 +106,29 @@ export const __mem = mem;
 /* ── sending via Resend (fetch only) ────────────────────────────────── */
 export type SendResult = { sent: true } | { sent: false; demo: true; code: string } | { sent: false; error: string };
 
+/** Resend is wired up, so a code can actually reach an inbox. */
+export const resendConfigured = (): boolean => (process.env.RESEND_API_KEY ?? "").trim().length > 0;
+
+/** Demo mode puts the sign-in code in the HTTP response body. That is only
+    acceptable where the response is ours: local dev and preview deploys.
+    VERCEL_ENV is the authority on Vercel; NODE_ENV covers a plain
+    `npm run start`. Anything that is not a production deploy may demo.
+    The env is a parameter so both branches are testable without mutating
+    process.env, which Next replaces at build time.                      ═ */
+export const demoAllowed = (env: Record<string, string | undefined> = process.env): boolean =>
+  (env.VERCEL_ENV || env.NODE_ENV || "") !== "production";
+
 export async function sendCodeEmail(email: string, code: string): Promise<SendResult> {
   const key = (process.env.RESEND_API_KEY ?? "").trim();
   const from = (process.env.EMAIL_FROM ?? "").trim() || "cyrus.ai <onboarding@resend.dev>";
   email = email.trim();
-  if (!key) return { sent: false, demo: true, code }; // demo mode: caller shows the code
+  /* Two guards, not one: a missing key in production fails closed here even
+     if a caller forgot its own pre-check, and the code never comes back. */
+  if (!key) {
+    return demoAllowed()
+      ? { sent: false, demo: true, code }
+      : { sent: false, error: "RESEND_API_KEY is not configured" };
+  }
   try {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",

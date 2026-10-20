@@ -31,10 +31,14 @@ async function getJson<T>(url: string): Promise<T | null> {
   }
 }
 
-async function postJson<T>(url: string, body: unknown, method: "POST" | "PATCH" | "DELETE" = "POST"): Promise<T | null> {
+async function postJson<T>(url: string, body: unknown, method: "POST" | "PATCH" | "DELETE" = "POST", readErrors = false): Promise<T | null> {
   try {
     const r = await fetch(url, { ...JSON_INIT, method, body: JSON.stringify(body) });
-    return r.ok ? ((await r.json()) as T) : null;
+    /* readErrors is for the routes that answer 429 or 503 with a reason the
+       sheet has to show rather than swallow. A non-JSON body still falls in
+       the catch and returns null, so every other caller is unaffected. */
+    if (!r.ok && !readErrors) return null;
+    return (await r.json()) as T;
   } catch {
     return null;
   }
@@ -58,9 +62,12 @@ export const api = {
     postJson<{ ok: true; user: ServerUser }>("/api/auth/github", { code, verifier }),
   authGoogle: (idToken: string) => postJson<{ ok: true; user: ServerUser }>("/api/auth/google", { idToken }),
 
-  emailStart: (email: string) => postJson<EmailStartRes>("/api/auth/email/start", { email }),
+  /* Both email routes report a reason the sheet must show (too_soon,
+     rate_limited, daily_limit, mail_unconfigured), so they read the body on
+     a 4xx/5xx too. */
+  emailStart: (email: string) => postJson<EmailStartRes>("/api/auth/email/start", { email }, "POST", true),
   emailVerify: (email: string, code: string, name?: string) =>
-    postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name }),
+    postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name }, "POST", true),
 
   savedList: () => getJson<{ items: SavedRow[] }>("/api/me/saved"),
   savedAdd: (itemType: string, itemId: string, title?: string) =>
