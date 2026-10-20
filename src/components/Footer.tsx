@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <Link to="/" className="flex items-center gap-2.5 text-foam"><Logo /><Brand /></Link>
             <p className="text-[13.5px] leading-[1.7] mt-3.5 max-w-[300px]">
-              The catalog of open-source programs, company hackathons and the skills, rules, configs and MCP servers that power AI coding agents - with a prep plan for every deadline.
+              Programs, hackathons and AI agent skills, with a prep plan for every deadline.
             </p>
             <p className="font-mono text-[11px] leading-[1.7] mt-3.5 max-w-[300px] text-dimdk">
               {statsLine()} · {fmt(STATS.orgs)} organization profiles · {STATS.programs} tracked programs
