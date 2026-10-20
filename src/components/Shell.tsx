@@ -56,8 +56,9 @@ export default function Shell({ children }: { children: ReactNode }) {
       <ScrollManager />
       <Splash />
       <div className="min-h-screen flex flex-col">
+        <a className="skip-link" href="#main">Skip to content</a>
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main id="main" tabIndex={-1} className="flex-1">{children}</main>
         <Footer />
       </div>
       <Palette />
