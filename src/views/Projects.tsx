@@ -103,7 +103,7 @@ function PCard({ r }: { r: Repo }) {
         <button aria-label={on ? "Unsave project" : "Save project"} onClick={() => {
           const added = toggleSaved(r.repo);
           toast(added ? `Saved ${r.repo.split("/")[1]} to your dashboard` : `Removed ${r.repo.split("/")[1]}`);
-        }} className={`ml-auto w-9 h-9 rounded-[11px] border grid place-items-center text-[14px] transition-all ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
+        }} className={`ml-auto w-9 h-9 cursor-pointer rounded-[11px] border grid place-items-center text-[14px] transition-all ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
           {on ? "★" : "☆"}
         </button>
         {r.cat === "tools" ? (
