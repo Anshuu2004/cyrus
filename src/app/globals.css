@@ -35,9 +35,12 @@
   --color-steam: #b5a28c;
   --color-dimdk: #7d6c5a;
 
-  --font-display: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
-  --font-sans: "Inter", -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* next/font declares --font-jakarta, --font-inter and --font-jbmono on <html>
+     and ships the files from our own origin; the old family names stay as the
+     fallback so the page still renders in the same faces if a file is missing. */
+  --font-display: var(--font-jakarta), "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, sans-serif;
+  --font-mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, monospace;
 
   --shadow-soft: 0 4px 16px -6px rgba(58, 40, 22, 0.1);
   --shadow-lift: 0 16px 44px -16px rgba(58, 40, 22, 0.22);
