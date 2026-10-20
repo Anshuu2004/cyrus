@@ -1,0 +1,204 @@
+/* ══ ogCard.tsx — renders a 1200x630 share card with ImageResponse ═══
+   Satori only lays out with flex, wants every string inside a <span>, and
+   needs real font bytes, so this file is deliberately un-Tailwind: inline
+   styles, vendored TTFs, no network at build. The palette values are the
+   same tokens globals.css binds (--color-paper, --color-ink, --color-accent,
+   --color-ember, --color-rust), copied as literals because a server image
+   route cannot read a CSS custom property.                             ══ */
+import { ImageResponse } from "next/og";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import type { OgCard as OgCardData } from "@/lib/ogContent";
+
+const PAPER = "#f5efe7";
+const CREAM = "#fbf7f1";
+const SAND = "#ede4d6";
+const INK = "#241b13";
+const COCOA = "#6e6153";
+const DIM = "#a09282";
+const RULE = "#e7dccd";
+const ARC = "#e2d0b6";
+const ACCENT = "#b4602c";
+const EMBER = "#d98546";
+const RUST = "#8a4a22";
+const FOAM = "#f5eee3";
+
+const FONT_DIR = join(process.cwd(), "public", "assets", "fonts");
+let cached: { regular: ArrayBuffer; display: ArrayBuffer } | null = null;
+
+/** Read once, reuse across every card in the build. */
+function fonts() {
+  if (!cached) {
+    const read = (file: string) => {
+      try {
+        return readFileSync(join(FONT_DIR, file)).buffer.slice(0) as ArrayBuffer;
+      } catch {
+        throw new Error(`ogCard: missing ${FONT_DIR}/${file} - the share card cannot render without the display face`);
+      }
+    };
+    cached = { regular: read("PlusJakartaSans-400.ttf"), display: read("PlusJakartaSans-800.ttf") };
+  }
+  return [
+    { name: "Jakarta", data: cached.regular, weight: 400 as const, style: "normal" as const },
+    { name: "Jakarta", data: cached.display, weight: 800 as const, style: "normal" as const },
+  ];
+}
+
+/** A share image is read at thumbnail size, so the display line has to hold
+ *  its width whatever the program is called. Long single names break at the
+ *  space nearest the middle rather than letting the browser drop one word. */
+function layoutTitle(title: string[]): { lines: string[]; size: number } {
+  if (title.length > 1) {
+    const longest = title.reduce((a, b) => (b.length > a.length ? b : a), "");
+    return { lines: title, size: longest.length <= 18 ? 78 : 62 };
+  }
+  const name = title[0];
+  if (name.length <= 15) return { lines: [name], size: 76 };
+  const words = name.split(" ");
+  let cut = 1;
+  let best = Number.POSITIVE_INFINITY;
+  for (let i = 1; i < words.length; i++) {
+    const left = words.slice(0, i).join(" ").length;
+    const gap = Math.abs(name.length - 2 * left);
+    if (gap < best) {
+      best = gap;
+      cut = i;
+    }
+  }
+  return { lines: [words.slice(0, cut).join(" "), words.slice(cut).join(" ")], size: name.length <= 30 ? 62 : 52 };
+}
+
+/** The mark from components/ui.tsx, scaled up and cropped by the corner. */
+function Stamp() {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        right: -34,
+        bottom: -132,
+        width: 520,
+        height: 520,
+        display: "flex",
+      }}
+    >
+      <svg width={520} height={520} viewBox="0 0 100 100">
+        <path d="M68 34a21.5 21.5 0 1 0 .9 32" fill="none" stroke={ARC} strokeWidth="11" strokeLinecap="round" />
+        <path
+          d="M76 22c1.6 8.4 5.2 12 13.5 13.6C81.2 37.2 77.6 40.8 76 49.2 74.4 40.8 70.8 37.2 62.4 35.6 70.8 34 74.4 30.4 76 22z"
+          fill={EMBER}
+        />
+      </svg>
+    </div>
+  );
+}
+
+function Mark() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <svg width={54} height={54} viewBox="0 0 100 100">
+        <rect width="100" height="100" rx="27" fill={INK} />
+        <path d="M68 34a21.5 21.5 0 1 0 .9 32" fill="none" stroke={FOAM} strokeWidth="11" strokeLinecap="round" />
+        <path
+          d="M76 22c1.6 8.4 5.2 12 13.5 13.6C81.2 37.2 77.6 40.8 76 49.2 74.4 40.8 70.8 37.2 62.4 35.6 70.8 34 74.4 30.4 76 22z"
+          fill={EMBER}
+        />
+      </svg>
+      <span style={{ fontSize: 33, fontWeight: 800, color: INK, letterSpacing: -0.8 }}>cyrus.ai</span>
+    </div>
+  );
+}
+
+export function renderOgCard(card: OgCardData): ImageResponse {
+  const { lines, size } = layoutTitle(card.title);
+  /* the accent colour belongs to the line the content chose to emphasise,
+     not to whatever the layout had to break in half */
+  const accentLast = card.title.length > 1;
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: 1200,
+          height: 630,
+          display: "flex",
+          flexDirection: "column",
+          padding: "50px 72px 44px",
+          position: "relative",
+          overflow: "hidden",
+          fontFamily: "Jakarta",
+          backgroundImage: `radial-gradient(760px 520px at 94% 98%, rgba(217,133,70,0.22), rgba(245,239,231,0) 68%), linear-gradient(178deg, ${CREAM} 0%, ${PAPER} 58%, ${SAND} 100%)`,
+        }}
+      >
+        <Stamp />
+
+        <Mark />
+
+        <div style={{ display: "flex", flexDirection: "column", width: 690, marginTop: 34, position: "relative" }}>
+          <span
+            style={{
+              fontSize: 16,
+              fontWeight: 800,
+              color: RUST,
+              letterSpacing: 2.4,
+              textTransform: "uppercase",
+              marginBottom: 14,
+            }}
+          >
+            {card.eyebrow}
+          </span>
+          {lines.map((line, i) => (
+            <span
+              key={line}
+              style={{
+                fontSize: size,
+                fontWeight: 800,
+                lineHeight: 1.04,
+                letterSpacing: -size * 0.033,
+                color: accentLast && i === lines.length - 1 ? ACCENT : INK,
+              }}
+            >
+              {line}
+            </span>
+          ))}
+          {card.tag ? (
+            <span style={{ fontSize: 24, fontWeight: 400, color: COCOA, lineHeight: 1.35, marginTop: 16 }}>{card.tag}</span>
+          ) : null}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", width: 690, marginTop: 26, position: "relative" }}>
+          {card.rows.map((r) => (
+            <div
+              key={r.k}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                borderTop: `1px solid ${RULE}`,
+                padding: "11px 0",
+              }}
+            >
+              <span style={{ fontSize: 15, fontWeight: 800, color: DIM, letterSpacing: 1.8, textTransform: "uppercase" }}>
+                {r.k}
+              </span>
+              <span style={{ fontSize: 21, fontWeight: 400, color: INK }}>{r.v}</span>
+            </div>
+          ))}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: "auto",
+            paddingTop: 18,
+            position: "relative",
+          }}
+        >
+          <span style={{ fontSize: 17, fontWeight: 400, color: DIM }}>{card.foot}</span>
+        </div>
+      </div>
+    ),
+    { width: 1200, height: 630, fonts: fonts() }
+  );
+}
