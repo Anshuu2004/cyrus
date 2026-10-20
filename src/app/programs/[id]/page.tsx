@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ProgramDetail from "@/views/ProgramDetail";
 import { PROGRAMS } from "@/data/orgs";
 import { canonical, clip } from "@/lib/seo";
+import { jsonLdScript, programEntity } from "@/lib/jsonLd";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -22,6 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default function Page() {
-  return <ProgramDetail />;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const p = PROGRAMS.find((x) => x.id === decodeURIComponent(id ?? "").toLowerCase());
+  const data = p ? programEntity(p) : null;
+  return (
+    <>
+      {data && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(data)} />}
+      <ProgramDetail />
+    </>
+  );
 }

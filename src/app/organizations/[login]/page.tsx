@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import OrgProfile from "@/views/OrgProfile";
 import { ORGS } from "@/data/orgs";
 import { canonical, clip } from "@/lib/seo";
+import { jsonLdScript, organizationEntity } from "@/lib/jsonLd";
 import { fmt } from "@/lib/siteStats";
 
 export async function generateMetadata({ params }: { params: Promise<{ login: string }> }): Promise<Metadata> {
@@ -22,6 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ login: st
   };
 }
 
-export default function Page() {
-  return <OrgProfile />;
+export default async function Page({ params }: { params: Promise<{ login: string }> }) {
+  const { login } = await params;
+  const o = ORGS.find((x) => x.login.toLowerCase() === decodeURIComponent(login ?? "").toLowerCase());
+  const data = o ? organizationEntity(o) : null;
+  return (
+    <>
+      {data && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(data)} />}
+      <OrgProfile />
+    </>
+  );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HackathonDetail } from "@/views/Hackathons";
 import { ALL_HACKS } from "@/lib/siteStats";
 import { canonical, clip } from "@/lib/seo";
+import { hackathonEntity, jsonLdScript } from "@/lib/jsonLd";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -21,6 +22,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default function Page() {
-  return <HackathonDetail />;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const h = ALL_HACKS.find((x) => x.id === decodeURIComponent(id ?? ""));
+  const data = h ? hackathonEntity(h) : null;
+  return (
+    <>
+      {data && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(data)} />}
+      <HackathonDetail />
+    </>
+  );
 }

@@ -12,6 +12,9 @@ export type Hack = {
   theme: string;
   status: "open" | "upcoming" | "rolling" | "recurring" | "closed";
   deadline: string;         // ISO
+  /* ISO date the build window opens. Only a record that states it publishes
+     an Event; the rest fall back to CreativeWork. See lib/jsonLd.ts. */
+  start?: string;
   estimated?: boolean;
   participants: string;
   prize: string;
