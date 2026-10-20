@@ -1,0 +1,66 @@
+name: Data correction
+description: A catalog value is wrong, such as a count, date, prize, eligibility line, link or logo
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Wrong data is the most useful bug in a directory, and the easiest to
+        prove. Fill in what the site says, what is true, and the source that
+        says so. Do not open a pull request for it until a maintainer assigns
+        the issue to you.
+  - type: input
+    id: where
+    attributes:
+      label: Where on the site
+      description: The page that shows the wrong value.
+      placeholder: https://cyrus-agent.vercel.app/programs/outreachy
+    validations:
+      required: true
+  - type: input
+    id: field
+    attributes:
+      label: Which value
+      description: Name the field exactly as it appears on the page.
+      placeholder: Application deadline
+    validations:
+      required: true
+  - type: textarea
+    id: current-vs-true
+    attributes:
+      label: What the site says versus what is true
+      description: One line each. Numbers, dates and amounts exactly.
+      placeholder: |
+        Site: 1,528 projects
+        Actual: 1,604 projects
+      value: |
+        Site:
+        Actual:
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Primary source
+      description: The organizer page, official announcement or API response that settles it. A link, not a screenshot of someone's post. If it came from an API, paste the request and the value returned.
+      placeholder: |
+        https://www.outreachy.org/apply/ with the timeline section
+        Fetched 2026-10-20
+    validations:
+      required: true
+  - type: textarea
+    id: spread
+    attributes:
+      label: Where else it appears
+      description: >-
+        The same value can show up on a card, a detail page, a structured data
+        block and the refresh script. List the places you noticed; a maintainer
+        can find the rest.
+      placeholder: "Also on the /programs shelf card"
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: Before you start work
+      options:
+        - label: I have read CONTRIBUTING.md and will not write code until a maintainer assigns this issue to me
+          required: true

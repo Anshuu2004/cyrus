@@ -5,9 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Data corrections are welcome here too, and they are the most useful
-        reports we get. If a star count, deadline, prize or eligibility line is
-        wrong, link the primary source.
+        Reporting a wrong number? Use the Data correction form instead. It asks
+        for the primary source, and it is the fastest thing to fix here.
   - type: textarea
     id: what-happened
     attributes:
