@@ -220,7 +220,7 @@ function PlatformMenu() {
           className={`transition-transform duration-200 ${pop ? "rotate-180" : ""}`}><path d="m5 9 7 7 7-7" /></svg>
       </button>
       {pop && (
-        <div className="absolute left-0 top-[42px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
+        <div className="absolute right-0 top-[42px] w-[340px] bg-card border border-line rounded-[18px] shadow-lift p-2 z-[70]">
           {PLAT.map(([slug, label, desc, d, tone]) => (
             <Link key={slug} to={`/platform/${slug}`}
               onClick={() => setPop(false)}
