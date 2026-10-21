@@ -1,14 +1,16 @@
 "use client";
 /* ══ HomeHero.tsx — the front page opens on the product ════════
-   An ossium-style stage: a dotted registration frame around a live
-   application window, sitting on a landscape. The window is not a
-   picture of the product, it is the product's own screens drawn from
-   the same data the real pages use, and the rail on its left actually
-   works: click Organizations and the panel becomes the organizations
-   grid, click Leaderboard and it becomes the ranking.
+   An ossium-style stage, three rectangles deep: a dotted registration frame
+   with "+" marks on the page background, the nature landscape inset inside
+   it, and the product window sitting on the photograph with a light hairline
+   all the way around it so the image shows on every side. The window is not
+   a picture of the product, it is the product's own screens drawn from the
+   same data the real pages use, and the rail on its left actually works:
+   click Organizations and the panel becomes the organizations grid, click
+   Leaderboard and it becomes the ranking.
 
-   The landscape behind it is one of six nature scenes, chosen per
-   visit, with a small dot row to move between them by hand.
+   The landscape is one of six nature photographs, picked at random on arrival
+   and cycled slowly from there.
    ═════════════════════════════════════════════════════════════ */
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -297,10 +299,7 @@ function BoardPreview() {
   const Active = PANELS[panel];
   return (
     <div className="laser">
-      <figure className="frame bg-card/70 backdrop-blur-[2px] p-2.5 sm:p-3 md:p-[14px] shadow-lift">
-        <span className="mark tr" aria-hidden>+</span>
-        <span className="mark bl" aria-hidden>+</span>
-
+      <figure className="bg-card/70 backdrop-blur-[2px] rounded-[14px] p-2.5 sm:p-3 md:p-[14px] shadow-lift">
         <div className="md:aspect-[16/9] overflow-hidden rounded-[10px] border border-line bg-paper flex flex-col text-left">
           {/* app top bar */}
           <div className="shrink-0 h-[40px] md:h-[44px] flex items-center gap-2.5 px-3 md:px-3.5 border-b border-line bg-card">
@@ -453,21 +452,27 @@ export default function HomeHero() {
         </div>
       </div>
 
-      {/* the board on its landscape */}
+      {/* the board, embedded in a landscape inside a registration frame */}
       <div className="hero-stage reveal mt-9 md:mt-11 pb-3" style={{ animationDelay: ".68s" }}>
-        <div className="hero-horizon" aria-hidden="true">
-          <AnimatePresence>
-            {scene !== null && (
-              <motion.div key={SCENES[scene].id} className="absolute inset-0"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 1.7, ease: "easeInOut" }}>
-                <img src={SCENES[scene].img} alt="" decoding="async" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-        <div className="hero-stage-inner max-w-[1220px] mx-auto px-5 sm:px-6">
-          <BoardPreview />
+        <div className="max-w-[1220px] mx-auto px-5 sm:px-6">
+          <div className="hero-field frame">
+            <span className="mark tr" aria-hidden="true">+</span>
+            <span className="mark bl" aria-hidden="true">+</span>
+            <div className="hero-photo">
+              <AnimatePresence>
+                {scene !== null && (
+                  <motion.div key={SCENES[scene].id} className="hero-scene"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 1.7, ease: "easeInOut" }}>
+                    <img src={SCENES[scene].img} alt="" decoding="async" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <div className="hero-photo-inner">
+                <BoardPreview />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

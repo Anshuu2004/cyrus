@@ -156,11 +156,6 @@
     radial-gradient(700px 420px at 88% 10%, rgba(15, 23, 42, 0.05), transparent 70%),
     radial-gradient(900px 480px at 50% 118%, rgba(96, 165, 250, 0.07), transparent 70%);
 }
-.light .hero-pattern {
-  background-image:
-    linear-gradient(rgba(15, 18, 20, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 18, 20, 0.055) 1px, transparent 1px);
-}
 .light .frame::before, .light .frame::after { color: var(--color-rule); }
 .light .tl-phase {
   color: color-mix(in srgb, var(--pc) 72%, #0f1214);
@@ -305,47 +300,60 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
     radial-gradient(900px 480px at 50% 118%, rgba(96, 165, 250, 0.06), transparent 70%);
 }
 
-/* ── hero stage: the board sits on a lit ridge ────────────────
-   The framed preview is the widest thing on the page, so it gets its own
-   full-bleed band with a horizon behind it. The band is masked top and
-   bottom so the ridges dissolve into the page rather than ending in a
-   line. Static by design: the hero's motion budget is in the reveal. */
+/* ── hero stage: the dashboard embedded in a landscape ─────────
+   Three nested rectangles, the way ossium frames its console: a dashed
+   hairline with "+" registration marks drawn on the page background, the
+   landscape photograph inset inside that, and the dashboard sitting on the
+   photograph with room around it so the image shows on every side. */
 .hero-stage { position: relative; }
-.hero-horizon {
-  position: absolute; left: 0; right: 0; bottom: -46px; z-index: 0; pointer-events: none;
-  height: clamp(380px, 54vw, 720px);
-  mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 86%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 86%, transparent 100%);
+.hero-field {
+  border-radius: 22px;
+  padding: clamp(9px, 1.3vw, 15px);
+  /* the dotted registration line: white dots on the night page */
+  border-color: color-mix(in srgb, var(--color-foam) 34%, transparent);
 }
-.hero-horizon svg, .hero-horizon img {
-  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
-  object-fit: cover; object-position: 50% 100%;
+.hero-field::before, .hero-field::after, .hero-field .mark {
+  color: color-mix(in srgb, var(--color-foam) 46%, transparent);
 }
-.hero-horizon img { opacity: .85 }
-/* a paper veil top and bottom so the photograph never fights the proof
-   row above it or the scene switcher below it */
-.hero-horizon::after {
+/* on the paper page the same registration is drawn in ink instead */
+.light .hero-field { border-color: color-mix(in srgb, var(--color-ink) 30%, transparent); }
+.light .hero-field::before, .light .hero-field::after, .light .hero-field .mark {
+  color: color-mix(in srgb, var(--color-ink) 42%, transparent);
+}
+.hero-photo {
+  position: relative; overflow: hidden; border-radius: 15px;
+  border: 1px solid var(--color-line);
+  background: var(--color-bean);
+}
+/* only the scene layer, never the avatars inside the board */
+.hero-scene { position: absolute; inset: 0; }
+.hero-scene img {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover; object-position: 50% 100%; opacity: .92;
+}
+/* a paper scrim so the photograph never fights the board on top of it */
+.hero-photo::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg,
-    var(--color-paper) 0%, transparent 24%, transparent 66%,
-    color-mix(in srgb, var(--color-paper) 82%, transparent) 100%);
+    color-mix(in srgb, var(--color-paper) 40%, transparent) 0%, transparent 24%,
+    transparent 58%, color-mix(in srgb, var(--color-paper) 46%, transparent) 100%);
 }
-/* the six scenes are night-weighted palettes; on a light page they would
-   read as a dark slab, so wash them into a pale tinted horizon instead */
-.light .hero-horizon img {
-  opacity: .5;
-  filter: saturate(.72) brightness(1.45) contrast(.85);
+.hero-photo-inner { position: relative; z-index: 1; padding: clamp(13px, 2.6vw, 38px) clamp(13px, 2.6vw, 34px); }
+/* the six scenes are night-weighted photographs; on a light page they would
+   read as a dark slab, so lay them over a pale ground and wash them up */
+.light .hero-photo { background: var(--color-sand); }
+.light .hero-scene img {
+  opacity: .62;
+  filter: saturate(.85) brightness(1.55) contrast(.82);
 }
-/* the frame needs to read as floating above the ridge, not pasted on it */
-.hero-stage > .hero-stage-inner { position: relative; z-index: 1 }
 
-/* ── signature: the laser boundary around the hero board ──────
-   A rectangle of light drawn just outside the registration frame. Two
-   layers: a steady hairline that breathes, and one bright segment that
-   travels the perimeter. The travelling beam is a conic gradient masked
-   down to the border box, animated through a registered custom property
-   so the angle can interpolate. Browsers without @property support get
-   the static hairline and the breathing glow, which is still a boundary. */
+/* ── signature: the line around the dashboard ─────────────────
+   The board sits on the photograph inside a single steady hairline, and one
+   bright segment travels that perimeter. The travelling beam is a conic
+   gradient masked down to the border box, animated through a registered
+   custom property so the angle can interpolate. The hairline itself never
+   changes colour: it stays white in the dark theme and ink in the light one,
+   and only the glow around it breathes. */
 @property --laser-a { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 
 .laser { position: relative; isolation: isolate; }
@@ -354,7 +362,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   pointer-events: none;
 }
 .laser::before {
-  border: 1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-foam) 33%, transparent);
   box-shadow:
     0 0 26px -8px color-mix(in srgb, var(--color-accent) 55%, transparent),
     inset 0 0 22px -14px color-mix(in srgb, var(--color-accent) 60%, transparent);
@@ -381,13 +389,11 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   .laser::after { animation: laserRun 5.5s linear infinite; }
   @keyframes laserBreathe {
     0%, 100% {
-      border-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
       box-shadow:
         0 0 18px -10px color-mix(in srgb, var(--color-accent) 40%, transparent),
         inset 0 0 18px -14px color-mix(in srgb, var(--color-accent) 45%, transparent);
     }
     50% {
-      border-color: color-mix(in srgb, var(--color-accent) 46%, transparent);
       box-shadow:
         0 0 40px -6px color-mix(in srgb, var(--color-accent) 62%, transparent),
         inset 0 0 28px -12px color-mix(in srgb, var(--color-accent) 62%, transparent);
@@ -396,6 +402,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   @keyframes laserRun { to { --laser-a: 360deg; } }
 }
 .light .laser::before {
+  border-color: color-mix(in srgb, var(--color-coffee) 24%, transparent);
   box-shadow:
     0 0 22px -10px rgba(22, 163, 74, 0.5),
     inset 0 0 18px -14px rgba(22, 163, 74, 0.4);
