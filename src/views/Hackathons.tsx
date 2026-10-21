@@ -1,6 +1,6 @@
 "use client"
 /* ══ Hackathons.tsx — cover art, shelf cards, list + full prep-plan detail ═ */
-import { Link, useParams, useNavigate } from "@/lib/router";
+import { Link, useParams, useNavigate, useSearchParams } from "@/lib/router";
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { HACKS, HACK_STATUS } from "../data/hackathons";
@@ -330,9 +330,19 @@ export function HackCard({ h }: { h: Hack }) {
 
 /* ── list page ── */
 export default function Hackathons() {
-  const [q, setQ] = useState("");
-  const [status, setStatus] = useState<"all" | Hack["status"]>("all");
-  const [tag, setTag] = useState("all");
+  const [params, setParams] = useSearchParams();
+  const STATUS_VALUES = ["all", "open", "upcoming", "closed"] as const;
+  const rawStatus = params.get("status");
+  const [q, setQ] = useState(params.get("q") ?? "");
+  const [status, setStatus] = useState<"all" | Hack["status"]>(
+    STATUS_VALUES.includes(rawStatus as any) ? (rawStatus as "all" | Hack["status"]) : "all"
+  );
+  const [tag, setTag] = useState(params.get("tag") ?? "all");
+
+  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
+  const setStatusUrl = (v: "all" | Hack["status"]) => { setStatus(v); setParams({ status: v }); };
+  const setTagUrl = (v: string) => { setTag(v); setParams({ tag: v }); };
+  const clearUrl = () => { setQ(""); setStatus("all"); setTag("all"); setParams({}); };
 
   const hotTags = useMemo(() => {
     const c: Record<string, number> = {};
@@ -358,10 +368,10 @@ export default function Hackathons() {
       </p>
 
       <div className="flex gap-3 items-center flex-wrap mt-8">
-        <input className={`${fin} !w-[320px] max-[640px]:w-full`} placeholder="Search hackathons - “ai”, “nvidia”, “web3”…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search hackathons" />
+        <input className={`${fin} !w-[320px] max-[640px]:w-full`} placeholder="Search hackathons - “ai”, “nvidia”, “web3”…" value={q} onChange={(e) => setQUrl(e.target.value)} aria-label="Search hackathons" />
         <div className="flex gap-1.5 flex-wrap ml-auto max-[900px]:ml-0" role="group" aria-label="Filter by status">
           {(["all", "open", "upcoming", "closed"] as const).map((s) => (
-            <button key={s} onClick={() => setStatus(s)}
+            <button key={s} onClick={() => setStatusUrl(s)}
               className={`font-mono text-[11px] font-semibold rounded-full px-3.5 py-2 border transition-all cursor-pointer ${status === s ? "bg-coffee border-coffee text-foam" : "bg-paper border-line text-cocoa hover:border-accent hover:text-rust"}`}>
               {s === "all" ? `All · ${ALL_HACKS.length}` : `${s} · ${ALL_HACKS.filter((h) => h.status === s).length}`}
             </button>
@@ -369,16 +379,16 @@ export default function Hackathons() {
         </div>
       </div>
       <div className="flex gap-1.5 flex-wrap mt-3" role="group" aria-label="Filter by theme">
-        <button onClick={() => setTag("all")} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === "all" ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>Any theme</button>
+        <button onClick={() => setTagUrl("all")} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === "all" ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>Any theme</button>
         {hotTags.map((t) => (
-          <button key={t} onClick={() => setTag(tag === t ? "all" : t)} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === t ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>#{t}</button>
+          <button key={t} onClick={() => setTagUrl(tag === t ? "all" : t)} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === t ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>#{t}</button>
         ))}
       </div>
 
       <p className="font-mono text-[11.5px] tracking-[.1em] uppercase text-cocoa mt-7 mb-5">
         <b className="text-accent">{list.length}</b> hackathon{list.length === 1 ? "" : "s"} shown
         {(q || status !== "all" || tag !== "all") && (
-          <button className="normal-case tracking-normal font-semibold text-accent ml-3 hover:underline cursor-pointer" onClick={() => { setQ(""); setStatus("all"); setTag("all"); }}>Clear filters</button>
+          <button className="normal-case tracking-normal font-semibold text-accent ml-3 hover:underline cursor-pointer" onClick={() => clearUrl()}>Clear filters</button>
         )}
       </p>
       {list.length ? (
@@ -387,7 +397,7 @@ export default function Hackathons() {
         </div>
       ) : (
         <div className="text-center py-16 text-dim border border-dashed border-line rounded-[22px] bg-cream">
-          No hackathon matches those filters. <button className="text-accent font-semibold hover:underline cursor-pointer" onClick={() => { setQ(""); setStatus("all"); setTag("all"); }}>Clear filters</button>
+          No hackathon matches those filters. <button className="text-accent font-semibold hover:underline cursor-pointer" onClick={() => clearUrl()}>Clear filters</button>
         </div>
       )}
     </div>

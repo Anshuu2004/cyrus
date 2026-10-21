@@ -4,6 +4,7 @@
    today without paying: filter by category, auth and CORS, search
    across names and descriptions, open the docs in one click.     ══ */
 import { useMemo, useState } from "react";
+import { useSearchParams } from "@/lib/router";
 import { FREE_APIS, API_CATEGORIES } from "../data/freeApis";
 import type { FreeApi } from "../data/freeApis";
 import { fmt } from "../lib/util";
@@ -51,12 +52,23 @@ function ApiCard({ a }: { a: FreeApi }) {
 }
 
 export default function Apis() {
-  const [cat, setCat] = useState("All");
-  const [auth, setAuth] = useState<"All" | FreeApi["auth"]>("All");
-  const [corsOnly, setCorsOnly] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const AUTH_VALUES = ["All", "no", "oauth", "apiKey"] as const;
+  const rawAuth = params.get("auth");
+  const [cat, setCat] = useState(params.get("cat") ?? "All");
+  const [auth, setAuth] = useState<"All" | FreeApi["auth"]>(
+    AUTH_VALUES.includes(rawAuth as any) ? (rawAuth as "All" | FreeApi["auth"]) : "All"
+  );
+  const [corsOnly, setCorsOnly] = useState(params.get("corsOnly") === "true");
   const [catOpen, setCatOpen] = useState(false);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(params.get("q") ?? "");
   const [shown, setShown] = useState(60);
+
+  const setCatUrl = (v: string) => { setCat(v); setParams({ cat: v }); };
+  const setAuthUrl = (v: "All" | FreeApi["auth"]) => { setAuth(v); setParams({ auth: v }); };
+  const setCorsOnlyUrl = (v: boolean) => { setCorsOnly(v); setParams({ corsOnly: String(v) }); };
+  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
+  const clearUrl = () => { setCat("All"); setAuth("All"); setCorsOnly(false); setQ(""); setParams({}); };
 
   const list = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -101,8 +113,8 @@ export default function Apis() {
             Weather, finance, images, text, science. Free APIs you can call from the browser right now.
           </p>
           <div className="flex gap-2.5 justify-center flex-wrap mt-7">
-            <button onClick={() => { setAuth("no"); setCat("All"); }} className={btn("primary", "md")}>Start with no-key APIs</button>
-            <button onClick={() => { setCorsOnly(true); }} className={btn("dark", "md")}>Browser-callable</button>
+            <button onClick={() => { setAuthUrl("no"); setCatUrl("All"); }} className={btn("primary", "md")}>Start with no-key APIs</button>
+            <button onClick={() => setCorsOnlyUrl(true)} className={btn("dark", "md")}>Browser-callable</button>
           </div>
         </div>
       </section>
@@ -115,12 +127,12 @@ export default function Apis() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden className="absolute left-4 text-dim pointer-events-none">
                 <circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" />
               </svg>
-              <input value={q} onChange={(e) => { setQ(e.target.value); setShown(60); }} placeholder="Search APIs by name or what they do…"
+              <input value={q} onChange={(e) => { setQUrl(e.target.value); setShown(60); }} placeholder="Search APIs by name or what they do…"
                 aria-label="Search APIs"
                 className="w-full bg-sand border border-line rounded-full pl-10 pr-4 py-2.5 text-[14px] outline-none focus:border-accent placeholder:text-dim" />
             </span>
             {anyFilter && (
-              <button onClick={() => { setQ(""); setCat("All"); setAuth("All"); setCorsOnly(false); setShown(60); }}
+              <button onClick={() => { clearUrl(); setShown(60); }}
                 className="font-mono text-[10.5px] font-bold uppercase tracking-[.08em] text-dim hover:text-rust transition-colors cursor-pointer px-2 py-2">
                 Clear all
               </button>
@@ -128,10 +140,10 @@ export default function Apis() {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] text-dim mr-1 w-[74px] shrink-0 max-[520px]:w-full">Access</span>
-            <button className={pill(auth === "no")} onClick={() => setAuth(auth === "no" ? "All" : "no")}>No key <span className={num}>{fmt(noKey)}</span></button>
-            <button className={pill(auth === "apiKey")} onClick={() => setAuth(auth === "apiKey" ? "All" : "apiKey")}>Free key <span className={num}>{fmt(authN.apiKey)}</span></button>
-            <button className={pill(auth === "oauth")} onClick={() => setAuth(auth === "oauth" ? "All" : "oauth")}>OAuth <span className={num}>{fmt(authN.oauth)}</span></button>
-            <button className={pill(corsOnly)} onClick={() => setCorsOnly(!corsOnly)}>Works in browser <span className={num}>{fmt(corsN)}</span></button>
+            <button className={pill(auth === "no")} onClick={() => setAuthUrl(auth === "no" ? "All" : "no")}>No key <span className={num}>{fmt(noKey)}</span></button>
+            <button className={pill(auth === "apiKey")} onClick={() => setAuthUrl(auth === "apiKey" ? "All" : "apiKey")}>Free key <span className={num}>{fmt(authN.apiKey)}</span></button>
+            <button className={pill(auth === "oauth")} onClick={() => setAuthUrl(auth === "oauth" ? "All" : "oauth")}>OAuth <span className={num}>{fmt(authN.oauth)}</span></button>
+            <button className={pill(corsOnly)} onClick={() => setCorsOnlyUrl(!corsOnly)}>Works in browser <span className={num}>{fmt(corsN)}</span></button>
           </div>
         </div>
       </div>
@@ -139,9 +151,9 @@ export default function Apis() {
       {/* ── category rail ── */}
       <div className={`${W} pt-7`}>
         <div className={`flex gap-1.5 flex-wrap ${catOpen ? "" : "max-h-[76px] overflow-hidden"} transition-[max-height]`}>
-          <button className={catPill(cat === "All")} onClick={() => { setCat("All"); setShown(60); }}>All <span className={num}>{fmt(FREE_APIS.length)}</span></button>
+          <button className={catPill(cat === "All")} onClick={() => { setCatUrl("All"); setShown(60); }}>All <span className={num}>{fmt(FREE_APIS.length)}</span></button>
           {CATS.map((c) => (
-            <button key={c} className={catPill(cat === c)} onClick={() => { setCat(cat === c ? "All" : c); setShown(60); }}>{c} <span className={num}>{catN.get(c) ?? 0}</span></button>
+            <button key={c} className={catPill(cat === c)} onClick={() => { setCatUrl(cat === c ? "All" : c); setShown(60); }}>{c} <span className={num}>{catN.get(c) ?? 0}</span></button>
           ))}
         </div>
         <button onClick={() => setCatOpen((v) => !v)} className="mt-2.5 font-mono text-[10.5px] font-bold uppercase tracking-[.08em] text-accent hover:text-rust transition-colors cursor-pointer">
@@ -164,7 +176,7 @@ export default function Apis() {
         ) : (
           <div className="text-center py-16 border border-dashed border-line rounded-[22px] bg-cream/60 text-dim leading-relaxed">
             No API matches that combination - loosen one filter, or
-            <button onClick={() => { setQ(""); setCat("All"); setAuth("All"); setCorsOnly(false); }} className="text-accent font-semibold hover:underline cursor-pointer ml-1">reset them all</button>.
+            <button onClick={() => clearUrl()} className="text-accent font-semibold hover:underline cursor-pointer ml-1">reset them all</button>.
           </div>
         )}
 

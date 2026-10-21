@@ -4,7 +4,7 @@
    with floating product cards, an overlapping search + type bar, then a
    clean result grid. Detail pages stay in-site before any click-out.  ═══ */
 import { useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "@/lib/router";
+import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { RESOURCES, RESOURCE_CATS, RESOURCE_PROVIDERS, providerGroup } from "../data/resources";
 import type { Resource } from "../data/resources";
 import { REPOS } from "../data/repos";
@@ -48,10 +48,17 @@ const PICKS: { id: string; best: string }[] = [
 ];
 
 export default function Resources() {
-  const [cat, setCat] = useState<string>("All");
-  const [prov, setProv] = useState<string>("All");
-  const [freeOnly, setFreeOnly] = useState(false);
-  const [q, setQ] = useState("");
+  const [params, setParams] = useSearchParams();
+  const [cat, setCat] = useState<string>(RESOURCE_CATS.includes(params.get("cat") as any) ? (params.get("cat") as string) : "All");
+  const [prov, setProv] = useState<string>(RESOURCE_PROVIDERS.includes(params.get("prov") as any) ? (params.get("prov") as string) : "All");
+  const [freeOnly, setFreeOnly] = useState(params.get("freeOnly") === "true");
+  const [q, setQ] = useState(params.get("q") ?? "");
+
+  const setCatUrl = (v: string) => { setCat(v); setParams({ cat: v }); };
+  const setProvUrl = (v: string) => { setProv(v); setParams({ prov: v }); };
+  const setFreeOnlyUrl = (v: boolean) => { setFreeOnly(v); setParams({ freeOnly: String(v) }); };
+  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
+  const clearUrl = () => { setCat("All"); setProv("All"); setFreeOnly(false); setQ(""); setParams({}); };
 
   const list = useMemo(() => RESOURCES.filter((r) =>
     (cat === "All" || r.cat === cat) &&
@@ -114,10 +121,10 @@ export default function Resources() {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden className="absolute left-4 text-dim pointer-events-none">
               <circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" />
             </svg>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search resources…"
+            <input value={q} onChange={(e) => setQUrl(e.target.value)} placeholder="Search resources…"
               className="w-full bg-sand border border-line rounded-full pl-10 pr-4 py-2.5 text-[14px] outline-none focus:border-accent placeholder:text-dim" />
           </span>
-          {RESOURCE_CATS.map((c) => <button key={c} className={pill(cat === c)} onClick={() => setCat(c)}>{c}</button>)}
+          {RESOURCE_CATS.map((c) => <button key={c} className={pill(cat === c)} onClick={() => setCatUrl(c)}>{c}</button>)}
         </div>
       </div>
 
@@ -136,12 +143,12 @@ export default function Resources() {
         </div>
 
         <div className="flex gap-2.5 flex-wrap items-center mt-6">
-          <button onClick={() => setFreeOnly(!freeOnly)}
+          <button onClick={() => setFreeOnlyUrl(!freeOnly)}
             className={`font-mono text-[11px] font-bold tracking-[.06em] uppercase rounded-full px-3.5 py-[7px] border transition-all cursor-pointer ${freeOnly ? "bg-leaf border-leaf text-white" : "bg-card border-line text-cocoa hover:border-leaf hover:text-leaf"}`}>
             Free only
           </button>
           <span className="w-px h-6 bg-liness mx-1 max-[700px]:hidden" />
-          {RESOURCE_PROVIDERS.map((p) => <button key={p} className={pill(prov === p)} onClick={() => setProv(p)}>{p}</button>)}
+          {RESOURCE_PROVIDERS.map((p) => <button key={p} className={pill(prov === p)} onClick={() => setProvUrl(p)}>{p}</button>)}
         </div>
 
         {/* ── start-here band, visible only with no filters ── */}
@@ -177,7 +184,7 @@ export default function Resources() {
           {list.map((r) => <ResCard key={r.id} r={r} />)}
         </div>
         {list.length === 0 && (
-          <p className="text-center text-cocoa py-16 text-[14.5px]">Nothing matches that combo - widen a filter, or <button className="text-accent font-semibold cursor-pointer" onClick={() => { setCat("All"); setProv("All"); setFreeOnly(false); setQ(""); }}>reset everything</button>.</p>
+          <p className="text-center text-cocoa py-16 text-[14.5px]">Nothing matches that combo - widen a filter, or           <button className="text-accent font-semibold cursor-pointer" onClick={clearUrl}>reset everything</button>.</p>
         )}
       </div>
     </div>
