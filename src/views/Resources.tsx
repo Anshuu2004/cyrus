@@ -70,7 +70,7 @@ export default function Resources() {
       {/* ── dark hero band with floating product cards ── */}
       <section className="relative overflow-hidden bg-coffee text-foam">
         <span aria-hidden className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,rgba(244,238,227,.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(244,238,227,.05)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:radial-gradient(900px_500px_at_50%_30%,#000_45%,transparent)]" />
-        <span aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(680px_320px_at_50%_-14%,rgba(217, 133, 70,.20),transparent_70%),radial-gradient(520px_300px_at_92%_110%,rgba(47, 125, 114,.14),transparent_70%),radial-gradient(480px_260px_at_6%_106%,rgba(180, 96, 44,.16),transparent_70%)]" />
+        <span aria-hidden className="absolute inset-0 pointer-events-none bg-[radial-gradient(680px_320px_at_50%_-14%,rgba(74, 222, 128,.20),transparent_70%),radial-gradient(520px_300px_at_92%_110%,rgba(47, 125, 114,.14),transparent_70%),radial-gradient(480px_260px_at_6%_106%,rgba(34, 197, 94,.16),transparent_70%)]" />
         {/* left floating card: the shelf list */}
         <div aria-hidden className="absolute left-[6%] top-[72px] w-[210px] -rotate-[7deg] rounded-[18px] border border-white/12 bg-white/[.06] backdrop-blur-[4px] p-4 shadow-[0_30px_60px_-30px_rgba(0,0,0,.7)] max-[1100px]:hidden">
           <p className="font-display font-extrabold text-[13px] text-white mb-3">cyrus<span className="text-ember">.ai</span></p>
@@ -137,7 +137,7 @@ export default function Resources() {
 
         <div className="flex gap-2.5 flex-wrap items-center mt-6">
           <button onClick={() => setFreeOnly(!freeOnly)}
-            className={`font-mono text-[11px] font-bold tracking-[.06em] uppercase rounded-full px-3.5 py-[7px] border transition-all cursor-pointer ${freeOnly ? "bg-leaf border-leaf text-white" : "bg-card border-line text-cocoa hover:border-leaf hover:text-leaf"}`}>
+            className={`font-mono text-[11px] font-bold tracking-[.06em] uppercase rounded-full px-3.5 py-[7px] border transition-all cursor-pointer ${freeOnly ? "bg-leaf border-leaf text-accentfg" : "bg-card border-line text-cocoa hover:border-leaf hover:text-leaf"}`}>
             Free only
           </button>
           <span className="w-px h-6 bg-liness mx-1 max-[700px]:hidden" />

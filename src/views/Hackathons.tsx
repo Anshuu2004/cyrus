@@ -301,7 +301,7 @@ export function HackCard({ h }: { h: Hack }) {
         <div className="flex items-center justify-between gap-2.5 mt-1.5">
           <span className="font-mono text-[13px] font-bold text-white">{h.prize.split("+")[0]}
             <small className="block text-[9.5px] font-medium text-foam/55 tracking-[.08em] uppercase">{h.status === "open" || h.status === "rolling" ? (d > 0 ? `closes in ${d} days` : "closing") : `deadline ${h.deadline.slice(0, 7)}`}</small></span>
-          <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] group-hover:bg-accent group-hover:border-accent transition-colors">Prep plan</span>
+          <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-white bg-white/10 border border-white/20 rounded-full px-3.5 py-[7px] group-hover:bg-accent group-hover:border-accent group-hover:text-accentfg transition-colors">Prep plan</span>
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-3 flex items-center gap-3.5 font-mono text-[10.5px] text-foam/60">
@@ -346,7 +346,7 @@ export default function Hackathons() {
     (!q.trim() || (h.name + " " + h.org + " " + h.theme + " " + h.tags.join(" ")).toLowerCase().includes(q.trim().toLowerCase()))
   ), [q, status, tag]);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
 
   return (
     <div className="max-w-[1240px] mx-auto px-6 pt-14 pb-4">
@@ -369,9 +369,9 @@ export default function Hackathons() {
         </div>
       </div>
       <div className="flex gap-1.5 flex-wrap mt-3" role="group" aria-label="Filter by theme">
-        <button onClick={() => setTag("all")} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === "all" ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>Any theme</button>
+        <button onClick={() => setTag("all")} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === "all" ? "bg-accent border-accent text-accentfg" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>Any theme</button>
         {hotTags.map((t) => (
-          <button key={t} onClick={() => setTag(tag === t ? "all" : t)} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === t ? "bg-accent border-accent text-white" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>#{t}</button>
+          <button key={t} onClick={() => setTag(tag === t ? "all" : t)} className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tag === t ? "bg-accent border-accent text-accentfg" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>#{t}</button>
         ))}
       </div>
 

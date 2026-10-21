@@ -489,7 +489,7 @@ export default function OrgProfile() {
             </div>
             <div className="flex gap-3 flex-wrap items-center mb-6">
               <input value={ppQ} onChange={(e) => setPpQ(e.target.value)} placeholder="Search this org's projects…" aria-label="Search projects"
-                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]" />
+                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.16)]" />
               <select value={ppDiff} onChange={(e) => setPpDiff(e.target.value)} aria-label="Filter by difficulty"
                 className="bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none select-warm pr-8 cursor-pointer">
                 <option value="all">All Difficulties</option>

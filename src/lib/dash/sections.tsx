@@ -69,7 +69,7 @@ export function OrgsSection({ d }: { d: Dash }) {
 }
 
 export function MatcherSection({ d }: { d: Dash }) {
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
   const [drag, setDrag] = useState(false);
   const take = (f: File | null | undefined) => { if (f) d.parseResume(f); };
   return (
@@ -254,7 +254,7 @@ export function CompareSection({ d }: { d: Dash }) {
       <p className="text-cocoa text-[13px] mb-4 max-w-[560px]">Put up to three side by side. The bar that stretches furthest on each row wins it - so the strongest host for your stack is obvious in one glance.</p>
       <div className="relative mb-4 max-w-[380px]">
         <input value={d.cmpQ} onChange={(e) => d.setCmpQ(e.target.value)} placeholder="Search orgs to compare (up to 3)…" aria-label="Search organizations"
-          className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]" />
+          className="w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]" />
         {d.cmpMatches.length > 0 && (
           <div className="absolute z-10 top-full mt-1.5 left-0 right-0 bg-card border border-line rounded-[14px] shadow-lift overflow-hidden">
             {d.cmpMatches.map((o) => (

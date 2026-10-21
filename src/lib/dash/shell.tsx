@@ -107,7 +107,7 @@ export function DashShell({ dash, active, children }: { dash: Dash; active: stri
         {/* desktop: full rail. phone: horizontally scrollable chips */}
         <nav className="hidden max-[980px]:flex gap-2 overflow-x-auto py-3.5 no-scrollbar" aria-label="Dashboard sections">
           {rail.map(([ic, l, to, cnt]) => (
-            <Link key={l} to={to} className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-full border text-[12.5px] font-semibold transition-colors ${active === to ? "bg-accent border-accent text-white" : "border-bean text-steam hover:bg-bean hover:text-foam"}`}>
+            <Link key={l} to={to} className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-full border text-[12.5px] font-semibold transition-colors ${active === to ? "bg-accent border-accent text-accentfg" : "border-bean text-steam hover:bg-bean hover:text-foam"}`}>
               <Ic d={ic} size={14} />{l}{cnt && <span className="font-mono text-[10px] opacity-80">{cnt}</span>}
             </Link>
           ))}
@@ -145,7 +145,7 @@ export function DashShell({ dash, active, children }: { dash: Dash; active: stri
         </div>
 
         <div className="border-t border-bean mt-2 pt-3.5 grid gap-1">
-          <Link to="/nova" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-white bg-accent/85 hover:bg-accent transition-colors"><Ic d={DP.spark} size={15} /> Ask Co-pilot</Link>
+          <Link to="/nova" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-accentfg bg-accent/85 hover:bg-accent transition-colors"><Ic d={DP.spark} size={15} /> Ask Co-pilot</Link>
           <Link to="/projects" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.plus} size={15} /> Find something to save</Link>
           <Link to="/organizations" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.building} size={15} /> Pick an organization</Link>
           <Link to="/tools" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13.5px] font-semibold text-steam hover:bg-bean hover:text-foam"><Ic d={DP.gem} size={15} /> Browse the Artifacts</Link>

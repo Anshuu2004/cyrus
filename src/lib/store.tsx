@@ -39,7 +39,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [toastMsg, setToastMsg] = useState<{ msg: string; k: number } | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [theme, setTheme] = useStored<"light" | "dark">("agenthub.theme", "light");
+  const [theme, setTheme] = useStored<"light" | "dark">("agenthub.theme", "dark");
 
   /* ── server sync layer (safe no-op when the backend is offline) ── */
   const [serverUser, setServerUser] = useState<ServerUser | null>(null);
@@ -69,9 +69,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { void refreshSession(); }, [refreshSession]);
 
-  /* flip the warm token set by toggling .dark on <html> */
+  /* dark is the default token set; the light variant is opt-out by adding
+     .light to <html>, so no class is needed for the default mode */
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("light", theme === "light");
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
   const toggleTheme = useCallback(() => setTheme(theme === "dark" ? "light" : "dark"), [theme, setTheme]);
@@ -133,7 +134,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       {children}
       {toastMsg && (
         <div key={toastMsg.k} className="reveal fixed bottom-6 left-1/2 z-[120] -translate-x-1/2 flex items-center gap-2.5 rounded-full bg-coffee border border-roast text-foam px-5.5 py-3 text-[14px] font-semibold shadow-lift">
-          <span className="text-[#7ee2a8]">✓</span> {toastMsg.msg}
+          <span className="text-accent">✓</span> {toastMsg.msg}
         </div>
       )}
     </Ctx.Provider>

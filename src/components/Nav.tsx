@@ -269,32 +269,32 @@ export function ThemeToggle() {
       title={dark ? "Switch to light theme" : "Switch to dark theme"}
       className="group relative w-[68px] h-[34px] rounded-full cursor-pointer shrink-0 border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       style={{
-        borderColor: dark ? "#2f3236" : "#dddad3",
-        background: dark ? "#1a1c1f" : "#eceae4",
+        borderColor: dark ? "#2a2d31" : "#d8dde0",
+        background: dark ? "#1d2023" : "#e9ebee",
         boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(133, 116, 97,.18)",
       }}>
       {/* idle icon resting on the track (opposite side from the knob) */}
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ right: "9px", opacity: dark ? 0 : 1 }}>
-        {MOON("#a09282")}
+        {MOON("#8b9298")}
       </svg>
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ left: "9px", opacity: dark ? 1 : 0 }}>
-        {SUN("#d98546")}
+        {SUN("#fbbf24")}
       </svg>
       {/* knob: a clean white circle carrying the active glyph */}
       <span aria-hidden className="absolute top-[3px] left-[3px] w-[26px] h-[26px] rounded-full bg-white grid place-items-center transition-transform duration-400 ease-[cubic-bezier(.55,1.6,.45,1)] group-hover:scale-[1.06]"
         style={{ boxShadow: "0 2px 6px rgba(58, 40, 22,.22), 0 0 0 1px rgba(58, 40, 22,.04)", transform: dark ? "translateX(34px)" : "none" }}>
         <svg width="19" height="19" viewBox="0 0 24 24" style={{ opacity: dark ? 0 : 1, position: "absolute", transition: "opacity .3s" }}>
-          <circle cx="12" cy="12" r="4.8" fill="#f0913a" />
-          <g stroke="#f0913a" strokeWidth="1.7" strokeLinecap="round">
+          <circle cx="12" cy="12" r="4.8" fill="#fbbf24" />
+          <g stroke="#fbbf24" strokeWidth="1.7" strokeLinecap="round">
             {RAYS.map((a) => (
               <line key={a} x1="12" y1="2.6" x2="12" y2="4.4" transform={`rotate(${a} 12 12)`} />
             ))}
           </g>
         </svg>
         <svg width="14" height="14" viewBox="0 0 24 24" style={{ opacity: dark ? 1 : 0, position: "absolute", transition: "opacity .3s" }}>
-          {MOON("#4c4a45")}
+          {MOON("#2a2d31")}
         </svg>
       </span>
     </button>

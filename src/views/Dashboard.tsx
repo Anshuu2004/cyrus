@@ -95,7 +95,7 @@ function Hub({ d }: { d: Dash }) {
         <div className="grid gap-1">
           {d.steps.map(([on, l, to]) => (
             <Link key={l} to={to} className="group flex items-center gap-3.5 px-2 py-2.5 rounded-xl hover:bg-cream transition-colors">
-              <span className={`w-[22px] h-[22px] rounded-[7px] border grid place-items-center shrink-0 transition-colors ${on ? "bg-leaf border-leaf text-white" : "border-line bg-paper text-transparent"}`}>
+              <span className={`w-[22px] h-[22px] rounded-[7px] border grid place-items-center shrink-0 transition-colors ${on ? "bg-leaf border-leaf text-accentfg" : "border-line bg-paper text-transparent"}`}>
                 <Ic d={DP.check} size={11} />
               </span>
               <span className={`text-[14px] font-semibold ${on ? "text-dim line-through decoration-line" : "text-ink"}`}>{l}</span>

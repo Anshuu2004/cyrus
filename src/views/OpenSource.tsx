@@ -128,7 +128,7 @@ function ProjCard({ p }: { p: Proj }) {
         <button aria-label={on ? "Stop tracking" : "Track project"} title={on ? "Stop tracking" : "Track on dashboard"} onClick={() => {
           const added = toggleSaved(p.url);
           toast(added ? "Added to your dashboard" : "Removed from dashboard");
-        }} className={`ml-auto w-[30px] h-[30px] rounded-[9px] border grid place-items-center text-[13px] transition-all cursor-pointer ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
+        }} className={`ml-auto w-[30px] h-[30px] rounded-[9px] border grid place-items-center text-[13px] transition-all cursor-pointer ${on ? "bg-accent border-accent text-accentfg" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
           {on ? "★" : "☆"}
         </button>
       </div>
@@ -211,7 +211,7 @@ export default function OpenSource() {
 
   const visible = list.slice(0, shown);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
   const lbl = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
   const clearAll = () => { setQ(""); setProg("all"); setDiff("all"); setYear("all"); setTech("all"); setShown(60); };
   const anyFilter = q || prog !== "all" || diff !== "all" || year !== "all" || tech !== "all";

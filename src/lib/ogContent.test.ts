@@ -89,7 +89,10 @@ describe("program cards", () => {
     });
   }
 
-  it("covers all ten programs", () => {
-    expect(PROGRAMS).toHaveLength(10);
+  it("covers every program in the catalog", () => {
+    /* the loop above is driven by PROGRAMS, so this only fails when the
+       data file changes size - which is exactly when the card builder
+       needs re-reading against the new records */
+    expect(PROGRAMS).toHaveLength(13);
   });
 });

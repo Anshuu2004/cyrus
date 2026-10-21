@@ -54,10 +54,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5efe7" },
-    { media: "(prefers-color-scheme: dark)", color: "#221a13" },
-  ],
+  /* dark graphite is the default mode now, so the browser chrome follows
+     it; a visitor who switches to light gets the cool paper on next paint. */
+  themeColor: "#0e0f10",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -65,10 +64,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${jakarta.variable} ${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        {/* keep the stored theme out of the first paint */}
+        {/* dark is the default, so only an explicit stored "light" adds a class;
+           this keeps the stored choice out of the first paint */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("agenthub.theme");if(t&&JSON.parse(t)==="dark")document.documentElement.classList.add("dark");}catch(e){}`,
+            __html: `try{var t=localStorage.getItem("agenthub.theme");if(t&&JSON.parse(t)==="light")document.documentElement.classList.add("light");}catch(e){}`,
           }}
         />
       </head>

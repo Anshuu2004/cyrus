@@ -174,7 +174,7 @@ export default function Nova() {
         <div className="absolute inset-0 opacity-[.06] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 82% 12%, #fff 0, transparent 45%), radial-gradient(circle at 8% 90%, #eab261 0, transparent 40%)" }} />
         <div className="relative p-7 md:p-9">
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="w-[38px] h-[38px] rounded-[11px] bg-accent grid place-items-center shadow-[0_8px_20px_-6px_rgba(217, 133, 70,.7)]">
+            <span className="w-[38px] h-[38px] rounded-[11px] bg-accent grid place-items-center shadow-[0_8px_20px_-6px_rgba(74, 222, 128,.7)]">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.4 6.4l2.8 2.8M14.8 14.8l2.8 2.8M17.6 6.4l-2.8 2.8M9.2 14.8l-2.8 2.8" /></svg>
             </span>
             <h1 className="font-display font-extrabold text-[clamp(24px,3vw,34px)] tracking-[-.02em] text-white">Co-pilot</h1>
@@ -190,7 +190,7 @@ export default function Nova() {
               <div className="flex gap-2 flex-wrap">
                 {QUICK.map((t) => (
                   <button key={t} onClick={() => toggleSkill(t)}
-                    className={`font-mono text-[11.5px] font-semibold rounded-full px-3.5 py-2 border transition-all cursor-pointer ${prof.skills.includes(t) ? "bg-accent border-accent text-white shadow-[0_6px_16px_-6px_rgba(217, 133, 70,.8)]" : "bg-white/6 border-foam/25 text-foam/85 hover:border-ember hover:text-white"}`}>
+                    className={`font-mono text-[11.5px] font-semibold rounded-full px-3.5 py-2 border transition-all cursor-pointer ${prof.skills.includes(t) ? "bg-accent border-accent text-white shadow-[0_6px_16px_-6px_rgba(74, 222, 128,.8)]" : "bg-white/6 border-foam/25 text-foam/85 hover:border-ember hover:text-white"}`}>
                     {t}
                   </button>
                 ))}
@@ -360,7 +360,7 @@ export default function Nova() {
                   </div>
                   <div className="flex items-center gap-1.5 flex-wrap max-[860px]:order-3">
                     {cycle.map((st, idx) => (
-                      <span key={st} className={`font-mono text-[9px] font-bold uppercase tracking-[.06em] rounded-full px-2 py-1 border transition-colors ${idx === i ? "bg-accent border-accent text-white" : idx < i ? "bg-peach border-accent/25 text-rust" : "bg-transparent border-line text-dim"}`}>{st.replace(/_/g, " ")}</span>
+                      <span key={st} className={`font-mono text-[9px] font-bold uppercase tracking-[.06em] rounded-full px-2 py-1 border transition-colors ${idx === i ? "bg-accent border-accent text-accentfg" : idx < i ? "bg-peach border-accent/25 text-rust" : "bg-transparent border-line text-dim"}`}>{st.replace(/_/g, " ")}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-2.5 shrink-0 max-[860px]:order-4 ml-auto max-[860px]:ml-0">

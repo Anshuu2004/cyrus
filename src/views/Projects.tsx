@@ -103,7 +103,7 @@ function PCard({ r }: { r: Repo }) {
         <button aria-label={on ? "Unsave project" : "Save project"} onClick={() => {
           const added = toggleSaved(r.repo);
           toast(added ? `Saved ${r.repo.split("/")[1]} to your dashboard` : `Removed ${r.repo.split("/")[1]}`);
-        }} className={`ml-auto w-9 h-9 cursor-pointer rounded-[11px] border grid place-items-center text-[14px] transition-all ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
+        }} className={`ml-auto w-9 h-9 cursor-pointer rounded-[11px] border grid place-items-center text-[14px] transition-all ${on ? "bg-accent border-accent text-accentfg" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
           {on ? "★" : "☆"}
         </button>
         {r.cat === "tools" ? (
@@ -159,7 +159,7 @@ export default function Projects() {
     return [...set.entries()].sort((a, b) => a[1].localeCompare(b[1]));
   }, []);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
   const label = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
   const rchip = (on: boolean) => `text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${on ? "bg-coffee border-coffee text-foam shadow-soft" : "bg-paper border-line text-cocoa hover:border-accent hover:text-rust"}`;
   const tog = (cur: string, id: string, set: (v: string) => void) => { set(cur === id ? "all" : id); setShown(48); };

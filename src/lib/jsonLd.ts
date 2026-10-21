@@ -67,7 +67,8 @@ export function programEntity(p: Program): JsonLd {
     name: p.name,
     url,
     description: p.tag,
-    image: absolute(p.img),
+    // a tracked program without cover art must not emit an empty image URL
+    ...(p.img ? { image: absolute(p.img) } : {}),
     provider: {
       "@type": "Organization",
       name: p.owner,
