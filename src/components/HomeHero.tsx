@@ -9,12 +9,13 @@
    click Organizations and the panel becomes the organizations grid, click
    Leaderboard and it becomes the ranking.
 
-   The landscape is one of six nature photographs, picked at random on arrival
-   and cycled slowly from there.
+   The landscape is one of two photographs and the theme picks it: the glacier
+   under the northern lights in the dark theme, the snow range at dawn in the
+   light one. It never rotates on its own.
    ═════════════════════════════════════════════════════════════ */
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "@/lib/router";
 import { REPOS } from "../data/repos";
 import { ORGS, PROGRAMS } from "../data/orgs";
@@ -23,8 +24,9 @@ import { ISSUE_SIGNALS } from "../data/issueSignals";
 import { LEADERS } from "../data/leaderboard";
 import { avatarOf, fmt, byStars } from "../lib/util";
 import { DP } from "../lib/dash/shared";
+import { useStore } from "../lib/store";
 import { Word, btn, OrgImg, Logo } from "./ui";
-import { SCENES } from "./HorizonBackdrop";
+import { sceneFor } from "./HorizonBackdrop";
 
 /* the orgs whose public data makes up the index */
 const PROOF = ["google", "kubernetes", "vercel", "huggingface", "freeCodeCamp"];
@@ -387,24 +389,12 @@ function BoardPreview() {
 }
 
 /* ── the hero ───────────────────────────────────────────────── */
-/* how long one landscape holds before the next dissolves in */
-const SCENE_MS = 9000;
 
 export default function HomeHero() {
-  const [scene, setScene] = useState<number | null>(null);
-  /* land on a landscape at random, then cycle slowly through the other five.
-     Visitors who ask for less motion keep the one they arrived on. */
-  useEffect(() => {
-    const start = Math.floor(Math.random() * SCENES.length);
-    setScene(start);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let n = start;
-    const id = window.setInterval(() => {
-      n = (n + 1) % SCENES.length;
-      setScene(n);
-    }, SCENE_MS);
-    return () => window.clearInterval(id);
-  }, []);
+  const { theme } = useStore();
+  const still = useReducedMotion();
+  /* one photograph, chosen by the theme the page is being read in */
+  const scene = sceneFor(theme);
 
   return (
     <header id="hero" className="relative overflow-hidden pt-[72px] pb-16 max-[700px]:pt-12 max-[700px]:pb-12">
@@ -459,14 +449,12 @@ export default function HomeHero() {
             <span className="mark tr" aria-hidden="true">+</span>
             <span className="mark bl" aria-hidden="true">+</span>
             <div className="hero-photo">
-              <AnimatePresence>
-                {scene !== null && (
-                  <motion.div key={SCENES[scene].id} className="hero-scene"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    transition={{ duration: 1.7, ease: "easeInOut" }}>
-                    <img src={SCENES[scene].img} alt="" decoding="async" />
-                  </motion.div>
-                )}
+              <AnimatePresence mode="wait">
+                <motion.div key={scene.id} className="hero-scene"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  transition={{ duration: still ? 0 : 0.9, ease: "easeInOut" }}>
+                  <img src={scene.img} alt="" decoding="async" />
+                </motion.div>
               </AnimatePresence>
               <div className="hero-photo-inner">
                 <BoardPreview />

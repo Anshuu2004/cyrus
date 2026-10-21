@@ -342,9 +342,11 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 /* the six scenes are night-weighted photographs; on a light page they would
    read as a dark slab, so lay them over a pale ground and wash them up */
 .light .hero-photo { background: var(--color-sand); }
+/* the dawn photograph is already a light scene, so the light theme only
+   lifts it a little rather than washing it out */
 .light .hero-scene img {
-  opacity: .62;
-  filter: saturate(.85) brightness(1.55) contrast(.82);
+  opacity: .86;
+  filter: saturate(.92) brightness(1.06) contrast(.94);
 }
 
 /* ── the line around the dashboard ────────────────────────────
