@@ -292,7 +292,7 @@ const PANELS: Record<PanelId, () => ReactNode> = {
 };
 
 /* ── the window ─────────────────────────────────────────────── */
-function BoardPreview({ sceneName }: { sceneName: string }) {
+function BoardPreview() {
   const [panel, setPanel] = useState<PanelId>("issues");
   const Active = PANELS[panel];
   return (
@@ -310,7 +310,7 @@ function BoardPreview({ sceneName }: { sceneName: string }) {
             </span>
             <span className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[.12em] text-dim border border-line rounded-full px-2 py-[3px]">
               <i className="not-italic w-[5px] h-[5px] rounded-full bg-accent" />
-              {sceneName}
+              Live index
             </span>
             <span className="ml-auto flex items-center gap-2.5 min-w-0">
               <span className="hidden md:flex items-center gap-2 w-[186px] text-[11px] text-dim bg-cream border border-line rounded-full px-3 py-[4px]">
@@ -388,13 +388,24 @@ function BoardPreview({ sceneName }: { sceneName: string }) {
 }
 
 /* ── the hero ───────────────────────────────────────────────── */
+/* how long one landscape holds before the next dissolves in */
+const SCENE_MS = 9000;
+
 export default function HomeHero() {
   const [scene, setScene] = useState<number | null>(null);
-  /* a new landscape on every visit; the dot row below moves by hand */
+  /* land on a landscape at random, then cycle slowly through the other five.
+     Visitors who ask for less motion keep the one they arrived on. */
   useEffect(() => {
-    if (scene === null) setScene(Math.floor(Math.random() * SCENES.length));
-  }, [scene]);
-  const s = SCENES[scene ?? 0];
+    const start = Math.floor(Math.random() * SCENES.length);
+    setScene(start);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let n = start;
+    const id = window.setInterval(() => {
+      n = (n + 1) % SCENES.length;
+      setScene(n);
+    }, SCENE_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <header id="hero" className="relative overflow-hidden pt-[72px] pb-16 max-[700px]:pt-12 max-[700px]:pb-12">
@@ -449,23 +460,14 @@ export default function HomeHero() {
             {scene !== null && (
               <motion.div key={SCENES[scene].id} className="absolute inset-0"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 1.1, ease: "easeInOut" }}>
+                transition={{ duration: 1.7, ease: "easeInOut" }}>
                 <img src={SCENES[scene].img} alt="" decoding="async" />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
         <div className="hero-stage-inner max-w-[1220px] mx-auto px-5 sm:px-6">
-          <BoardPreview sceneName={s.name} />
-          {/* scene switcher */}
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-cocoa mr-1">{s.name}</span>
-            {SCENES.map((sc, i) => (
-              <button key={sc.id} type="button" onClick={() => setScene(i)} aria-label={`Background: ${sc.name}`}
-                title={sc.name}
-                className={`w-[9px] h-[9px] rounded-full cursor-pointer transition-all border ${scene === i ? "bg-accent border-accent scale-125" : "bg-card border-rule hover:border-accent"}`} />
-            ))}
-          </div>
+          <BoardPreview />
         </div>
       </div>
     </header>

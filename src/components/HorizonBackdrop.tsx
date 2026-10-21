@@ -1,6 +1,6 @@
 /* ══ HorizonBackdrop.tsx — the six landscapes behind the hero board
-   One photograph per visit, picked at random in HomeHero and cross-faded
-   when the dot row below the board switches by hand. The images live in
+   A photograph is picked at random when the hero mounts, then HomeHero
+   cycles slowly through the rest with a cross-fade. The images live in
    public/assets/scenes and are shot-style landscapes with the horizon in
    the lower third, so the framed board always sits on solid ground.
    Light mode washes them in globals.css (.light .hero-horizon img).   ═ */
