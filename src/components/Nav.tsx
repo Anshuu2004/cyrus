@@ -14,8 +14,8 @@ const LINKS = [
   { to: "/organizations", label: "Organizations" },
   { to: "/issues", label: "Issues" },
   { to: "/leaderboard", label: "Leaderboard" },
-  { to: "/opensource", label: "Open Source" },
   { to: "/projects", label: "Projects" },
+  { to: "/skills", label: "Skills" },
   { to: "/about", label: "About us" },
 ];
 
@@ -56,7 +56,7 @@ export default function Nav() {
   }, [menu]);
 
   const active = (to: string) =>
-    to === "/" ? loc.pathname === "/" : loc.pathname.startsWith(to) || (to === "/projects" && loc.pathname.startsWith("/repo/"));
+    to === "/" ? loc.pathname === "/" : loc.pathname.startsWith(to) || (to === "/skills" && loc.pathname.startsWith("/repo/"));
 
   return (
     <header>

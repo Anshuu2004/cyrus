@@ -140,7 +140,7 @@ export function useDash() {
       tone: "info",
       title: "You are not following any repository yet",
       body: "Following a repository is what turns the catalog into a board: its stars, open issues and last update land here.",
-      to: "/projects",
+      to: "/skills",
       cta: "Browse the catalog",
     });
   }
@@ -158,7 +158,7 @@ export function useDash() {
   const steps: [boolean, string, string][] = [
     [issues.length >= 1, "Track your first open issue", "/dashboard/issues"],
     [working.length >= 1, "Move one issue to working on it", "/dashboard/issues"],
-    [saved.length >= 3, "Follow three repositories", "/projects"],
+    [saved.length >= 3, "Follow three repositories", "/skills"],
     [savedOrgs.length >= 1, "Follow an organization", "/organizations"],
     [byStage("done").length >= 1, "Close one out as completed", "/dashboard/issues"],
   ];

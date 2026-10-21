@@ -17,14 +17,18 @@ const nextConfig: NextConfig = {
       // search hits. Temporary rather than permanent so they can be re-pointed.
       { source: "/nova", destination: "/platform/features", permanent: false },
       { source: "/platform/nova", destination: "/platform/features", permanent: false },
-      { source: "/hackathons", destination: "/opensource", permanent: false },
-      { source: "/hackathons/:id", destination: "/opensource", permanent: false },
-      { source: "/resources", destination: "/projects", permanent: false },
-      { source: "/resources/:id", destination: "/projects", permanent: false },
-      { source: "/apis", destination: "/projects", permanent: false },
-      { source: "/tools", destination: "/projects", permanent: false },
-      { source: "/tools/:path*", destination: "/projects", permanent: false },
+      { source: "/hackathons", destination: "/projects", permanent: false },
+      { source: "/hackathons/:id", destination: "/projects", permanent: false },
+      { source: "/resources", destination: "/skills", permanent: false },
+      { source: "/resources/:id", destination: "/skills", permanent: false },
+      { source: "/apis", destination: "/skills", permanent: false },
+      { source: "/tools", destination: "/skills", permanent: false },
+      { source: "/tools/:path*", destination: "/skills", permanent: false },
       { source: "/dashboard/saved", destination: "/dashboard", permanent: false },
+      // the two listings swapped names: the archive left /opensource for
+      // /projects, and the skills catalog moved from /projects to /skills.
+      { source: "/opensource", destination: "/projects", permanent: false },
+      { source: "/opensource/:path*", destination: "/projects", permanent: false },
     ];
   },
 };

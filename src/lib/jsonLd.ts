@@ -44,7 +44,7 @@ export function webSite(): JsonLd {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${canonical("/projects")}?q={search_term_string}`,
+        urlTemplate: `${canonical("/skills")}?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },

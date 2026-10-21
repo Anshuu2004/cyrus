@@ -208,7 +208,7 @@ export default function ProgramDetail() {
             <section>
               <div className="flex items-end justify-between gap-4 flex-wrap mb-4">
                 <h2 className="font-display font-extrabold text-[22px] tracking-[-.02em]">Flagship <Word>{p.name}</Word> projects</h2>
-                <Link to="/opensource" className={btn("ghost", "sm")}>Browse all program projects</Link>
+                <Link to="/projects" className={btn("ghost", "sm")}>Browse all program projects</Link>
               </div>
               <div className="grid grid-cols-3 gap-4 max-[980px]:grid-cols-2 max-[640px]:grid-cols-1">
                 {shelf.map((r) => (
@@ -240,7 +240,7 @@ export default function ProgramDetail() {
             <MetaRow k="Eligibility" v={d.eligibility} />
             <MetaRow k="Scale" v={`${p.orgs} · ${p.slots}`} />
             <div className="grid gap-2.5 mt-4">
-              {shelf.length > 0 && <Link to="/opensource" className={btn("primary", "md", "w-full")}>Browse {PROGRAM_META[shelfName as ProgramName].label} projects</Link>}
+              {shelf.length > 0 && <Link to="/projects" className={btn("primary", "md", "w-full")}>Browse {PROGRAM_META[shelfName as ProgramName].label} projects</Link>}
               <Link to="/organizations" className={btn("outline", "md", "w-full")}>View organizations</Link>
               <a href={p.url} target="_blank" rel="noopener" className={btn("dark", "md", "w-full")}>Official website</a>
             </div>

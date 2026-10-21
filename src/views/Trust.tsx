@@ -65,7 +65,7 @@ export default function Trust() {
             </div>
             <div className="flex gap-2.5 ml-auto flex-wrap">
               <Link to="/about#data" className={btn("dark", "sm")}>View methodology</Link>
-              <Link to="/opensource" className={btn("outline", "sm")}>Open the archive</Link>
+              <Link to="/projects" className={btn("outline", "sm")}>Open the archive</Link>
             </div>
           </div>
         </section>

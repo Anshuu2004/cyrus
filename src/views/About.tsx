@@ -73,7 +73,7 @@ function Orbit() {
 const CAP_IC = { fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
 const capIcon = (d: string) => <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden {...CAP_IC}><path d={d} /></svg>;
 const CAPS: [string, string, string, string, ReactNode, string][] = [
-  ["Skill catalog", `/projects`, "text-rust bg-peach border-accent/20",
+  ["Skill catalog", `/skills`, "text-rust bg-peach border-accent/20",
     `${REPOS.length} agent skills, Cursor rules, AGENTS.md configs and MCP servers across ${CATEGORIES.length} shelves - ranked by live GitHub stats, never by hype.`,
     capIcon("M4 5h7v7H4zM13 5h7v4h-7zM13 12h7v7h-7zM4 15h7v4H4z"),
     "Every shelf is filtered by what the repo itself declares - SKILL.md, rules files, MCP manifests - and each card carries stars, forks, last-push and license from the public API."],
@@ -85,11 +85,11 @@ const CAPS: [string, string, string, string, ReactNode, string][] = [
     "Contributor pulse before you commit: language mix, open issues, review latency, past accepted projects and who actually mentors there.",
     capIcon("M4 21V6l8-3v18M12 21h8V10l-8-2.4M7 10h1M7 14h1M7 18h1M16 13h1M16 17h1M2 21h20"),
     "Profiles join our live GitHub directory with the accepted-project archive, so a page shows both the code signal and the program history for the same organization."],
-  ["Program calendar", "/opensource", "text-plum bg-plum/10 border-plum/25",
+  ["Program calendar", "/projects", "text-plum bg-plum/10 border-plum/25",
     `GSoC, Outreachy, LFX, ESOC, MLH Fellowship, GSSoC, KDE, Summer of Bitcoin, Nexus Spring of Code, 24 Pull Requests and Hacktoberfest - ${PROGRAMS.length} tracked windows on one timeline.`,
     capIcon("M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3.5 2"),
     "Each program page shows the phase you are actually in today - organization applications, participant applications, community bonding, coding period - with the window dates the organizer publishes."],
-  ["Project archive", "/opensource", "text-honey bg-honey/12 border-honey/40",
+  ["Project archive", "/projects", "text-honey bg-honey/12 border-honey/40",
     "6,600+ accepted program projects from 2022 to 2026, filterable by year, organization, stack and difficulty.",
     capIcon("M3 7l9-4 9 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7ZM3 7l9 4 9-4M12 11v10"),
     "Pulled from each program's public API by our refresh pipeline - titles, orgs, mentors, tech tags and descriptions, never hand-typed."],
@@ -320,7 +320,7 @@ export default function About() {
           orgs and builders ship the same week. That's the whole trick - and the whole promise.
         </p>
         <div className="flex gap-3 justify-center flex-wrap mt-8">
-          <Link to="/projects" className={btn("dark", "md")}>Browse the catalog</Link>
+          <Link to="/skills" className={btn("dark", "md")}>Browse the catalog</Link>
           <Link to="/dashboard" className={btn("outline", "md")}>Open your dashboard</Link>
         </div>
       </section>

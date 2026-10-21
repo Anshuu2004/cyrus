@@ -139,7 +139,7 @@ function Programs() {
     <Section id="programs">
       <Head tag="Paid & mentored" title={<>Programs that <Word>fund</Word> contributors.</>}
         sub={`${PROGRAMS.length} tracked programs with their application windows. Where a program pays nothing or is a grant for maintainers, the card says so.`}
-        side={<Link className={btn("outline", "md")} to="/opensource">All programs</Link>} />
+        side={<Link className={btn("outline", "md")} to="/projects">All programs</Link>} />
       <div className="grid grid-cols-3 gap-[14px] max-[1020px]:grid-cols-2 max-[640px]:grid-cols-1">
         {shelf.map((p) => <ProgCard key={p.id} p={p} />)}
       </div>
@@ -235,13 +235,13 @@ function OrgMarquee() {
   );
 }
 
-function Projects() {
+function Skills () {
   const cards = useMemo(() => REPOS.slice().sort(byStars).slice(0, 4), []);
   return (
-    <Section id="projects">
+    <Section id="skills">
       <Head tag="Browse good open source projects" title={<>Most-starred in the <Word>catalog</Word>.</>}
         sub={`${fmt(CRAWL.catalogRepos)} repositories indexed by language, topic and stars, refreshed from the GitHub API.`}
-        side={<Link className={btn("outline", "md")} to="/projects">All projects</Link>} />
+        side={<Link className={btn("outline", "md")} to="/skills">All skills</Link>} />
       <div className="grid grid-cols-4 gap-[14px] max-[1100px]:grid-cols-2 max-[700px]:grid-cols-1">
         {cards.map((r) => {
           const [owner, name] = r.repo.split("/");
@@ -412,7 +412,7 @@ function Cta() {
         </p>
         <div className="flex gap-3 justify-center flex-wrap mt-9">
           <button className={btn("primary", "lg")} onClick={() => setAuthOpen(true)}>Sign in &amp; open dashboard</button>
-          <Link className={`${btn("outline", "lg")} !bg-white/6 !border-white/18 !text-foam hover:!bg-white/12`} to="/opensource">Browse programs</Link>
+          <Link className={`${btn("outline", "lg")} !bg-white/6 !border-white/18 !text-foam hover:!bg-white/12`} to="/projects">Browse programs</Link>
         </div>
         <p className="mt-7 font-mono text-[10.5px] tracking-[.1em] uppercase text-dimdk">
           Free to browse · <Link className="text-foam underline underline-offset-3 normal-case tracking-normal" to="/about#data">how we source the data</Link>
@@ -429,7 +429,7 @@ export default function Home() {
       <Features />
       <Programs />
       <Timeline />
-      <Projects />
+      <Skills />
       <Band />
       <OrgMarquee />
       <Voices />

@@ -829,7 +829,7 @@ export default function OrgProfile() {
         <section>
           <div className="flex items-end justify-between gap-4 flex-wrap mb-5">
             <h2 className="font-display font-extrabold text-[26px] tracking-[-.02em]">Every build, <Word>on cyrus.ai</Word></h2>
-            <Link to="/projects" className={btn("ghost", "sm")}>Browse all projects</Link>
+            <Link to="/skills" className={btn("ghost", "sm")}>Browse all skills</Link>
           </div>
           {repos.length ? (
             <div className="grid grid-cols-2 gap-4 max-[840px]:grid-cols-1">

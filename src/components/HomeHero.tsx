@@ -433,7 +433,7 @@ export default function HomeHero() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </span>
           </Link>
-          <Link to="/opensource" className={btn("outline", "lg")}>Browse programs</Link>
+          <Link to="/projects" className={btn("outline", "lg")}>Browse programs</Link>
         </div>
 
         <div className="reveal flex items-center justify-center gap-3.5 mt-6 flex-wrap" style={{ animationDelay: ".58s" }}>

@@ -30,7 +30,7 @@ export function ReposSection({ d }: { d: Dash }) {
     <>
       <DashHead title="My Repositories"
         sub="The repositories you follow. Stars, open issues and last update decide where the next evening goes."
-        action={<Link to="/projects" className={btn("outline", "sm")}>Follow more</Link>} />
+        action={<Link to="/skills" className={btn("outline", "sm")}>Follow more</Link>} />
 
       <Card>
         <div className="grid grid-cols-4 gap-4 max-[760px]:grid-cols-2">
@@ -94,7 +94,7 @@ export function ReposSection({ d }: { d: Dash }) {
             Tap the bookmark on any repository in the catalog and it lands here with its
             stars, open issues and last update.
           </p>
-          <Link to="/projects" className={btn("primary", "md") + " mt-5"}>
+          <Link to="/skills" className={btn("primary", "md") + " mt-5"}>
             Browse {fmt(d.index.catalog)} repositories
           </Link>
         </Card>

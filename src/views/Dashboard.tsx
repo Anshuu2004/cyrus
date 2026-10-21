@@ -42,7 +42,7 @@ function Overview({ d }: { d: Dash }) {
         action={
           <>
             <Link to="/dashboard/issues" className={btn("primary", "sm")}>Track an issue</Link>
-            <Link to="/projects" className={btn("outline", "sm")}>Browse catalog</Link>
+            <Link to="/skills" className={btn("outline", "sm")}>Browse catalog</Link>
           </>
         }
       />

@@ -14,8 +14,8 @@ const body = `# cyrus.ai
 
 ## Pages
 
-${line("/projects", `the ${fmt(STATS.catalog)}-repository catalog, ranked by stars, each entry linked to its live GitHub record`)}
-${line("/opensource", `${fmt(STATS.archive)} mentored program projects from GSoC, LFX, Outreachy, Hacktoberfest and Nexus Spring of Code, filterable by year, org and tech`)}
+${line("/skills", `the ${fmt(STATS.catalog)}-repository catalog, ranked by stars, each entry linked to its live GitHub record`)}
+${line("/projects", `${fmt(STATS.archive)} mentored program projects from GSoC, LFX, Outreachy, Hacktoberfest and Nexus Spring of Code, filterable by year, org and tech`)}
 ${line("/issues", `search ${fmt(STATS.issues)} open issues by keyword, language, organization, label, beginner-friendly and unassigned`)}
 ${line("/organizations", `${fmt(STATS.orgs)} real GitHub organizations with stats, program history and how to contribute to each`)}
 - ${canonical("/programs/gsoc")} and one page like it per tracked program: ${PROGRAMS.map((p) => p.id).join(", ")}

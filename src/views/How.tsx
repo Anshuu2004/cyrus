@@ -71,7 +71,7 @@ export default function How() {
             yourself. No resume upload, no onboarding call.
           </p>
           <div className="flex gap-3 justify-center flex-wrap mt-8">
-            <Link to="/projects" className={btn("dark", "lg")}>Open the archive</Link>
+            <Link to="/skills" className={btn("dark", "lg")}>Browse the catalog</Link>
             <Link to="/platform/features" className={btn("outline", "lg")}>What is on the platform</Link>
           </div>
         </header>

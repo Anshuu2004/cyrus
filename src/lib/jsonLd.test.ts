@@ -22,7 +22,7 @@ describe("webSite", () => {
     const action = site.potentialAction as JsonLd;
     const target = action.target as JsonLd;
     expect(action["@type"]).toBe("SearchAction");
-    expect(target.urlTemplate).toBe(`${SITE_ORIGIN}/projects?q={search_term_string}`);
+    expect(target.urlTemplate).toBe(`${SITE_ORIGIN}/skills?q={search_term_string}`);
     expect(action["query-input"]).toBe("required name=search_term_string");
   });
 });
