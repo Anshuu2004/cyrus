@@ -411,10 +411,10 @@ function Cta() {
   );
 }
 
-export default function Home() {
+export default function Home({ horizon }: { horizon?: string }) {
   return (
     <>
-      <HomeHero />
+      <HomeHero horizon={horizon} />
       <Features />
       <Programs />
       <Timeline />
