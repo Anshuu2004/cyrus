@@ -13,6 +13,7 @@ const LINKS = [
   { to: "/", label: "Home" },
   { to: "/organizations", label: "Organizations" },
   { to: "/issues", label: "Issues" },
+  { to: "/leaderboard", label: "Leaderboard" },
   { to: "/opensource", label: "Open Source" },
   { to: "/projects", label: "Projects" },
   { to: "/about", label: "About us" },
