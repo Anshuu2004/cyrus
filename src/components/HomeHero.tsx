@@ -1,66 +1,36 @@
 "use client";
-/* ══ HomeHero.tsx — the centred front-page hero ══════════════════════
-   One column: eyebrow pill, a headline with a single green phrase, one short
-   line of sub, two pills, the organizations behind the index. Then the board
-   itself, framed 16:9 inside the dashed registration-mark frame, sitting on
-   the horizon band.
+/* ══ HomeHero.tsx — the front page opens on the product ════════
+   An ossium-style stage: a dotted registration frame around a live
+   application window, sitting on a landscape. The window is not a
+   picture of the product, it is the product's own screens drawn from
+   the same data the real pages use, and the rail on its left actually
+   works: click Organizations and the panel becomes the organizations
+   grid, click Leaderboard and it becomes the ranking.
 
-   The frame is not a mock of the product - it is the Issue Finder screen,
-   drawn with the same sidebar model, the same icons and the same rows the
-   real page renders, so what a visitor sees here is what they get when they
-   click through. Every number comes from the crawl.
-   ═══════════════════════════════════════════════════════════════════ */
-import { useMemo } from "react";
+   The landscape behind it is one of six nature scenes, chosen per
+   visit, with a small dot row to move between them by hand.
+   ═════════════════════════════════════════════════════════════ */
+import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "@/lib/router";
 import { REPOS } from "../data/repos";
-import { PROGRAMS } from "../data/orgs";
+import { ORGS, PROGRAMS } from "../data/orgs";
 import { CRAWL } from "../data/crawlStats";
 import { ISSUE_SIGNALS } from "../data/issueSignals";
-import { STATS } from "../lib/siteStats";
-import { avatarOf, fmt } from "../lib/util";
+import { LEADERS } from "../data/leaderboard";
+import { avatarOf, fmt, byStars } from "../lib/util";
 import { DP } from "../lib/dash/shared";
 import { Word, btn, OrgImg, Logo } from "./ui";
-import HorizonBackdrop from "./HorizonBackdrop";
+import { SCENES, SceneArt } from "./HorizonBackdrop";
 
 /* the orgs whose public data makes up the index */
 const PROOF = ["google", "kubernetes", "vercel", "huggingface", "freeCodeCamp"];
 
-/* the board's own navigation, so the preview cannot promise a screen that
-   does not exist. Counts are the real ones the sidebar shows. */
-type RailItem = { icon: string; text: string; count?: string };
-const RAIL: { label: string; items: RailItem[] }[] = [
-  {
-    label: "Board",
-    items: [
-      { icon: DP.grid, text: "Overview" },
-      { icon: DP.issue, text: "My Issues" },
-      { icon: DP.repo, text: "My Repositories" },
-    ],
-  },
-  {
-    label: "Discover",
-    items: [
-      { icon: DP.search, text: "Issue finder" },
-      { icon: DP.building, text: "Organizations", count: fmt(CRAWL.orgs) },
-      { icon: DP.flag, text: "Leaderboard", count: "100" },
-      { icon: DP.spark, text: "Sponsors" },
-      { icon: DP.layers, text: "Project archive", count: fmt(STATS.archive) },
-      { icon: DP.star, text: "Skill catalog", count: fmt(REPOS.length) },
-    ],
-  },
-  { label: "Account", items: [{ icon: DP.settings, text: "Settings" }] },
-];
-const ACTIVE = "Issue finder";
-
-/* the finder's own chips, in the order the rail offers them */
-const CHIPS = ["Everything", "Python", "Rust", "Go", "beginner-friendly", "unassigned"];
-
 const PAGES = Math.ceil(CRAWL.issues / 25);
 
-/* three cards, taken from the crawl sample the home page already trusts:
-   real open issues in real repositories, at most one per repo so the screen
-   reads as a wide ecosystem rather than one busy project */
-function previewIssues() {
+/* real rows, sliced once at module load so the panels never re-sort */
+const TOP_ISSUES = (() => {
   const seen = new Set<string>();
   const picked = [];
   for (const i of ISSUE_SIGNALS) {
@@ -70,7 +40,32 @@ function previewIssues() {
     if (picked.length === 3) break;
   }
   return picked;
+})();
+const TOP_ORGS = ORGS.slice(0, 4);
+const TOP_LEADERS = LEADERS.slice(0, 5);
+const TOP_PROGS = PROGRAMS.slice(0, 4);
+const TOP_REPOS = REPOS.slice().sort(byStars).slice(0, 4);
+
+/* the co-pilot panel: pick skills, get repositories that ask for them */
+const SKILLS = ["TypeScript", "Python", "Go", "Rust", "React", "Docs"];
+function matches(skills: string[]) {
+  if (!skills.length) return TOP_REPOS.slice(0, 3);
+  const hit = REPOS.filter((r) =>
+    skills.some((s) => r.lang === s || r.tags.includes(s) || (s === "Docs" && /doc|guide|readme/i.test(r.desc))));
+  return (hit.length ? hit : REPOS).slice().sort(byStars).slice(0, 3);
 }
+
+type PanelId = "issues" | "orgs" | "board" | "programs" | "projects" | "copilot";
+const RAIL: { id: PanelId; icon: string; text: string; count?: string }[] = [
+  { id: "issues", icon: DP.search, text: "Issue finder", count: fmt(CRAWL.issues) },
+  { id: "orgs", icon: DP.building, text: "Organizations", count: fmt(CRAWL.orgs) },
+  { id: "board", icon: DP.flag, text: "Leaderboard", count: "100" },
+  { id: "programs", icon: DP.calendar, text: "Programs", count: String(PROGRAMS.length) },
+  { id: "projects", icon: DP.layers, text: "Projects", count: fmt(CRAWL.catalogRepos) },
+  { id: "copilot", icon: DP.spark, text: "Co-pilot" },
+];
+
+const CHIPS = ["Everything", "Python", "Rust", "Go", "beginner-friendly", "unassigned"];
 
 function Ic({ d, size = 14 }: { d: string; size?: number }) {
   return (
@@ -80,17 +75,232 @@ function Ic({ d, size = 14 }: { d: string; size?: number }) {
   );
 }
 
-function BoardPreview() {
-  const issues = useMemo(previewIssues, []);
+const Row = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
+  <div className={`rounded-[10px] border border-line bg-card px-3 md:px-3.5 py-2.5 ${className}`}>{children}</div>
+);
+
+const StatLine = ({ k, v }: { k: string; v: string }) => (
+  <span className="flex items-baseline gap-1 font-mono text-[9.5px]">
+    <span className="text-dim">{k}</span>
+    <b className="text-ink font-semibold">{v}</b>
+  </span>
+);
+
+/* ── the six panels ─────────────────────────────────────────── */
+function IssuesPanel() {
+  return (
+    <>
+      <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Issue finder</h3>
+      <p className="text-[10.5px] md:text-[11px] leading-[1.55] text-dim mt-1 md:mt-0.5">
+        <b className="text-accent font-semibold">{fmt(CRAWL.issues)}</b> open issues from {fmt(CRAWL.reposWithIssues)} repositories.
+        <span className="hidden md:inline"> Snapshot {CRAWL.crawledAt}.</span>
+      </p>
+      <div className="flex items-center gap-1.5 mt-2.5 overflow-hidden">
+        {CHIPS.map((c, i) => (
+          <span key={c} className={`shrink-0 font-mono text-[9px] md:text-[9.5px] rounded-full px-2 md:px-2.5 py-[4px] border ${i > 2 ? "hidden sm:block" : ""} ${i === 0 ? "border-accent/40 bg-peach text-accent" : "border-line bg-card text-cocoa"}`}>{c}</span>
+        ))}
+      </div>
+      <div className="grid gap-2 mt-2.5 md:mt-3">
+        {TOP_ISSUES.map((i, k) => {
+          const [owner] = i.repo.split("/");
+          return (
+            <Row key={i.url} className={k === 1 ? "hidden md:block" : k === 2 ? "hidden lg:block" : ""}>
+              <div className="flex items-center gap-2 md:gap-2.5 min-w-0">
+                <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[18px] h-[18px] rounded-[5px] object-cover bg-sand shrink-0" />
+                <span className="font-mono text-[9.5px] text-dim truncate">{i.repo}</span>
+                <span className="font-mono text-[9.5px] text-dim shrink-0">#{i.number}</span>
+                <span className="ml-auto shrink-0 flex items-center gap-1 font-mono text-[9.5px] text-cocoa">
+                  <Ic d={DP.star} size={11} /> {fmt(i.stars)}
+                </span>
+              </div>
+              <p className="text-[11.5px] font-medium text-ink mt-1.5 line-clamp-1">{i.title}</p>
+              <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+                {i.labels.slice(0, 2).map((l) => (
+                  <span key={l} className="font-mono text-[8.5px] rounded-[5px] border border-line bg-cream px-1.5 py-px text-cocoa truncate max-w-[120px]">{l}</span>
+                ))}
+                {i.beginner && <span className="font-mono text-[8.5px] rounded-[5px] border border-accent/35 bg-peach px-1.5 py-px text-accent">good first issue</span>}
+              </div>
+              <div className="hidden md:flex flex-wrap items-baseline gap-2.5 pt-2 mt-2 border-t border-dashed border-line">
+                <StatLine k="Language" v={i.lang ?? "n/a"} />
+                <StatLine k="Last touched" v={i.updated} />
+                <StatLine k="Beginner-labelled" v={i.beginner ? "yes" : "no"} />
+              </div>
+            </Row>
+          );
+        })}
+      </div>
+      <div className="flex items-center gap-2 mt-2.5 font-mono text-[9px] text-dim">
+        <span className="rounded-[5px] border border-accent/40 bg-peach px-1.5 py-px text-accent">1</span>
+        <span className="hidden md:inline">2</span><span className="hidden md:inline">3</span>
+        <span className="opacity-60">…</span>
+        <span>{fmt(PAGES)}</span>
+        <span className="ml-auto max-md:hidden">25 per page</span>
+        <span className="ml-auto md:hidden">{fmt(CRAWL.issues - 25)} more</span>
+      </div>
+    </>
+  );
+}
+
+function OrgsPanel() {
+  return (
+    <>
+      <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Organizations</h3>
+      <p className="text-[10.5px] md:text-[11px] text-dim mt-1 md:mt-0.5">{fmt(CRAWL.orgs)} profiled from their public GitHub record.</p>
+      <div className="grid grid-cols-2 gap-2 mt-3">
+        {TOP_ORGS.map((o, k) => (
+          <Row key={o.login} className={k > 1 ? "hidden md:block" : ""}>
+            <div className="flex items-center gap-2.5 min-w-0">
+              <OrgImg src={avatarOf(o.login, 64)} name={o.login} className="w-[26px] h-[26px] rounded-[8px] object-cover bg-sand shrink-0" />
+              <span className="min-w-0">
+                <b className="block text-[11.5px] font-semibold truncate">{o.name}</b>
+                <span className="block font-mono text-[9px] text-dim truncate">{o.tagline}</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-2.5 pt-2 mt-2 border-t border-dashed border-line font-mono text-[9.5px] text-cocoa">
+              <span className="text-honey font-bold">★ {fmt(o.stars)}</span>
+              <span>{o.repos} repos</span>
+              <span className="ml-auto text-dim">{fmt(o.issues)} open</span>
+            </div>
+          </Row>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function BoardPanel() {
+  return (
+    <>
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">PR leaderboard</h3>
+        <span className="font-mono text-[9px] uppercase tracking-[.1em] text-dim">merged · all time</span>
+      </div>
+      <div className="grid gap-1.5 mt-3">
+        {TOP_LEADERS.map((r, k) => (
+          <div key={r.login} className={`flex items-center gap-2.5 rounded-[9px] border border-line bg-card px-3 py-2 ${k > 2 ? "hidden md:flex" : ""}`}>
+            <span className={`font-mono text-[10px] font-bold w-[18px] ${k === 0 ? "text-accent" : "text-dim"}`}>{String(k + 1).padStart(2, "0")}</span>
+            <img src={r.avatar} alt="" loading="lazy" className="w-[20px] h-[20px] rounded-full object-cover bg-sand shrink-0" />
+            <span className="min-w-0 flex-1">
+              <b className="block text-[11px] font-semibold truncate">{r.name ?? r.login}</b>
+              <span className="block font-mono text-[8.5px] text-dim truncate">{r.company ?? r.location ?? r.login}</span>
+            </span>
+            <span className="font-mono text-[10.5px] font-bold text-accent shrink-0">{fmt(r.merged_total ?? 0)}</span>
+          </div>
+        ))}
+      </div>
+      <p className="font-mono text-[9px] text-dim mt-2.5">Counts are GitHub search totals per author, humans only. Bots are filtered out.</p>
+    </>
+  );
+}
+
+const PSTATUS: Record<string, string> = {
+  live: "text-accent border-accent/45 bg-peach",
+  upcoming: "text-denim border-denim/40 bg-denim/8",
+  closed: "text-dim border-line bg-cream",
+};
+
+function ProgramsPanel() {
+  return (
+    <>
+      <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Programs</h3>
+      <p className="text-[10.5px] md:text-[11px] text-dim mt-1 md:mt-0.5">{PROGRAMS.length} funded or mentored cycles on one calendar.</p>
+      <div className="grid gap-1.5 mt-3">
+        {TOP_PROGS.map((p, k) => (
+          <div key={p.id} className={`flex items-center gap-2.5 rounded-[9px] border border-line bg-card px-3 py-2 ${k > 2 ? "hidden md:flex" : ""}`}>
+            <img src={avatarOf(p.owner, 48)} alt="" loading="lazy" className="w-[20px] h-[20px] rounded-[6px] object-cover bg-sand shrink-0" />
+            <span className="min-w-0 flex-1">
+              <b className="block text-[11px] font-semibold truncate">{p.name}</b>
+              <span className="block font-mono text-[8.5px] text-dim truncate">{p.window}</span>
+            </span>
+            <span className={`shrink-0 font-mono text-[8.5px] font-bold uppercase tracking-[.08em] px-2 py-[3px] rounded-full border ${PSTATUS[p.status]}`}>{p.status}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function ProjectsPanel() {
+  return (
+    <>
+      <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Project catalog</h3>
+      <p className="text-[10.5px] md:text-[11px] text-dim mt-1 md:mt-0.5">{fmt(CRAWL.catalogRepos)} repositories indexed by language, topic and stars.</p>
+      <div className="grid gap-1.5 mt-3">
+        {TOP_REPOS.map((r, k) => {
+          const [owner, name] = r.repo.split("/");
+          return (
+            <div key={r.repo} className={`flex items-center gap-2.5 rounded-[9px] border border-line bg-card px-3 py-2 ${k > 2 ? "hidden md:flex" : ""}`}>
+              <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[20px] h-[20px] rounded-[6px] object-cover bg-sand shrink-0" />
+              <span className="min-w-0 flex-1">
+                <b className="block text-[11px] font-semibold truncate">{name}</b>
+                <span className="block font-mono text-[8.5px] text-dim truncate">{r.lang} · {r.license}</span>
+              </span>
+              <span className="shrink-0 font-mono text-[10px] font-bold text-honey">★ {fmt(r.stars)}</span>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function CopilotPanel() {
+  const [picked, setPicked] = useState<string[]>(["TypeScript"]);
+  const hits = useMemo(() => matches(picked), [picked]);
+  return (
+    <>
+      <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Co-pilot</h3>
+      <p className="text-[10.5px] md:text-[11px] text-dim mt-1 md:mt-0.5">Pick what you already know. It shortlists repositories asking for exactly that.</p>
+      <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+        {SKILLS.map((s) => {
+          const on = picked.includes(s);
+          return (
+            <button key={s} type="button" onClick={() => setPicked((p) => (on ? p.filter((x) => x !== s) : [...p, s]))}
+              className={`font-mono text-[9.5px] rounded-full px-2.5 py-[4px] border cursor-pointer transition-colors ${on ? "border-accent/45 bg-peach text-accent" : "border-line bg-card text-cocoa hover:border-accent/40"}`}>
+              {s}
+            </button>
+          );
+        })}
+      </div>
+      <div className="grid gap-1.5 mt-3">
+        {hits.map((r) => {
+          const [owner, name] = r.repo.split("/");
+          return (
+            <div key={r.repo} className="flex items-center gap-2.5 rounded-[9px] border border-line bg-card px-3 py-2">
+              <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[20px] h-[20px] rounded-[6px] object-cover bg-sand shrink-0" />
+              <span className="min-w-0 flex-1">
+                <b className="block text-[11px] font-semibold truncate">{name}</b>
+                <span className="block font-mono text-[8.5px] text-dim truncate">{r.lang} · {fmt(r.issues)} open issues</span>
+              </span>
+              <span className="shrink-0 font-mono text-[10px] font-bold text-honey">★ {fmt(r.stars)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <p className="font-mono text-[9px] text-dim mt-2.5">Signed in, it reads your resume and your saved repos too. Here it only uses what you click.</p>
+    </>
+  );
+}
+
+const PANELS: Record<PanelId, () => ReactNode> = {
+  issues: IssuesPanel,
+  orgs: OrgsPanel,
+  board: BoardPanel,
+  programs: ProgramsPanel,
+  projects: ProjectsPanel,
+  copilot: CopilotPanel,
+};
+
+/* ── the window ─────────────────────────────────────────────── */
+function BoardPreview({ sceneName }: { sceneName: string }) {
+  const [panel, setPanel] = useState<PanelId>("issues");
+  const Active = PANELS[panel];
   return (
     <div className="laser">
       <figure className="frame bg-card/70 backdrop-blur-[2px] p-2.5 sm:p-3 md:p-[14px] shadow-lift">
         <span className="mark tr" aria-hidden>+</span>
         <span className="mark bl" aria-hidden>+</span>
 
-        {/* 16:9 is the desktop composition. On a phone that box is barely
-            180px tall, which crushes every row inside it, so below md the
-            shell grows to fit a simplified board instead. */}
         <div className="md:aspect-[16/9] overflow-hidden rounded-[10px] border border-line bg-paper flex flex-col text-left">
           {/* app top bar */}
           <div className="shrink-0 h-[40px] md:h-[44px] flex items-center gap-2.5 px-3 md:px-3.5 border-b border-line bg-card">
@@ -100,7 +310,7 @@ function BoardPreview() {
             </span>
             <span className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[.12em] text-dim border border-line rounded-full px-2 py-[3px]">
               <i className="not-italic w-[5px] h-[5px] rounded-full bg-accent" />
-              Board
+              {sceneName}
             </span>
             <span className="ml-auto flex items-center gap-2.5 min-w-0">
               <span className="hidden md:flex items-center gap-2 w-[186px] text-[11px] text-dim bg-cream border border-line rounded-full px-3 py-[4px]">
@@ -108,114 +318,39 @@ function BoardPreview() {
                 <span className="truncate">Search issues, repos, orgs</span>
                 <kbd className="ml-auto font-mono text-[8.5px] border border-line rounded-[4px] px-1 py-px">⌘K</kbd>
               </span>
-              <span className="hidden lg:flex items-center gap-1.5 text-[10.5px] font-semibold text-cocoa">
-                <Ic d={DP.external} size={11} /> Site
-              </span>
               <span className="w-[22px] h-[22px] rounded-full grid place-items-center bg-clay border border-line text-dim shrink-0">
                 <Ic d={DP.sun} size={11} />
               </span>
-              <span className="hidden sm:grid w-[22px] h-[22px] rounded-full bg-cream border border-line place-items-center font-mono text-[8.5px] font-bold text-dim shrink-0">
-                ?
-              </span>
+              <span className="hidden sm:grid w-[22px] h-[22px] rounded-full bg-cream border border-line place-items-center font-mono text-[8.5px] font-bold text-dim shrink-0">?</span>
             </span>
           </div>
 
-          <div className="flex-1 min-h-0 flex">
-            {/* sidebar: the board's own groups, icons and counts */}
-            <aside className="hidden md:flex flex-col w-[184px] shrink-0 border-r border-line bg-sand min-h-0">
-              <nav className="flex-1 px-2.5 py-3 overflow-hidden">
-                {RAIL.map((g, gi) => (
-                  <div key={g.label} className={gi ? "mt-3.5" : ""}>
-                    <span className="block font-mono text-[8.5px] uppercase tracking-[.14em] text-dim px-2 mb-1">{g.label}</span>
-                    <div className="grid gap-[2px]">
-                      {g.items.map((it) => {
-                        const on = it.text === ACTIVE;
-                        return (
-                          <span key={it.text} className={`relative flex items-center gap-2 rounded-[8px] px-2 py-[5px] text-[11px] font-semibold ${on ? "bg-clay text-ink" : "text-cocoa"}`}>
-                            {on && <i className="not-italic absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-[13px] rounded-l-full bg-accent" />}
-                            <span className={on ? "text-accent shrink-0" : "shrink-0"}><Ic d={it.icon} size={12} /></span>
-                            <span className="truncate">{it.text}</span>
-                            {it.count && <span className={`ml-auto font-mono text-[9px] shrink-0 ${on ? "text-accent" : "text-dim"}`}>{it.count}</span>}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </nav>
-              {/* the pinned account card, in the state a first-time visitor is
-                  actually in: nothing signed in, nothing invented */}
-              <div className="border-t border-line p-2.5">
-                <div className="flex items-center gap-2 p-1.5 rounded-[10px] bg-card border border-line">
-                  <span className="w-[20px] h-[20px] rounded-full bg-clay border border-line grid place-items-center font-mono text-[8.5px] font-bold text-dim shrink-0">?</span>
-                  <span className="min-w-0 flex-1">
-                    <b className="block text-[10.5px] font-semibold truncate">Guest</b>
-                    <span className="block text-[9px] text-dim truncate">Browse free, no login</span>
-                  </span>
-                  <span className="w-[18px] h-[18px] grid place-items-center rounded-[6px] text-dim shrink-0"><Ic d={DP.collapse} size={11} /></span>
-                </div>
-              </div>
-            </aside>
+          <div className="flex-1 min-h-0 flex flex-col md:flex-row">
+            {/* the rail: real buttons, real panels */}
+            <nav aria-label="Preview sections"
+              className="shrink-0 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible md:w-[176px] md:border-r border-line md:bg-sand px-2.5 md:px-2.5 py-2 md:py-3 border-b md:border-b-0">
+              {RAIL.map((it) => {
+                const on = it.id === panel;
+                return (
+                  <button key={it.id} type="button" onClick={() => setPanel(it.id)} aria-current={on ? "page" : undefined}
+                    className={`relative flex items-center gap-2 rounded-[8px] px-2.5 md:px-2 py-[6px] md:py-[5px] text-[11px] font-semibold whitespace-nowrap cursor-pointer transition-colors ${on ? "bg-clay text-ink" : "text-cocoa hover:bg-clay/60 hover:text-ink"}`}>
+                    {on && <i className="not-italic absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-[13px] rounded-l-full bg-accent max-md:hidden" />}
+                    <span className={on ? "text-accent shrink-0" : "shrink-0"}><Ic d={it.icon} size={12} /></span>
+                    <span className="truncate">{it.text}</span>
+                    {it.count && <span className={`ml-auto font-mono text-[9px] shrink-0 ${on ? "text-accent" : "text-dim"}`}>{it.count}</span>}
+                  </button>
+                );
+              })}
+            </nav>
 
-            {/* main column: the Issue Finder */}
+            {/* the panel */}
             <div className="flex-1 min-w-0 px-3.5 md:px-5 py-3 md:py-3.5 overflow-hidden">
-              <h3 className="font-display font-extrabold text-[14px] md:text-[15px] tracking-[-.015em]">Issue finder</h3>
-              <p className="text-[10.5px] md:text-[11px] leading-[1.55] text-dim mt-1 md:mt-0.5">
-                <b className="text-accent font-semibold">{fmt(CRAWL.issues)}</b> open issues from {fmt(CRAWL.reposWithIssues)} repositories.
-                <span className="hidden md:inline"> Snapshot {CRAWL.crawledAt}.</span>
-              </p>
-              <div className="flex items-center gap-1.5 mt-2.5 overflow-hidden">
-                {CHIPS.map((c, i) => (
-                  <span key={c} className={`shrink-0 font-mono text-[9px] md:text-[9.5px] rounded-full px-2 md:px-2.5 py-[4px] border ${i > 2 ? "hidden sm:block" : ""} ${i === 0 ? "border-accent/40 bg-peach text-accent" : "border-line bg-card text-cocoa"}`}>{c}</span>
-                ))}
-              </div>
-              <div className="grid gap-2 mt-2.5 md:mt-3">
-                {issues.map((i, k) => {
-                  const [owner] = i.repo.split("/");
-                  /* the 16:9 shell only has room for three rows once the right
-                     rail is gone and the column is wide; between md and lg two
-                     rows are the honest fit */
-                  const hide = k === 1 ? "hidden md:block" : k === 2 ? "hidden lg:block" : "";
-                  return (
-                    <div key={i.url} className={`rounded-[10px] border border-line bg-card px-3 md:px-3.5 py-2.5 ${hide}`}>
-                      <div className="flex items-center gap-2 md:gap-2.5 min-w-0">
-                        <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[18px] h-[18px] rounded-[5px] object-cover bg-sand shrink-0" />
-                        <span className="font-mono text-[9.5px] text-dim truncate">{i.repo}</span>
-                        <span className="font-mono text-[9.5px] text-dim shrink-0">#{i.number}</span>
-                        <span className="ml-auto shrink-0 flex items-center gap-1 font-mono text-[9.5px] text-cocoa">
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden><path d={DP.star} /></svg>
-                          {fmt(i.stars)}
-                        </span>
-                      </div>
-                      <p className="text-[11.5px] font-medium text-ink mt-1.5 line-clamp-1">{i.title}</p>
-                      <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
-                        {i.labels.slice(0, 2).map((l) => (
-                          <span key={l} className="font-mono text-[8.5px] rounded-[5px] border border-line bg-cream px-1.5 py-px text-cocoa truncate max-w-[120px]">{l}</span>
-                        ))}
-                        {i.beginner && <span className="font-mono text-[8.5px] rounded-[5px] border border-accent/35 bg-peach px-1.5 py-px text-accent">good first issue</span>}
-                      </div>
-                      <div className="hidden md:flex flex-wrap items-baseline gap-1.5 pt-2 mt-2 border-t border-dashed border-line font-mono text-[9.5px]">
-                        {[["Language", i.lang ?? "n/a"], ["Last touched", i.updated], ["Beginner-labelled", i.beginner ? "yes" : "no"]].map(([l, v], n) => (
-                          <span key={l} className={`flex items-baseline gap-1 ${n ? "before:content-['·'] before:text-rule before:mr-1" : ""}`}>
-                            <span className="text-dim">{l}</span>
-                            <b className="text-ink font-semibold">{v}</b>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              {/* on a phone the single card is the whole point; the pager and
-                  the "24 more" line say it without stacking three of them */}
-              <div className="flex items-center gap-2 mt-2.5 font-mono text-[9px] text-dim">
-                <span className="rounded-[5px] border border-accent/40 bg-peach px-1.5 py-px text-accent">1</span>
-                <span className="hidden md:inline">2</span><span className="hidden md:inline">3</span>
-                <span className="opacity-60">…</span>
-                <span>{fmt(PAGES)}</span>
-                <span className="ml-auto max-md:hidden">25 per page</span>
-                <span className="ml-auto md:hidden">{fmt(CRAWL.issues - 25)} more</span>
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div key={panel} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.22, ease: [0.22, 0.8, 0.36, 1] }}>
+                  <Active />
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* right rail: the index, and the windows it is in */}
@@ -243,16 +378,24 @@ function BoardPreview() {
             </aside>
           </div>
         </div>
-        <figcaption className="mt-3 md:mt-3.5 mb-0.5 text-center font-mono text-[9.5px] md:text-[10.5px] uppercase tracking-[.1em] md:tracking-[.12em] text-dim">
-          <span className="max-md:hidden">The finder, on {fmt(CRAWL.issues)} real issues · free to browse, no login required</span>
-          <span className="md:hidden">{fmt(CRAWL.issues)} real issues · free to browse, no login</span>
+        <figcaption className="mt-3 md:mt-3.5 mb-0.5 text-center font-mono text-[9.5px] md:text-[10.5px] uppercase tracking-[.1em] md:tracking-[.12em] text-cocoa">
+          <span className="max-md:hidden">The board, live on {fmt(CRAWL.issues)} real issues · click the rail, it works</span>
+          <span className="md:hidden">{fmt(CRAWL.issues)} real issues · the rail works</span>
         </figcaption>
       </figure>
     </div>
   );
 }
 
-export default function HomeHero({ horizon }: { horizon?: string }) {
+/* ── the hero ───────────────────────────────────────────────── */
+export default function HomeHero() {
+  const [scene, setScene] = useState<number | null>(null);
+  /* a new landscape on every visit; the dot row below moves by hand */
+  useEffect(() => {
+    if (scene === null) setScene(Math.floor(Math.random() * SCENES.length));
+  }, [scene]);
+  const s = SCENES[scene ?? 0];
+
   return (
     <header id="hero" className="relative overflow-hidden pt-[72px] pb-16 max-[700px]:pt-12 max-[700px]:pb-12">
       <div className="hero-glow" />
@@ -299,12 +442,30 @@ export default function HomeHero({ horizon }: { horizon?: string }) {
         </div>
       </div>
 
-      {/* the board, on the horizon: the band is full-bleed so the frame reads
-          as a window onto a place rather than a card on a page */}
+      {/* the board on its landscape */}
       <div className="hero-stage reveal mt-9 md:mt-11 pb-3" style={{ animationDelay: ".68s" }}>
-        <HorizonBackdrop photo={horizon} />
+        <div className="hero-horizon" aria-hidden="true">
+          <AnimatePresence>
+            {scene !== null && (
+              <motion.div key={SCENES[scene].id} className="absolute inset-0"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                transition={{ duration: 1.1, ease: "easeInOut" }}>
+                <SceneArt s={SCENES[scene]} uid={SCENES[scene].id} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         <div className="hero-stage-inner max-w-[1220px] mx-auto px-5 sm:px-6">
-          <BoardPreview />
+          <BoardPreview sceneName={s.name} />
+          {/* scene switcher */}
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <span className="font-mono text-[9.5px] uppercase tracking-[.12em] text-cocoa mr-1">{s.name}</span>
+            {SCENES.map((sc, i) => (
+              <button key={sc.id} type="button" onClick={() => setScene(i)} aria-label={`Background: ${sc.name}`}
+                title={sc.name}
+                className={`w-[9px] h-[9px] rounded-full cursor-pointer transition-all border ${scene === i ? "bg-accent border-accent scale-125" : "bg-card border-rule hover:border-accent"}`} />
+            ))}
+          </div>
         </div>
       </div>
     </header>

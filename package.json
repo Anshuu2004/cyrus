@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "cyrus.ai \u2014 developer programs, organizations and AI-agent projects catalog",
+  "description": "cyrus.ai — developer programs, organizations and AI-agent projects catalog",
   "scripts": {
     "dev": "next dev -p 5330",
     "build": "next build",
@@ -24,6 +24,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
+    "framer-motion": "^14.5.0",
     "jose": "^6.2.12",
     "next": "^16.4.0",
     "react": "^19.1.0",

@@ -7,6 +7,7 @@
    ════════════════════════════════════════════════════════════ */
 import { useMemo } from "react";
 import type { ReactNode } from "react";
+import { motion } from "framer-motion";
 import { Link } from "@/lib/router";
 import HomeHero from "../components/HomeHero";
 import { ORGS, PROGRAMS } from "../data/orgs";
@@ -33,8 +34,18 @@ const ICONS = {
   spark: <Icon d="M12 3.5 13.9 9l5.6 2-5.6 2L12 20.5 10.1 13 4.5 11l5.6-2Z" />,
 };
 
+/* Every section below the hero fades and rises into place once, the first
+   time it is actually on screen. Reduced-motion users get the same layout
+   with the travel taken out. */
 const Section = ({ id, children, className = "" }: { id?: string; children: ReactNode; className?: string }) => (
-  <section id={id} className={`max-w-[1240px] mx-auto px-6 pt-[92px] scroll-mt-24 ${className}`}>{children}</section>
+  <motion.section id={id}
+    className={`max-w-[1240px] mx-auto px-6 pt-[92px] scroll-mt-24 ${className}`}
+    initial={{ opacity: 0, y: 26 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-70px" }}
+    transition={{ duration: 0.55, ease: [0.22, 0.8, 0.36, 1] }}>
+    {children}
+  </motion.section>
 );
 
 const Head = ({ tag, title, sub, side }: { tag: string; title: ReactNode; sub?: string; side?: ReactNode }) => (
@@ -411,10 +422,10 @@ function Cta() {
   );
 }
 
-export default function Home({ horizon }: { horizon?: string }) {
+export default function Home() {
   return (
     <>
-      <HomeHero horizon={horizon} />
+      <HomeHero />
       <Features />
       <Programs />
       <Timeline />

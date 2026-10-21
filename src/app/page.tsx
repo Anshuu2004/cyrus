@@ -1,5 +1,3 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import type { Metadata } from "next";
 import Home from "@/views/Home";
 import { statsLine } from "@/lib/siteStats";
@@ -8,20 +6,12 @@ import { jsonLdScript, webSite } from "@/lib/jsonLd";
 
 export const metadata: Metadata = { title: { absolute: "cyrus.ai - find your open-source contribution" }, description: `The developer-program platform: ${statsLine()} in one warm, self-refreshing catalog.`, alternates: { canonical: canonical("/") } };
 
-/* The hero draws its own horizon in SVG. Drop a photograph at
-   public/assets/hero-horizon.jpg and the build uses that instead, with the
-   drawing kept underneath it - checked at prerender time, so a missing file
-   means the drawing, not a broken image. */
-const HORIZON = existsSync(join(process.cwd(), "public", "assets", "hero-horizon.jpg"))
-  ? "/assets/hero-horizon.jpg"
-  : undefined;
-
 export default function Page() {
   return (
     <>
       {/* the site search really does run over the catalog, so the graph says so */}
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(webSite())} />
-      <Home horizon={HORIZON} />
+      <Home />
     </>
   );
 }

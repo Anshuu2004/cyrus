@@ -322,6 +322,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   object-fit: cover; object-position: 50% 100%;
 }
 .hero-horizon img { opacity: .7 }
+/* the six scenes are night-weighted palettes; on a light page they would
+   read as a dark slab, so wash them into a pale tinted horizon instead */
+.light .hero-horizon svg {
+  opacity: .34;
+  filter: saturate(.72) brightness(2.05) contrast(.8);
+}
 /* the frame needs to read as floating above the ridge, not pasted on it */
 .hero-stage > .hero-stage-inner { position: relative; z-index: 1 }
 
