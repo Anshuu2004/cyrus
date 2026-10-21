@@ -1,21 +1,20 @@
 "use client"
 /* ══ Home.tsx — the open-source discovery front page ═════════
-   Hero leads with the thing itself: real open issues, crawled from the
-   GitHub API. Then what the product does, the programs that fund
+   Hero (HomeHero.tsx) leads with the index itself: real open issues, crawled
+   from the GitHub API. Then what the product does, the programs that fund
    contributors, the projects and orgs behind them, and the questions
    a first-time visitor actually asks. No hackathons, no artifacts.
    ════════════════════════════════════════════════════════════ */
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { ReactNode } from "react";
-import { Link, useNavigate } from "@/lib/router";
+import { Link } from "@/lib/router";
+import HomeHero from "../components/HomeHero";
 import { ORGS, PROGRAMS } from "../data/orgs";
 import { REPOS } from "../data/repos";
 import { CRAWL } from "../data/crawlStats";
-import { ISSUE_SIGNALS, ISSUE_SIGNALS_AS_OF } from "../data/issueSignals";
 import type { Program } from "../lib/types";
 import { avatarOf, fmt, byStars, CAT_META } from "../lib/util";
 import { Word, SectionTag, btn, OrgImg, Avatar } from "../components/ui";
-import { SearchIcon } from "../components/Nav";
 import { useStore } from "../lib/store";
 
 /* ── shared bits ──────────────────────────────────────────── */
@@ -48,118 +47,6 @@ const Head = ({ tag, title, sub, side }: { tag: string; title: ReactNode; sub?: 
     {side && <div className="flex items-center gap-3 shrink-0">{side}</div>}
   </div>
 );
-
-/* ── hero ─────────────────────────────────────────────────── */
-const WALL = ["google", "microsoft", "vercel", "cloudflare", "kubernetes", "huggingface",
-  "rust-lang", "pytorch", "flutter", "mozilla", "wikimedia", "docker"];
-
-/* the signature: a live panel of real open issues, advancing a row group
-   at a time. Reduced-motion visitors get a static list instead. */
-function SignalPanel() {
-  const PAGE = 5;
-  const pages = Math.ceil(ISSUE_SIGNALS.length / PAGE);
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setP((x) => (x + 1) % pages), 5200);
-    return () => clearInterval(t);
-  }, [pages]);
-  const rows = ISSUE_SIGNALS.slice(p * PAGE, p * PAGE + PAGE);
-  return (
-    <div className="frame bg-card/60 backdrop-blur-[2px] p-[18px] shadow-lift">
-      <div className="flex items-center justify-between gap-3 pb-3.5 mb-1 border-b border-dashed border-line">
-        <span className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[.14em] text-dim">
-          <i className="not-italic w-[7px] h-[7px] rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-accent)_22%,transparent)]" />
-          {fmt(CRAWL.issues)} open issues
-        </span>
-        <span className="font-mono text-[10px] text-dim">snapshot {ISSUE_SIGNALS_AS_OF}</span>
-      </div>
-      <ul className="grid">
-        {rows.map((i) => (
-          <li key={i.url}>
-            <a href={i.url} target="_blank" rel="noopener"
-              className="group grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-1 items-baseline py-[13px] border-b border-liness last:border-0 hover:bg-cream/70 -mx-3 px-3 rounded-[10px] transition-colors">
-              <span className="min-w-0">
-                <span className="block font-mono text-[10px] text-dim truncate">{i.repo} #{i.number}</span>
-                <span className="block text-[13.5px] font-semibold leading-[1.45] mt-[3px] text-ink group-hover:text-accent transition-colors line-clamp-2">{i.title}</span>
-                <span className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                  {i.beginner && <em className="not-italic font-mono text-[9px] font-bold uppercase tracking-[.06em] text-accent border border-accent/35 bg-peach rounded-[5px] px-1.5 py-[2px]">beginner</em>}
-                  {i.labels.filter((l) => !/good first|help wanted|beginner|easy/i.test(l)).slice(0, 2).map((l) => (
-                    <em key={l} className="not-italic font-mono text-[9px] text-cocoa border border-line rounded-[5px] px-1.5 py-[2px] truncate max-w-[130px]">{l}</em>
-                  ))}
-                </span>
-              </span>
-              <span className="text-right shrink-0">
-                <span className="block font-mono text-[11px] font-bold text-honey">{fmt(i.stars)} ★</span>
-                <span className="block font-mono text-[9.5px] text-dim mt-1">{i.lang ?? "no lang"}</span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="flex items-center justify-between gap-3 pt-3.5 mt-1 border-t border-dashed border-line">
-        <span className="font-mono text-[10px] text-dim">{fmt(CRAWL.reposWithIssues)} repositories · {fmt(CRAWL.orgs)} orgs · {CRAWL.languages} languages</span>
-        <span className="flex gap-1.5">{Array.from({ length: pages }).map((_, k) => (
-          <i key={k} className={`not-italic block w-[14px] h-[3px] rounded-full transition-colors ${k === p ? "bg-accent" : "bg-line"}`} />
-        ))}</span>
-      </div>
-    </div>
-  );
-}
-
-function Hero() {
-  const nav = useNavigate();
-  const [q, setQ] = useState("");
-  return (
-    <header id="hero" className="relative overflow-hidden pt-[92px] pb-20 max-[700px]:pt-14 max-[700px]:pb-12">
-      <div className="hero-glow" /><div className="hero-pattern" />
-      <div className="wrap max-w-[1240px] mx-auto px-6 relative z-[1] grid grid-cols-[1fr_minmax(0,472px)] gap-14 items-center max-[1080px]:grid-cols-1 max-[1080px]:gap-12">
-        <div>
-          <span className="eyebrow reveal">Open source discovery for GitHub developers</span>
-          <h1 className="font-display font-extrabold tracking-[-.028em] leading-[1.03] mt-5 text-[clamp(42px,5.4vw,70px)]">
-            <span className="block reveal" style={{ animationDelay: ".06s" }}>Discover open source.</span>
-            <span className="block reveal" style={{ animationDelay: ".2s" }}>Understand code.</span>
-            <span className="block reveal" style={{ animationDelay: ".34s" }}>Make an <Word>impact</Word>.</span>
-          </h1>
-          <p className="mt-6 max-w-[560px] text-cocoa text-[17px] leading-[1.62] reveal" style={{ animationDelay: ".46s" }}>
-            cyrus indexes {fmt(CRAWL.issues)} open issues across {fmt(CRAWL.reposWithIssues)} active repositories, the
-            {" "}{PROGRAMS.length} programs that pay contributors, and the pull-request records that show who actually ships.
-          </p>
-          <div className="reveal" style={{ animationDelay: ".58s" }}>
-            <form className="mt-7 flex items-center gap-2 bg-card border border-line rounded-full py-[7px] pl-[18px] pr-[7px] max-w-[540px] shadow-lift transition-all focus-within:border-accent search-pulse"
-              onSubmit={(e) => { e.preventDefault(); nav(`/projects${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ""}`); }}>
-              <SearchIcon size={17} />
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search issues, repos, orgs…"
-                className="flex-1 min-w-0 border-0 outline-none bg-transparent text-[15px] placeholder:text-dim py-2" autoComplete="off" />
-              <button type="submit" className={btn("primary", "md")}>Search</button>
-            </form>
-          </div>
-          <div className="flex items-center gap-2 mt-3.5 flex-wrap reveal" style={{ animationDelay: ".68s" }}>
-            <span className="font-mono text-[10.5px] tracking-[.12em] uppercase text-dim">Try:</span>
-            {[["good first issue", "/projects?q=good+first+issue"], ["Rust", "/projects?q=rust"], ["kubernetes", "/projects?q=kubernetes"], ["docs", "/projects?q=docs"]].map(([l, to]) => (
-              <Link key={l} to={to} className="text-[12.5px] font-semibold text-cocoa bg-card border border-line rounded-full px-3.5 py-[5px] hover:border-accent hover:text-accent hover:-translate-y-px transition-all">{l}</Link>
-            ))}
-          </div>
-          <div className="flex gap-x-6 gap-y-3.5 mt-9 flex-wrap items-center reveal" style={{ animationDelay: ".8s" }}>
-            <a className={btn("dark", "lg")} href="#programs">Explore open source programs</a>
-            <Link className="text-[13.5px] font-semibold text-cocoa border-b border-dashed border-dim pb-0.5 hover:text-accent hover:border-accent transition-colors" to="/organizations">Browse {fmt(ORGS.length)} organizations</Link>
-          </div>
-        </div>
-        <div className="reveal max-[1080px]:mt-2" style={{ animationDelay: ".4s" }}>
-          <SignalPanel />
-          <div className="mt-5 grid grid-cols-6 gap-2.5 max-[700px]:grid-cols-4">
-            {WALL.map((o) => (
-              <Link key={o} to={`/organizations/${o}`} title={o}
-                className="aspect-square bg-card border border-line rounded-[13px] grid place-items-center p-2 hover:border-accent transition-colors">
-                <OrgImg src={avatarOf(o, 64)} name={o} className="w-[26px] h-[26px] rounded-[7px] object-cover bg-sand" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
 
 /* ── what you can do ──────────────────────────────────────── */
 /* live: false marks the two capabilities still being built, so the grid
@@ -527,7 +414,7 @@ function Cta() {
 export default function Home() {
   return (
     <>
-      <Hero />
+      <HomeHero />
       <Features />
       <Programs />
       <Timeline />

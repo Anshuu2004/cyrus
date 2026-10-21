@@ -2,7 +2,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Shell from "@/components/Shell";
-import { fmt, statsLine, STATS } from "@/lib/siteStats";
+import { statsLine } from "@/lib/siteStats";
 import { SITE_ORIGIN } from "@/lib/seo";
 import "./globals.css";
 
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     template: "%s · cyrus.ai",
   },
   description:
-    `${statsLine()} - skills, Cursor rules, AGENTS.md configs and MCP servers ranked by stars, ${STATS.programs} tracked open-source programs with a timeline of every contribution window, and ${fmt(STATS.orgs)} organization profiles.`,
-  keywords: ["open source", "GSoC", "NSOC", "hackathons", "AI agents", "MCP servers", "Cursor rules", "AGENTS.md", "agent skills"],
+    `${statsLine()} - every issue is the real GitHub one, with its labels, its age and the repository it belongs to, so a contribution can be picked on evidence rather than on a wishlist.`,
+  keywords: ["open source", "good first issues", "GSoC", "MLH Fellowship", "Hacktoberfest", "NSOC", "GitHub contributors", "open source programs"],
   openGraph: {
     type: "website",
     siteName: "cyrus.ai",
     title: "cyrus.ai - the developer-program platform",
-    description: `${statsLine(new Date())} in one self-refreshing catalog.`,
+    description: `${statsLine()} in one self-refreshing index.`,
     url: SITE,
   },
   twitter: { card: "summary_large_image", title: "cyrus.ai", description: "The developer-program platform." },

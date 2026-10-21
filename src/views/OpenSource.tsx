@@ -229,15 +229,16 @@ export default function OpenSource() {
         Find open source projects actively accepting contributors. Search repositories, filter by program, difficulty tags, or tech stack.
       </p>
 
-      {/* AI-matcher banner */}
+      {/* how to work the archive */}
       <div className="mt-8 bg-gradient-to-br from-clay to-peach/60 border border-line rounded-[22px] px-8 py-7 flex items-center gap-6 flex-wrap max-[700px]:px-5">
         <div className="min-w-[280px] flex-1">
-          <h2 className="card-title-xl">Confused which project to choose or don't know which one you are most suitable to work on?</h2>
-          <p className="text-cocoa text-[13.5px] leading-[1.6] mt-2 max-w-[560px]">
-            Ask Co-pilot. It scores every project against your skills, frameworks and contribution experience - instantly.
+          <h2 className="card-title-xl">Not sure which project to take?</h2>
+          <p className="text-cocoa text-[13.5px] leading-[1.6] mt-2 max-w-[600px]">
+            Narrow the archive with the filters on the left - program, difficulty, language - then track the issues
+            worth your week on your own board. cyrus shows the public record; the choice stays yours.
           </p>
         </div>
-        <Link to="/nova" className={btn("primary", "lg") + " shrink-0"}>Match with Co-pilot</Link>
+        <Link to="/dashboard/issues" className={btn("primary", "lg") + " shrink-0"}>Track it on your board</Link>
       </div>
 
       {/* rail + results */}
