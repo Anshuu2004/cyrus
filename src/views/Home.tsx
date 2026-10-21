@@ -52,7 +52,7 @@ const Head = ({ tag, title, sub, side }: { tag: string; title: ReactNode; sub?: 
 /* live: false marks the two capabilities still being built, so the grid
    never reads as a list of things the product already does. */
 const FEATURES: [ReactNode, string, string, string, boolean][] = [
-  [ICONS.issue, "Find an issue you can actually take", "Filter by language, topic, label, difficulty and how recently a repo was touched. Stale and already-assigned work is flagged, not hidden.", "/projects", true],
+  [ICONS.issue, "Find an issue you can actually take", "Search every open issue in the snapshot by keyword, language, organization and label. Beginner-labelled and nobody-assigned are filters, not guesses.", "/issues", true],
   [ICONS.repo, "Read a repository before you touch it", "Every project page pulls the README, the guidelines, the open work and the contributor pulse, so you know what you are walking into.", "/organizations", true],
   [ICONS.calendar, `Track the ${PROGRAMS.length} programs that pay`, "Application, bonding and coding windows for GSoC, Outreachy, LFX, MLH, FOSSEE and more, on one calendar.", "#programs", true],
   [ICONS.pull, "See who ships, not who shouts", "A leaderboard built from merged pull requests, with open PRs and reviews counted separately so one number cannot be gamed.", "/dashboard", false],

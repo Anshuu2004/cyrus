@@ -170,7 +170,7 @@ export default function HomeHero() {
         </p>
 
         <div className="reveal flex gap-3 justify-center flex-wrap mt-8" style={{ animationDelay: ".46s" }}>
-          <Link to="/projects" className={btn("dark", "lg")}>
+          <Link to="/issues" className={btn("dark", "lg")}>
             Start searching
             <span className="grid place-items-center w-[22px] h-[22px] rounded-full bg-paper text-ink shrink-0">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>

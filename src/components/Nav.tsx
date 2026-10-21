@@ -12,6 +12,7 @@ import { useStore } from "../lib/store";
 const LINKS = [
   { to: "/", label: "Home" },
   { to: "/organizations", label: "Organizations" },
+  { to: "/issues", label: "Issues" },
   { to: "/opensource", label: "Open Source" },
   { to: "/projects", label: "Projects" },
   { to: "/about", label: "About us" },

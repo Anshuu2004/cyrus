@@ -9,7 +9,7 @@ import { ORGS, PROGRAMS } from "@/data/orgs";
 const YEAR = new Date().getFullYear();
 
 const COLS: [string, [string, string][]][] = [
-  ["Explore", [["Organizations", "/organizations"], ["Projects", "/projects"], ["Open source programs", "/opensource"], ["Program calendar", "/#timeline"]]],
+  ["Explore", [["Issue finder", "/issues"], ["Organizations", "/organizations"], ["Projects", "/projects"], ["Open source programs", "/opensource"], ["Program calendar", "/#timeline"]]],
   ["Programs", [["Nexus Spring of Code", "/programs/nsoc"], ["Google Summer of Code", "/programs/gsoc"], ["Hacktoberfest", "/programs/oct"], ["Outreachy", "/programs/outreachy"], ["LFX Mentorship", "/programs/lfx"], ["All programs", "/opensource"]]],
   ["Platform", [["Features", "/platform/features"], ["Trust centre", "/platform/trust"], ["How it works", "/platform/how"]]],
   ["Your space", [["Overview", "/dashboard"], ["My Issues", "/dashboard/issues"], ["My Repositories", "/dashboard/repos"], ["Settings", "/dashboard/settings"]]],

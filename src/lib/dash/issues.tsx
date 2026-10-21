@@ -226,8 +226,9 @@ export function IssuesSection({ d }: { d: Dash }) {
           </div>
           <p className="text-dim text-[12px] mt-4">
             A sample of the {fmt(d.index.issues)} open issues read from{" "}
-            {fmt(d.index.issueRepos)} repositories on {d.index.crawledAt}. The full
-            searchable index arrives with the issue finder.
+            {fmt(d.index.issueRepos)} repositories on {d.index.crawledAt}. The whole
+            snapshot is searchable on the{" "}
+            <Link to="/issues" className="text-accent font-semibold hover:underline">issue finder</Link>.
           </p>
         </Card>
       )}

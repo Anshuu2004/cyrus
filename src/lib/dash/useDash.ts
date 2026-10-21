@@ -9,12 +9,11 @@ import { useNavigate } from "@/lib/router";
 import { ORGS } from "../../data/orgs";
 import { CRAWL } from "../../data/crawlStats";
 import { ISSUE_SIGNALS } from "../../data/issueSignals";
-import { orgByLogin, repoById, useStored } from "../util";
+import { orgByLogin, repoById } from "../util";
 import { useStore } from "../store";
 import { googleConfigured, promptGoogle } from "../google";
+import { useIssueLedger, type IssueMeta } from "../issueLedger";
 import { parseIssueUrl, type IssueStage, type TrackedIssue } from "./shared";
-
-type LedgerEntry = { stage: IssueStage; added: string };
 
 /* the crawl rows the board can offer you right now, keyed by URL */
 const SHELF = new Map(ISSUE_SIGNALS.map((i) => [i.url, i]));
@@ -26,23 +25,28 @@ export function useDash() {
   const [gBusy, setGBusy] = useState(false);
 
   /* ── the issue ledger: url -> stage + the day you added it ────── */
-  const [ledger, setLedger] = useStored<Record<string, LedgerEntry>>("cyrus.issues.v1", {});
+  const { ledger, stageOf, add, toggle, setStage, remove, clear } = useIssueLedger();
 
+  /* A row can come from three places, in this order of trust: the crawl
+     sample shipped with the board, the metadata stored when the issue was
+     tracked from the finder, and finally the URL itself, which at least
+     says which repository and number it is. */
   const issues = useMemo<TrackedIssue[]>(
     () =>
       Object.entries(ledger).map(([url, e]) => {
         const s = SHELF.get(url);
+        const m = e.meta as IssueMeta | undefined;
         const parsed = parseIssueUrl(url);
         return {
           url,
-          repo: s?.repo ?? parsed?.repo ?? "unknown repository",
-          number: s?.number ?? parsed?.number ?? 0,
-          title: s?.title ?? `${parsed?.repo ?? "issue"} #${parsed?.number ?? "?"}`,
-          lang: s?.lang ?? null,
-          stars: s?.stars ?? 0,
-          labels: s?.labels ?? [],
-          beginner: s?.beginner ?? false,
-          updated: s?.updated ?? "",
+          repo: s?.repo ?? m?.repo ?? parsed?.repo ?? "unknown repository",
+          number: s?.number ?? m?.number ?? parsed?.number ?? 0,
+          title: s?.title ?? m?.title ?? `${parsed?.repo ?? "issue"} #${parsed?.number ?? "?"}`,
+          lang: s?.lang ?? m?.lang ?? null,
+          stars: s?.stars ?? m?.stars ?? 0,
+          labels: s?.labels ?? m?.labels ?? [],
+          beginner: s?.beginner ?? m?.beginner ?? false,
+          updated: s?.updated ?? m?.updated ?? "",
           added: e.added,
         };
       }),
@@ -50,39 +54,28 @@ export function useDash() {
   );
 
   const byStage = (stage: IssueStage) => issues.filter((i) => ledger[i.url]?.stage === stage);
-  const stageOf = (url: string): IssueStage => ledger[url]?.stage ?? "saved";
 
-  const trackIssue = (raw: string) => {
-    const parsed = parseIssueUrl(raw);
-    if (!parsed) {
+  const trackIssue = (raw: string, meta?: IssueMeta) => {
+    if (!parseIssueUrl(raw)) {
       toast("That is not a GitHub issue link yet - try one like github.com/vercel/next.js/issues/123");
       return false;
     }
-    if (ledger[parsed.url]) {
+    if (!add(raw, meta)) {
       toast("That issue is already on your board.");
       return false;
     }
-    setLedger({ ...ledger, [parsed.url]: { stage: "saved", added: new Date().toISOString() } });
+    const parsed = parseIssueUrl(raw)!;
     toast(`Tracking ${parsed.repo} #${parsed.number}`);
     return true;
   };
-  const toggleIssue = (url: string) => {
-    const next = { ...ledger };
-    const had = Boolean(next[url]);
-    if (had) delete next[url];
-    else next[url] = { stage: "saved" as IssueStage, added: new Date().toISOString() };
-    setLedger(next);
-    return !had;
+  const toggleIssue = (url: string, meta?: IssueMeta) => {
+    const on = toggle(url, meta);
+    toast(on ? "Added to your board." : "Taken off your board.");
+    return on;
   };
-  const setStage = (url: string, stage: IssueStage) =>
-    setLedger({ ...ledger, [url]: { ...(ledger[url] ?? { added: new Date().toISOString() }), stage } });
-  const removeIssue = (url: string) => {
-    const next = { ...ledger };
-    delete next[url];
-    setLedger(next);
-  };
+  const removeIssue = (url: string) => remove(url);
   const clearIssues = () => {
-    setLedger({});
+    clear();
     toast("Issue ledger cleared.");
   };
 

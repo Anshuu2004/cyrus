@@ -17,6 +17,7 @@ const CATALOG = [...REPOS, ...PROGRAM_REPOS];
 const HUBS: [string, number][] = [
   ["", 1],
   ["/projects", 0.9],
+  ["/issues", 0.9],
   ["/opensource", 0.9],
   ["/organizations", 0.8],
   ["/about", 0.5],

@@ -92,6 +92,7 @@ function rail(d: Dash): { label: string; items: { icon: string; text: string; to
     {
       label: "Discover",
       items: [
+        { icon: DP.search, text: "Issue finder", to: "/issues" },
         { icon: DP.building, text: "Organizations", to: "/organizations", count: String(d.savedOrgs.length) },
         { icon: DP.layers, text: "Project archive", to: "/opensource" },
         { icon: DP.star, text: "Skill catalog", to: "/projects" },

@@ -16,6 +16,7 @@ const body = `# cyrus.ai
 
 ${line("/projects", `the ${fmt(STATS.catalog)}-repository catalog, ranked by stars, each entry linked to its live GitHub record`)}
 ${line("/opensource", `${fmt(STATS.archive)} mentored program projects from GSoC, LFX, Outreachy, Hacktoberfest and Nexus Spring of Code, filterable by year, org and tech`)}
+${line("/issues", `search ${fmt(STATS.issues)} open issues by keyword, language, organization, label, beginner-friendly and unassigned`)}
 ${line("/organizations", `${fmt(STATS.orgs)} real GitHub organizations with stats, program history and how to contribute to each`)}
 - ${canonical("/programs/gsoc")} and one page like it per tracked program: ${PROGRAMS.map((p) => p.id).join(", ")}
 
@@ -32,6 +33,7 @@ ${line("/organizations", `${fmt(STATS.orgs)} real GitHub organizations with stat
 - ${canonical("/api/health")} - reports {"ok":true,"db":boolean,"auth":boolean}
 - ${canonical("/api/catalog/counts")} - live row counts per catalog table
 - ${canonical("/api/catalog/repos")}?cat=skills|cursor|agentsmd|mcp|tools&q=&domain=&model=&format=&framework=&page=&per= - filtered rows, per caps at 60
+- ${canonical("/api/issues")}?q=&lang=&org=&label=&repo=&beginner=1&unassigned=1&sort=relevance|stars|updated|comments|oldest&page=&per= - paged JSON over the same issue snapshot the finder uses, 60 requests/minute per address
 
 The two catalog endpoints above answer 503 while no database is attached, and
 /api/health tells you whether one is. Everything else here is static content
