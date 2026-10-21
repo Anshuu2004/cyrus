@@ -12,19 +12,16 @@ import { useStore } from "../lib/store";
 const LINKS = [
   { to: "/", label: "Home" },
   { to: "/organizations", label: "Organizations" },
+  { to: "/issues", label: "Issues" },
+  { to: "/leaderboard", label: "Leaderboard" },
   { to: "/opensource", label: "Open Source" },
   { to: "/projects", label: "Projects" },
-  { to: "/hackathons", label: "Hackathons" },
-  { to: "/resources", label: "Resources" },
-  { to: "/apis", label: "APIs" },
-  { to: "/tools", label: "Artifacts" },
   { to: "/about", label: "About us" },
 ];
 
 /* Platform menu entries: slug, label, blurb, icon path, tone class from the plat kit */
 const PLAT: [string, string, string, string, string][] = [
   ["features", "Features", "The whole contributor workflow.", "M12 3 3 8l9 5 9-5-9-5ZM3 16l9 5 9-5M3 12l9 5 9-5", "rust"],
-  ["nova", "Co-pilot", "One AI for matches, answers and build plans.", "M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z", "plum"],
   ["trust", "Trust centre", "Data sources, snapshots, verification.", "M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3Z", "leaf"],
   ["how", "How it works", "Three steps from empty tabs to merged PR.", "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3.5 2", "honey"],
 ];
@@ -96,8 +93,8 @@ export default function Nav() {
                         <span className="text-[12px] text-cocoa block truncate">{user.email || (user.provider === "guest" ? "Guest session" : "Signed in with " + user.provider)}</span>
                       </div>
                       <Link to="/dashboard" className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-medium text-cocoa hover:bg-peach hover:text-rust"><MenuIcon d="M4 18v-6M10 18V7M16 18v-4M22 18H2" /> Dashboard</Link>
-                      <Link to="/nova" className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-semibold text-rust hover:bg-peach"><MenuIcon d="M12 4l1.7 4.9L18.6 10l-4.9 1.7L12 16.6l-1.7-4.9L5.4 10l4.9-1.4zM18 16l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" /> Ask Co-pilot</Link>
-                      <Link to="/dashboard/saved" className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-medium text-cocoa hover:bg-peach hover:text-rust"><MenuIcon d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9z" /> Saved items ({saved.length + savedOrgs.length})</Link>
+                      <Link to="/dashboard/issues" className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-semibold text-rust hover:bg-peach"><MenuIcon d="M12 8.5v4.5M12 16.6v.1M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" /> My Issues</Link>
+                      <Link to="/dashboard/repos" className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-medium text-cocoa hover:bg-peach hover:text-rust"><MenuIcon d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9z" /> Followed ({saved.length + savedOrgs.length})</Link>
                       <button onClick={signOut} className="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-[10px] text-[13.5px] font-medium text-cocoa hover:bg-peach hover:text-rust"><MenuIcon d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 8l-4 4 4 4M6 12h10" /> Sign out</button>
                     </div>
                   )}
@@ -269,32 +266,32 @@ export function ThemeToggle() {
       title={dark ? "Switch to light theme" : "Switch to dark theme"}
       className="group relative w-[68px] h-[34px] rounded-full cursor-pointer shrink-0 border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       style={{
-        borderColor: dark ? "#2f3236" : "#dddad3",
-        background: dark ? "#1a1c1f" : "#eceae4",
+        borderColor: dark ? "#2a2d31" : "#d8dde0",
+        background: dark ? "#1d2023" : "#e9ebee",
         boxShadow: dark ? "inset 0 1px 4px rgba(0,0,0,.5)" : "inset 0 1px 3px rgba(133, 116, 97,.18)",
       }}>
       {/* idle icon resting on the track (opposite side from the knob) */}
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ right: "9px", opacity: dark ? 0 : 1 }}>
-        {MOON("#a09282")}
+        {MOON("#8b9298")}
       </svg>
       <svg aria-hidden width="17" height="17" viewBox="0 0 24 24"
         className="absolute top-[8.5px] transition-opacity duration-300" style={{ left: "9px", opacity: dark ? 1 : 0 }}>
-        {SUN("#d98546")}
+        {SUN("#fbbf24")}
       </svg>
       {/* knob: a clean white circle carrying the active glyph */}
       <span aria-hidden className="absolute top-[3px] left-[3px] w-[26px] h-[26px] rounded-full bg-white grid place-items-center transition-transform duration-400 ease-[cubic-bezier(.55,1.6,.45,1)] group-hover:scale-[1.06]"
         style={{ boxShadow: "0 2px 6px rgba(58, 40, 22,.22), 0 0 0 1px rgba(58, 40, 22,.04)", transform: dark ? "translateX(34px)" : "none" }}>
         <svg width="19" height="19" viewBox="0 0 24 24" style={{ opacity: dark ? 0 : 1, position: "absolute", transition: "opacity .3s" }}>
-          <circle cx="12" cy="12" r="4.8" fill="#f0913a" />
-          <g stroke="#f0913a" strokeWidth="1.7" strokeLinecap="round">
+          <circle cx="12" cy="12" r="4.8" fill="#fbbf24" />
+          <g stroke="#fbbf24" strokeWidth="1.7" strokeLinecap="round">
             {RAYS.map((a) => (
               <line key={a} x1="12" y1="2.6" x2="12" y2="4.4" transform={`rotate(${a} 12 12)`} />
             ))}
           </g>
         </svg>
         <svg width="14" height="14" viewBox="0 0 24 24" style={{ opacity: dark ? 1 : 0, position: "absolute", transition: "opacity .3s" }}>
-          {MOON("#4c4a45")}
+          {MOON("#2a2d31")}
         </svg>
       </span>
     </button>

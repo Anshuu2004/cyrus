@@ -128,7 +128,7 @@ function ProjCard({ p }: { p: Proj }) {
         <button aria-label={on ? "Stop tracking" : "Track project"} title={on ? "Stop tracking" : "Track on dashboard"} onClick={() => {
           const added = toggleSaved(p.url);
           toast(added ? "Added to your dashboard" : "Removed from dashboard");
-        }} className={`ml-auto w-[30px] h-[30px] rounded-[9px] border grid place-items-center text-[13px] transition-all cursor-pointer ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
+        }} className={`ml-auto w-[30px] h-[30px] rounded-[9px] border grid place-items-center text-[13px] transition-all cursor-pointer ${on ? "bg-accent border-accent text-accentfg" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
           {on ? "★" : "☆"}
         </button>
       </div>
@@ -224,7 +224,7 @@ export default function OpenSource() {
 
   const visible = list.slice(0, shown);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
   const lbl = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
   const clearAll = () => { clearUrl(); setShown(60); };
   const anyFilter = q || prog !== "all" || diff !== "all" || year !== "all" || tech !== "all";
@@ -242,15 +242,16 @@ export default function OpenSource() {
         Find open source projects actively accepting contributors. Search repositories, filter by program, difficulty tags, or tech stack.
       </p>
 
-      {/* AI-matcher banner */}
+      {/* how to work the archive */}
       <div className="mt-8 bg-gradient-to-br from-clay to-peach/60 border border-line rounded-[22px] px-8 py-7 flex items-center gap-6 flex-wrap max-[700px]:px-5">
         <div className="min-w-[280px] flex-1">
-          <h2 className="card-title-xl">Confused which project to choose or don't know which one you are most suitable to work on?</h2>
-          <p className="text-cocoa text-[13.5px] leading-[1.6] mt-2 max-w-[560px]">
-            Ask Co-pilot. It scores every project against your skills, frameworks and contribution experience - instantly.
+          <h2 className="card-title-xl">Not sure which project to take?</h2>
+          <p className="text-cocoa text-[13.5px] leading-[1.6] mt-2 max-w-[600px]">
+            Narrow the archive with the filters on the left - program, difficulty, language - then track the issues
+            worth your week on your own board. cyrus shows the public record; the choice stays yours.
           </p>
         </div>
-        <Link to="/nova" className={btn("primary", "lg") + " shrink-0"}>Match with Co-pilot</Link>
+        <Link to="/dashboard/issues" className={btn("primary", "lg") + " shrink-0"}>Track it on your board</Link>
       </div>
 
       {/* rail + results */}

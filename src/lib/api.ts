@@ -18,7 +18,6 @@ export type AppRow = {
   id: string; kind: "program" | "hackathon"; targetId: string; targetTitle: string | null;
   status: string; notes?: unknown; createdAt: string; updatedAt: string;
 };
-export type AssistantRes = { reply: string; model: string; demo: boolean; error?: string };
 
 const JSON_INIT: RequestInit = { headers: { "content-type": "application/json" }, credentials: "same-origin" };
 
@@ -51,7 +50,7 @@ async function fire(url: string, body: unknown, method: "POST" | "DELETE"): Prom
 
 export const api = {
   health: () => getJson<{ ok: boolean; db: boolean; auth: boolean }>("/api/health"),
-  me: () => getJson<{ user: ServerUser }>("/api/me"),
+  me: () => getJson<{ user: ServerUser | null }>("/api/me"),
   logout: () => fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" }).then((r) => r.ok).catch(() => false),
 
   authGithub: (code: string, verifier: string) =>
@@ -77,9 +76,6 @@ export const api = {
   appPatch: (id: string, patch: { status?: string; notes?: unknown }) =>
     postJson<{ application: AppRow }>("/api/me/applications", { id, ...patch }, "PATCH"),
   appDelete: (id: string) => postJson<{ ok: boolean }>("/api/me/applications", { id }, "DELETE"),
-
-  assistant: (messages: { role: "user" | "assistant"; content: string }[], mode: "assistant" | "builder", context?: string) =>
-    postJson<AssistantRes>("/api/assistant", { messages, mode, context }),
 };
 
 /** can this deployment actually run server sessions? (cached per page load) */

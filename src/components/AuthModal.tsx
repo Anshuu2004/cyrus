@@ -6,12 +6,13 @@ import { useEffect, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { useNavigate } from "@/lib/router";
 import { useStore } from "../lib/store";
-import { LANG_COLORS } from "../lib/util";
+import { fmt, LANG_COLORS } from "../lib/util";
 import { googleConfigured, promptGoogle, readGoogleRedirectCredential } from "../lib/google";
 import { githubConfigured, promptGitHub } from "../lib/github";
 import { api, serverAuthReady } from "../lib/api";
 import { REPOS } from "../data/repos";
-import { RESOURCES } from "../data/resources";
+import { PROGRAMS } from "../data/orgs";
+import { CRAWL } from "../data/crawlStats";
 import { Logo, Word } from "./ui";
 
 const PANEL_LANGS = ["TypeScript", "Python", "Go", "Rust", "JavaScript", "Java", "C++", "Swift", "MDX"];
@@ -187,7 +188,7 @@ export default function AuthModal() {
   };
 
   const label = "block font-mono text-[11px] tracking-[.12em] uppercase text-cocoa mb-2";
-  const fin = "w-full bg-card border border-line rounded-[14px] px-4 py-3.5 text-[15px] outline-none transition-all placeholder:text-dim focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.14)]";
+  const fin = "w-full bg-card border border-line rounded-[14px] px-4 py-3.5 text-[15px] outline-none transition-all placeholder:text-dim focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.14)]";
 
   return (
     <div className="fixed inset-0 z-[100] overflow-y-auto" style={{ background: "var(--color-paper)" }}
@@ -211,7 +212,8 @@ export default function AuthModal() {
             </div>
 
             <p className="text-cocoa text-[15px] leading-[1.7] mt-7 max-w-[440px]">
-              One account for the whole season - {REPOS.length} flagship open-source repos, {RESOURCES.length} curated resources, every program and hackathon that matters.
+              One account for the whole season - {fmt(CRAWL.issues)} open issues, {REPOS.length} flagship
+              open-source repos and every one of the {PROGRAMS.length} tracked programs.
             </p>
 
             <div className="grid grid-cols-3 gap-2.5 mt-8 max-w-[440px]">
@@ -225,7 +227,7 @@ export default function AuthModal() {
 
             <div className="flex items-center gap-3 mt-8 font-mono text-[10.5px] tracking-[.1em] uppercase text-dim">
               <span className="h-px flex-1 bg-liness" />
-              <span>repos · programs · hackathons · resources</span>
+              <span>issues · repos · programs · your board</span>
               <span className="h-px flex-1 bg-liness" />
             </div>
           </div>
@@ -241,8 +243,8 @@ export default function AuthModal() {
             </h1>
             <p className="text-center text-cocoa text-[15px] leading-[1.6] mt-3 mb-8">
               {tab === "login"
-                ? "Log in to access your matches and saved roadmaps."
-                : "One account for hackathons, programs, skills and deadlines."}
+                ? "Log in to pick up the issues you are already working on."
+                : "One account for issues, programs, repos and your board."}
             </p>
 
             {/* tabs */}
@@ -268,7 +270,7 @@ export default function AuthModal() {
                   <input className={fin} type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
                 </div>
                 <button type="submit" disabled={busyMail}
-                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180, 96, 44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-accentfg font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(34, 197, 94,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
                   {busyMail ? "Sending code..." : tab === "login" ? "Send Login Code" : "Send Sign-Up Code"}
                 </button>
                 <p className="text-center font-mono text-[10.5px] tracking-[.08em] text-dim -mt-1">
@@ -284,7 +286,7 @@ export default function AuthModal() {
                     value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} autoFocus />
                 </div>
                 <button type="submit" disabled={busyMail}
-                  className="mt-1 w-full bg-accent hover:bg-accentd text-white font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(180, 96, 44,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                  className="mt-1 w-full bg-accent hover:bg-accentd text-accentfg font-display font-bold text-[16px] rounded-[14px] py-4 shadow-[0_14px_30px_-12px_rgba(34, 197, 94,.6)] transition-all active:scale-[.99] cursor-pointer disabled:opacity-60 disabled:cursor-wait">
                   {busyMail ? "Verifying..." : "Verify & Continue"}
                 </button>
                 <div className="flex items-center justify-between font-mono text-[11px] font-bold tracking-[.08em]">

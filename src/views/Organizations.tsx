@@ -68,7 +68,7 @@ function OrgCard({ org }: { org: Org }) {
         <button aria-label={on ? "Unsave organization" : "Save organization"} onClick={() => {
           const added = toggleSavedOrg(org.login);
           toast(added ? `Saved ${org.login} - see your dashboard` : `Removed ${org.login}`);
-        }} className={`w-[34px] h-[34px] rounded-[10px] border grid place-items-center text-[13px] transition-all ${on ? "bg-accent border-accent text-white" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
+        }} className={`w-[34px] h-[34px] rounded-[10px] border grid place-items-center text-[13px] transition-all ${on ? "bg-accent border-accent text-accentfg" : "bg-cream border-line text-dim hover:border-accent hover:text-accent"}`}>
           {on ? "★" : "☆"}
         </button>
         <Link to={`/organizations/${org.login}`} className={btn("outline", "sm", "flex-1 justify-center")}>Explore</Link>
@@ -87,7 +87,13 @@ function ProgramCard({ p }: { p: Program }) {
   return (
     <article className="bg-card border border-line rounded-[20px] overflow-hidden flex flex-col shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift hover:border-accent/40">
       <div className="relative h-40">
-        <img src={p.img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+        {p.img
+          ? <img src={p.img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+          /* programs we track but have no cover art for keep the panel and
+             carry the owner avatar instead of shipping a generated image */
+          : <span className="absolute inset-0 bg-cream grid place-items-center">
+              <img src={avatarOf(p.owner, 96)} alt="" loading="lazy" className="w-[46px] h-[46px] rounded-[14px] object-contain" />
+            </span>}
         <div className="absolute inset-0 bg-gradient-to-t from-coffee/95 via-coffee/35 to-transparent" />
         <span className={`absolute top-3.5 right-3.5 font-mono text-[10px] font-bold uppercase tracking-[.1em] px-2.5 py-1 rounded-full border backdrop-blur-sm ${STATUS_CLS[p.status]}`}>
           {p.status}
@@ -147,7 +153,7 @@ export default function Organizations() {
     (!q.trim() || (o.login + " " + o.name + " " + o.tagline + " " + o.tags.join(" ")).toLowerCase().includes(q.trim().toLowerCase()))
   ).sort(byStars), [q, level, tag]);
 
-  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]";
+  const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
 
   return (
     <>

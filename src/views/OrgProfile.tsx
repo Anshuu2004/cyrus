@@ -354,7 +354,7 @@ export default function OrgProfile() {
               </div>
               <div className="flex flex-col gap-2 shrink-0 ml-auto">
                 <a href={`https://github.com/${org.login}`} target="_blank" rel="noopener" className={btn("dark", "sm")}>Visit official site</a>
-                <Link to="/nova" className={btn("outline", "sm")}>Ask Co-pilot about {org.login}</Link>
+                <Link to={`/projects?q=${encodeURIComponent(org.login)}`} className={btn("outline", "sm")}>Projects from {org.login}</Link>
               </div>
             </div>
 
@@ -385,13 +385,13 @@ export default function OrgProfile() {
               </div>
             </div>
 
-            <Link to="/dashboard" className="block mt-6 bg-cream border border-line rounded-[16px] px-5 py-4 flex items-center gap-3 hover:border-accent/45 hover:shadow-lift transition-all">
+            <Link to="/dashboard/repos" className="block mt-6 bg-cream border border-line rounded-[16px] px-5 py-4 flex items-center gap-3 hover:border-accent/45 hover:shadow-lift transition-all">
               <span className="w-[34px] h-[34px] rounded-[10px] bg-peach text-rust grid place-items-center shrink-0">{IC_SPARK}</span>
               <span className="min-w-0">
-                <b className="block text-ink text-[14px] font-display font-extrabold leading-snug">Draft a project proposal for {org.name}</b>
-                <span className="block text-cocoa text-[12px] mt-0.5">Use the dashboard proposal studio - templates, mentors and timeline included.</span>
+                <b className="block text-ink text-[14px] font-display font-extrabold leading-snug">Work the {org.name} repositories</b>
+                <span className="block text-cocoa text-[12px] mt-0.5">Follow the repos you care about and track the issues you take, stage by stage, on your own board.</span>
               </span>
-              <span className="ml-auto font-mono text-[10.5px] font-bold uppercase tracking-[.1em] text-accent shrink-0">Open studio</span>
+              <span className="ml-auto font-mono text-[10.5px] font-bold uppercase tracking-[.1em] text-accent shrink-0">Open board</span>
             </Link>
           </section>
 
@@ -477,7 +477,7 @@ export default function OrgProfile() {
               <span className="font-mono text-[10.5px] uppercase tracking-[.12em] text-cocoa bg-cream border border-line rounded-full px-3 py-1.5">{fmt(orgProjects.length)} total projects</span>
             </div>
             <p className="text-cocoa text-[13px] leading-[1.6] mb-5 max-w-[680px]">
-              Showing {fmt(ppList.length)} of {fmt(orgProjects.length)} projects. Click any project card for scope, mentors, and the proposal studio.
+              Showing {fmt(ppList.length)} of {fmt(orgProjects.length)} projects. Click any project card for scope, mentors and the accepted-project record.
             </p>
             <div className="flex gap-2 flex-wrap items-center mb-4">
               <button onClick={() => setPpYear("all")}
@@ -489,7 +489,7 @@ export default function OrgProfile() {
             </div>
             <div className="flex gap-3 flex-wrap items-center mb-6">
               <input value={ppQ} onChange={(e) => setPpQ(e.target.value)} placeholder="Search this org's projects…" aria-label="Search projects"
-                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(180, 96, 44,.12)]" />
+                className="flex-1 min-w-[220px] max-w-[360px] bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.16)]" />
               <select value={ppDiff} onChange={(e) => setPpDiff(e.target.value)} aria-label="Filter by difficulty"
                 className="bg-card border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] outline-none select-warm pr-8 cursor-pointer">
                 <option value="all">All Difficulties</option>
