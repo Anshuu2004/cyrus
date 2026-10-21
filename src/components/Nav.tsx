@@ -73,8 +73,11 @@ export default function Nav() {
       <div className="max-w-[1340px] mx-auto bg-paper/92 backdrop-blur-[16px] saturate-[1.35] border border-liness rounded-full shadow-soft">
         <div className="flex items-center gap-5 h-[62px] pl-4 pr-4 max-[1023px]:h-[54px] max-[700px]:gap-2.5 max-[700px]:pl-2.5 max-[700px]:pr-2.5">
           <Link to="/" className="flex items-center gap-2.5 shrink-0 max-[700px]:gap-2"><Logo size={34} /><Brand /></Link>
-          {/* desktop strip: single tightened row, lg+ only */}
-          <div className="hidden lg:flex items-center gap-1 min-w-0">
+          {/* desktop strip: one tightened row, and only from 1280px up. The row needs
+              862px of pills, so between 1024 and 1279 it overflowed its box and ran
+              under the theme toggle, which made the rightmost links unclickable.
+              Below 1280 the hamburger sheet carries the same links instead. */}
+          <div className="hidden xl:flex items-center gap-1 min-w-0">
             {LINKS.slice(0, -1).map((l) => (
               <NavLink key={l.to} to={l.to} end={l.to === "/"}
                 className={`${PILL} ${pillCls(active(l.to))}`}>
@@ -112,10 +115,10 @@ export default function Nav() {
             ) : (
               <SignInButton className="max-[700px]:!px-3.5 max-[700px]:!py-2 max-[700px]:!text-[12.5px]" />
             )}
-            {/* hamburger: phone + tablet only, always the rightmost control */}
+            {/* hamburger: everything below 1280px, always the rightmost control */}
             <button onClick={() => setMenu(!menu)}
               aria-label={menu ? "Close menu" : "Open menu"} aria-expanded={menu}
-              className="lg:hidden relative w-[38px] h-[38px] rounded-full grid place-items-center border border-line bg-card/60 text-ink transition-colors duration-200 hover:bg-peach shrink-0 cursor-pointer">
+              className="xl:hidden relative w-[38px] h-[38px] rounded-full grid place-items-center border border-line bg-card/60 text-ink transition-colors duration-200 hover:bg-peach shrink-0 cursor-pointer">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 strokeWidth="2.1" strokeLinecap="round" aria-hidden>
                 <line x1="4" y1="7" x2="20" y2="7" style={{ transformBox: "fill-box", transformOrigin: "center",
@@ -133,9 +136,9 @@ export default function Nav() {
       {menu && (
         <>
           <div onClick={() => setMenu(false)} aria-hidden
-            className="lg:hidden fixed inset-0 z-[80] bg-ink/45 backdrop-blur-[3px]"
+            className="xl:hidden fixed inset-0 z-[80] bg-ink/45 backdrop-blur-[3px]"
             style={{ animation: "fadeIn .25s ease both" }} />
-          <aside role="dialog" aria-label="Site menu" className="lg:hidden fixed top-0 right-0 bottom-0 z-[85] w-[min(86vw,340px)]
+          <aside role="dialog" aria-label="Site menu" className="xl:hidden fixed top-0 right-0 bottom-0 z-[85] w-[min(86vw,340px)]
             bg-paper border-l border-line rounded-l-[28px] shadow-lift flex flex-col
             max-[1023px]:rounded-none max-[1023px]:border-l-0"
             style={{ animation: "sheetIn .34s cubic-bezier(.32,.9,.35,1) both" }}>
