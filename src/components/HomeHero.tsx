@@ -22,7 +22,7 @@ import { LEADERS } from "../data/leaderboard";
 import { avatarOf, fmt, byStars } from "../lib/util";
 import { DP } from "../lib/dash/shared";
 import { Word, btn, OrgImg, Logo } from "./ui";
-import { SCENES, SceneArt } from "./HorizonBackdrop";
+import { SCENES } from "./HorizonBackdrop";
 
 /* the orgs whose public data makes up the index */
 const PROOF = ["google", "kubernetes", "vercel", "huggingface", "freeCodeCamp"];
@@ -450,7 +450,7 @@ export default function HomeHero() {
               <motion.div key={SCENES[scene].id} className="absolute inset-0"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ duration: 1.1, ease: "easeInOut" }}>
-                <SceneArt s={SCENES[scene]} uid={SCENES[scene].id} />
+                <img src={SCENES[scene].img} alt="" decoding="async" />
               </motion.div>
             )}
           </AnimatePresence>

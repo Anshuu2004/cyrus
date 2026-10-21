@@ -321,12 +321,20 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   position: absolute; inset: 0; width: 100%; height: 100%; display: block;
   object-fit: cover; object-position: 50% 100%;
 }
-.hero-horizon img { opacity: .7 }
+.hero-horizon img { opacity: .85 }
+/* a paper veil top and bottom so the photograph never fights the proof
+   row above it or the scene switcher below it */
+.hero-horizon::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    var(--color-paper) 0%, transparent 24%, transparent 66%,
+    color-mix(in srgb, var(--color-paper) 82%, transparent) 100%);
+}
 /* the six scenes are night-weighted palettes; on a light page they would
    read as a dark slab, so wash them into a pale tinted horizon instead */
-.light .hero-horizon svg {
-  opacity: .34;
-  filter: saturate(.72) brightness(2.05) contrast(.8);
+.light .hero-horizon img {
+  opacity: .5;
+  filter: saturate(.72) brightness(1.45) contrast(.85);
 }
 /* the frame needs to read as floating above the ridge, not pasted on it */
 .hero-stage > .hero-stage-inner { position: relative; z-index: 1 }
