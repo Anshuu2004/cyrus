@@ -1,7 +1,7 @@
 "use client"
 /* ══ Organizations.tsx — searchable org directory + programs ═ */
 import { useMemo, useState } from "react";
-import { Link } from "@/lib/router";
+import { Link, useSearchParams } from "@/lib/router";
 import { ORGS, PROGRAMS } from "../data/orgs";
 import { avatarOf, byStars, fmt } from "../lib/util";
 import type { Org, Program } from "../lib/types";
@@ -127,9 +127,19 @@ function ProgramCard({ p }: { p: Program }) {
 
 /* ── page ──────────────────────────────────────────────────── */
 export default function Organizations() {
-  const [q, setQ] = useState("");
-  const [level, setLevel] = useState("all");
-  const [tag, setTag] = useState("all");
+  const [params, setParams] = useSearchParams();
+  const LEVEL_VALUES = ["all", "beginner", "intermediate", "advanced"] as const;
+  const rawLevel = params.get("level");
+  const [q, setQ] = useState(params.get("q") ?? "");
+  const [level, setLevel] = useState<string>(
+    LEVEL_VALUES.includes(rawLevel as any) ? (rawLevel as string) : "all"
+  );
+  const [tag, setTag] = useState(params.get("tag") ?? "all");
+
+  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
+  const setLevelUrl = (v: string) => { setLevel(v); setParams({ level: v }); };
+  const setTagUrl = (v: string) => { setTag(v); setParams({ tag: v }); };
+  const clearUrl = () => { setQ(""); setLevel("all"); setTag("all"); setParams({}); };
 
   const allTags = useMemo(() => {
     const c: Record<string, number> = {};
@@ -151,14 +161,14 @@ export default function Organizations() {
 
       <section className={`${W} pt-6`}>
         <div className="grid grid-cols-[1fr_210px_210px] gap-3.5 max-[760px]:grid-cols-1">
-          <input className={fin} placeholder="Search organizations - “google”, “ai”, “infra”…" value={q} onChange={(e) => setQ(e.target.value)} />
-          <select className={`${fin} select-warm pr-8`} value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Difficulty level">
+          <input className={fin} placeholder="Search organizations - “google”, “ai”, “infra”…" value={q} onChange={(e) => setQUrl(e.target.value)} />
+          <select className={`${fin} select-warm pr-8`} value={level} onChange={(e) => setLevelUrl(e.target.value)} aria-label="Difficulty level">
             <option value="all">Any level</option>
             <option value="beginner">Beginner-friendly</option>
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
           </select>
-          <select className={`${fin} select-warm pr-8`} value={tag} onChange={(e) => setTag(e.target.value)} aria-label="Focus tag">
+          <select className={`${fin} select-warm pr-8`} value={tag} onChange={(e) => setTagUrl(e.target.value)} aria-label="Focus tag">
             <option value="all">Any focus</option>
             {allTags.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -176,7 +186,7 @@ export default function Organizations() {
           </div>
         ) : (
           <div className="text-center py-16 text-dim">
-            No organizations match those filters. <button className="text-accent font-semibold hover:underline cursor-pointer" onClick={() => { setQ(""); setLevel("all"); setTag("all"); }}>Clear filters</button>
+            No organizations match those filters. <button className="text-accent font-semibold hover:underline cursor-pointer" onClick={clearUrl}>Clear filters</button>
           </div>
         )}
       </section>

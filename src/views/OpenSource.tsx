@@ -5,7 +5,7 @@
    Cards never open an internal page - they redirect to the real
    project page and show the organisation name.                    ═ */
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@/lib/router";
+import { Link, useSearchParams } from "@/lib/router";
 import { ORGS, PROGRAMS } from "../data/orgs";
 import { PROGRAM_REPOS, PROGRAM_META } from "../data/programRepos";
 import type { ProgramName } from "../data/programRepos";
@@ -142,13 +142,26 @@ export default function OpenSource() {
   const [other, setOther] = useState<RawFile | null>(null);
   const [loadErr, setLoadErr] = useState(false);
 
-  const [q, setQ] = useState("");
-  const [prog, setProg] = useState("all");
-  const [diff, setDiff] = useState("all");
-  const [year, setYear] = useState("all");
-  const [tech, setTech] = useState("all");
-  const [sort, setSort] = useState<"recent" | "org" | "title">("recent");
+  const [params, setParams] = useSearchParams();
+  const SORT_VALUES = ["recent", "org", "title"] as const;
+  const rawSort = params.get("sort");
+  const [q, setQ] = useState(params.get("q") ?? "");
+  const [prog, setProg] = useState(params.get("prog") ?? "all");
+  const [diff, setDiff] = useState(params.get("diff") ?? "all");
+  const [year, setYear] = useState(params.get("year") ?? "all");
+  const [tech, setTech] = useState(params.get("tech") ?? "all");
+  const [sort, setSort] = useState<"recent" | "org" | "title">(
+    SORT_VALUES.includes(rawSort as any) ? (rawSort as "recent" | "org" | "title") : "recent"
+  );
   const [shown, setShown] = useState(60);
+
+  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
+  const setProgUrl = (v: string) => { setProg(v); setParams({ prog: v }); };
+  const setDiffUrl = (v: string) => { setDiff(v); setParams({ diff: v }); };
+  const setYearUrl = (v: string) => { setYear(v); setParams({ year: v }); };
+  const setTechUrl = (v: string) => { setTech(v); setParams({ tech: v }); };
+  const setSortUrl = (v: "recent" | "org" | "title") => { setSort(v); setParams({ sort: v }); };
+  const clearUrl = () => { setQ(""); setProg("all"); setDiff("all"); setYear("all"); setTech("all"); setParams({}); };
 
   useEffect(() => {
     let go = true;
@@ -213,7 +226,7 @@ export default function OpenSource() {
 
   const fin = "w-full bg-paper border border-line rounded-xl px-3.5 py-2.5 text-[14px] outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(34, 197, 94,.12)]";
   const lbl = "block font-mono text-[10.5px] tracking-[.12em] uppercase text-dim mb-2.5";
-  const clearAll = () => { setQ(""); setProg("all"); setDiff("all"); setYear("all"); setTech("all"); setShown(60); };
+  const clearAll = () => { clearUrl(); setShown(60); };
   const anyFilter = q || prog !== "all" || diff !== "all" || year !== "all" || tech !== "all";
 
   return (
@@ -250,11 +263,11 @@ export default function OpenSource() {
           </div>
           <div>
             <span className={lbl}>Search</span>
-            <input className={fin} placeholder="Title, tech, org..." value={q} onChange={(e) => { setQ(e.target.value); setShown(60); }} aria-label="Search projects" />
+            <input className={fin} placeholder="Title, tech, org..." value={q} onChange={(e) => { setQUrl(e.target.value); setShown(60); }} aria-label="Search projects" />
           </div>
           <div>
             <span className={lbl}>Difficulty</span>
-            <select className={`${fin} select-warm pr-8`} value={diff} onChange={(e) => { setDiff(e.target.value); setShown(60); }} aria-label="Filter by difficulty">
+            <select className={`${fin} select-warm pr-8`} value={diff} onChange={(e) => { setDiffUrl(e.target.value); setShown(60); }} aria-label="Filter by difficulty">
               <option value="all">All Difficulties</option>
               <option value="small">Easy · small (~175h)</option>
               <option value="medium">Medium · ~350h</option>
@@ -263,7 +276,7 @@ export default function OpenSource() {
           </div>
           <div>
             <span className={lbl}>Program</span>
-            <select className={`${fin} select-warm pr-8`} value={prog} onChange={(e) => { setProg(e.target.value); setShown(60); }} aria-label="Filter by program">
+            <select className={`${fin} select-warm pr-8`} value={prog} onChange={(e) => { setProgUrl(e.target.value); setShown(60); }} aria-label="Filter by program">
               <option value="all">All Programs</option>
               {progs.map((p) => <option key={p} value={p}>{p === "GSoC" ? "Google Summer of Code" : PROGRAM_META[p as ProgramName]?.label ?? p}</option>)}
             </select>
@@ -272,7 +285,7 @@ export default function OpenSource() {
             <span className={lbl}>Popular stacks</span>
             <div className="flex flex-wrap gap-[7px]">
               {stacks.map((l) => (
-                <button key={l} onClick={() => { setTech(tech === l ? "all" : l); setShown(60); }}
+                <button key={l} onClick={() => { setTechUrl(tech === l ? "all" : l); setShown(60); }}
                   className={`text-[12px] font-semibold rounded-full px-3 py-1.5 border transition-all cursor-pointer ${tech === l ? "bg-coffee border-coffee text-foam" : "bg-paper border-line text-cocoa hover:border-accent hover:text-rust"}`}>
                   {l}
                 </button>
@@ -286,7 +299,7 @@ export default function OpenSource() {
         <section id="results" className="scroll-mt-24">
           <div className="flex gap-2 flex-wrap pb-4">
             {[["all", "All Years"], ...years.map((y) => [String(y), String(y)] as [string, string])].map(([v, l]) => (
-              <button key={v} onClick={() => { setYear(v); setShown(60); }}
+              <button key={v} onClick={() => { setYearUrl(v); setShown(60); }}
                 className={`font-mono text-[11.5px] font-bold tracking-[.05em] rounded-full px-4 py-2 border transition-all cursor-pointer ${year === v ? "bg-coffee border-coffee text-foam" : "bg-card border-line text-cocoa hover:border-accent hover:text-rust"}`}>
                 {l}
               </button>
@@ -298,7 +311,7 @@ export default function OpenSource() {
               {loadErr && <span className="normal-case tracking-normal text-brick ml-3">Archive file missing - run npm run refresh</span>}
             </span>
             <span className="ml-auto font-mono text-[10.5px] tracking-[.12em] uppercase text-dim">Sort by</span>
-            <select className={`${fin} select-warm !w-auto rounded-full pr-8 py-2 text-[13px] font-semibold`} value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} aria-label="Sort projects">
+            <select className={`${fin} select-warm !w-auto rounded-full pr-8 py-2 text-[13px] font-semibold`} value={sort} onChange={(e) => setSortUrl(e.target.value as typeof sort)} aria-label="Sort projects">
               <option value="recent">Newest Added</option>
               <option value="org">Organization A-Z</option>
               <option value="title">Title A-Z</option>
