@@ -347,65 +347,21 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   filter: saturate(.85) brightness(1.55) contrast(.82);
 }
 
-/* ── signature: the line around the dashboard ─────────────────
-   The board sits on the photograph inside a single steady hairline, and one
-   bright segment travels that perimeter. The travelling beam is a conic
-   gradient masked down to the border box, animated through a registered
-   custom property so the angle can interpolate. The hairline itself never
-   changes colour: it stays white in the dark theme and ink in the light one,
-   and only the glow around it breathes. */
-@property --laser-a { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
-
-.laser { position: relative; isolation: isolate; }
-.laser::before, .laser::after {
+/* ── the line around the dashboard ────────────────────────────
+   The board sits on the photograph inside one steady hairline: white in the
+   dark theme, ink in the light one. Nothing glows and nothing travels round
+   it - the ring only separates the board from the landscape behind it. */
+.board-ring { position: relative; }
+.board-ring::before {
   content: ""; position: absolute; inset: -9px; border-radius: 20px;
   pointer-events: none;
-}
-.laser::before {
   border: 1px solid color-mix(in srgb, var(--color-foam) 33%, transparent);
-  box-shadow:
-    0 0 26px -8px color-mix(in srgb, var(--color-accent) 55%, transparent),
-    inset 0 0 22px -14px color-mix(in srgb, var(--color-accent) 60%, transparent);
-}
-.laser::after {
-  padding: 1.5px;
-  background: conic-gradient(from var(--laser-a),
-    transparent 0deg, transparent 268deg,
-    color-mix(in srgb, var(--color-accent) 45%, transparent) 306deg,
-    var(--color-accent) 340deg,
-    var(--color-ember) 354deg,
-    color-mix(in srgb, var(--color-accent) 45%, transparent) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 70%, transparent));
 }
 @media (min-width: 768px) {
-  .laser::before, .laser::after { inset: -13px; border-radius: 22px; }
+  .board-ring::before { inset: -13px; border-radius: 22px; }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .laser::before { animation: laserBreathe 3.6s var(--ease-silk) infinite; }
-  .laser::after { animation: laserRun 5.5s linear infinite; }
-  @keyframes laserBreathe {
-    0%, 100% {
-      box-shadow:
-        0 0 18px -10px color-mix(in srgb, var(--color-accent) 40%, transparent),
-        inset 0 0 18px -14px color-mix(in srgb, var(--color-accent) 45%, transparent);
-    }
-    50% {
-      box-shadow:
-        0 0 40px -6px color-mix(in srgb, var(--color-accent) 62%, transparent),
-        inset 0 0 28px -12px color-mix(in srgb, var(--color-accent) 62%, transparent);
-    }
-  }
-  @keyframes laserRun { to { --laser-a: 360deg; } }
-}
-.light .laser::before {
+.light .board-ring::before {
   border-color: color-mix(in srgb, var(--color-coffee) 24%, transparent);
-  box-shadow:
-    0 0 22px -10px rgba(22, 163, 74, 0.5),
-    inset 0 0 18px -14px rgba(22, 163, 74, 0.4);
 }
 
 /* the other two corners of the registration frame: .frame draws the

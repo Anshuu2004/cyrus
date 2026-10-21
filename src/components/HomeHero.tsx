@@ -298,7 +298,7 @@ function BoardPreview() {
   const [panel, setPanel] = useState<PanelId>("issues");
   const Active = PANELS[panel];
   return (
-    <div className="laser">
+    <div className="board-ring">
       <figure className="bg-card/70 backdrop-blur-[2px] rounded-[14px] p-2.5 sm:p-3 md:p-[14px] shadow-lift">
         <div className="md:aspect-[16/9] overflow-hidden rounded-[10px] border border-line bg-paper flex flex-col text-left">
           {/* app top bar */}
