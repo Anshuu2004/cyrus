@@ -32,25 +32,32 @@ const NEAR = "M0 438 L148 412 L302 446 L462 410 L622 448 L784 414 L946 450 L1108
 export default function HorizonBackdrop({ photo }: { photo?: string }) {
   return (
     <div className="hero-horizon" aria-hidden="true">
-      <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax meet">
+      <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice">
         <defs>
           <linearGradient id="hz-sky" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0" />
-            <stop offset="0.55" stopColor="var(--color-accent)" stopOpacity="0.035" />
-            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0.14" />
+            <stop offset="0.5" stopColor="var(--color-accent)" stopOpacity="0.06" />
+            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0.2" />
           </linearGradient>
           {/* the light the ridges are silhouetted against */}
-          <radialGradient id="hz-glow" cx="0.5" cy="0.44" r="0.5">
-            <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0.3" />
-            <stop offset="0.42" stopColor="var(--color-accent)" stopOpacity="0.13" />
+          <radialGradient id="hz-glow" cx="0.5" cy="0.42" r="0.58">
+            <stop offset="0" stopColor="var(--color-ember)" stopOpacity="0.46" />
+            <stop offset="0.34" stopColor="var(--color-accent)" stopOpacity="0.24" />
+            <stop offset="0.68" stopColor="var(--color-accent)" stopOpacity="0.08" />
             <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="hz-band" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0.1" />
-            <stop offset="0.3" stopColor="var(--color-accent)" stopOpacity="0.6" />
-            <stop offset="0.52" stopColor="var(--color-ember)" stopOpacity="0.8" />
-            <stop offset="0.76" stopColor="var(--color-accent)" stopOpacity="0.5" />
-            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0.1" />
+            <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0.16" />
+            <stop offset="0.28" stopColor="var(--color-accent)" stopOpacity="0.78" />
+            <stop offset="0.5" stopColor="var(--color-ember)" stopOpacity="1" />
+            <stop offset="0.74" stopColor="var(--color-accent)" stopOpacity="0.72" />
+            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0.16" />
+          </linearGradient>
+          <linearGradient id="hz-band-soft" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0" />
+            <stop offset="0.4" stopColor="var(--color-accent)" stopOpacity="0.34" />
+            <stop offset="0.62" stopColor="var(--color-accent)" stopOpacity="0.4" />
+            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -59,16 +66,19 @@ export default function HorizonBackdrop({ photo }: { photo?: string }) {
 
         <g fill="var(--star)">
           {STARS.map(([x, y, r], i) => (
-            <circle key={i} cx={x} cy={y} r={r} opacity={0.14 + (i % 4) * 0.06} />
+            <circle key={i} cx={x} cy={y} r={r} opacity={0.22 + (i % 4) * 0.09} />
           ))}
         </g>
 
         {/* far ridge first, then its light line, so the band reads as the
-            horizon rather than a stroke pasted over the mountain */}
+            horizon rather than a stroke pasted over the mountain. The nearer
+            ridges get a fainter edge so the three planes stay separable. */}
         <path d={FAR} fill="var(--ridge-far)" />
-        <path d={FAR} fill="none" stroke="url(#hz-band)" strokeWidth="1.5" />
+        <path d={FAR} fill="none" stroke="url(#hz-band)" strokeWidth="2" />
         <path d={MID} fill="var(--ridge-mid)" />
+        <path d={MID} fill="none" stroke="url(#hz-band-soft)" strokeWidth="1.25" />
         <path d={NEAR} fill="var(--ridge-near)" />
+        <path d={NEAR} fill="none" stroke="url(#hz-band-soft)" strokeWidth="1" opacity="0.6" />
       </svg>
 
       {photo && <img src={photo} alt="" loading="lazy" />}
