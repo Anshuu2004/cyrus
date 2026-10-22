@@ -90,8 +90,17 @@ function rail(d: Dash): { label: string; items: { icon: string; text: string; to
       ],
     },
     {
+      label: "Plan",
+      items: [
+        { icon: DP.calendar, text: "Season calendar", to: "/dashboard/calendar" },
+        { icon: DP.star, text: "Demand radar", to: "/dashboard/demand" },
+      ],
+    },
+    {
       label: "Tools",
       items: [
+        { icon: DP.pulse, text: "Repo analyser", to: "/dashboard/analyser" },
+        { icon: DP.file, text: "Draft studio", to: "/dashboard/drafts" },
         { icon: DP.spark, text: "Co-pilot matcher", to: "/dashboard/matcher" },
         { icon: DP.target, text: "Mentor finder", to: "/dashboard/mentors" },
         { icon: DP.layers, text: "Compare orgs", to: "/dashboard/compare" },
@@ -259,7 +268,7 @@ export function DashShell({ dash, active, children }: { dash: Dash; active: stri
               </Link>
             ))}
           </nav>
-          <main className="mx-auto max-w-[1160px] px-4 md:px-7 py-6 md:py-8 grid gap-5">{children}</main>
+          <main className="mx-auto max-w-[1160px] px-4 md:px-7 py-6 md:py-8 grid gap-5 [&>*]:min-w-0">{children}</main>
         </div>
       </div>
     </div>

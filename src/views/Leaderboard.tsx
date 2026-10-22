@@ -60,7 +60,7 @@ function Podium({ rows }: { rows: Ranked[] }) {
   const three = rows.slice(0, 3);
   if (three.length < 3) return null;
   return (
-    <div className="grid grid-cols-3 gap-3 md:gap-5 mt-9">
+    <div className="grid grid-cols-1 min-[520px]:grid-cols-3 gap-3 md:gap-5 mt-9">
       {three.map((r) => (
         <article key={r.login} className="frame bg-card/60 p-4 md:p-6 relative">
           <span className="mark tr" aria-hidden>+</span>
@@ -68,7 +68,7 @@ function Podium({ rows }: { rows: Ranked[] }) {
             {ordinal(r.rank)}
           </span>
           <Person r={r} size={r.rank === 1 ? 46 : 38} />
-          <div className="flex items-baseline gap-2 mt-4">
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-4">
             <b className="font-display font-extrabold tracking-[-.02em] leading-none text-[clamp(24px,3.4vw,38px)] text-ink">
               {num_(num(r.merged_total))}
             </b>

@@ -80,7 +80,7 @@ function Ic({ d, size = 14 }: { d: string; size?: number }) {
 }
 
 const Row = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
-  <div className={`rounded-[10px] border border-line bg-card px-3 md:px-3.5 py-2.5 ${className}`}>{children}</div>
+  <div className={`min-w-0 rounded-[10px] border border-line bg-card px-3 md:px-3.5 py-2.5 ${className}`}>{children}</div>
 );
 
 const StatLine = ({ k, v }: { k: string; v: string }) => (
@@ -111,7 +111,7 @@ function IssuesPanel() {
             <Row key={i.url} className={k === 1 ? "hidden md:block" : k === 2 ? "hidden lg:block" : ""}>
               <div className="flex items-center gap-2 md:gap-2.5 min-w-0">
                 <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[18px] h-[18px] rounded-[5px] object-cover bg-sand shrink-0" />
-                <span className="font-mono text-[9.5px] text-dim truncate">{i.repo}</span>
+                <span className="font-mono text-[9.5px] text-dim min-w-0 truncate">{i.repo}</span>
                 <span className="font-mono text-[9.5px] text-dim shrink-0">#{i.number}</span>
                 <span className="ml-auto shrink-0 flex items-center gap-1 font-mono text-[9.5px] text-cocoa">
                   <Ic d={DP.star} size={11} /> {fmt(i.stars)}
@@ -301,7 +301,7 @@ function BoardPreview() {
   const Active = PANELS[panel];
   return (
     <div className="board-ring">
-      <figure className="bg-card/70 backdrop-blur-[2px] rounded-[14px] p-2.5 sm:p-3 md:p-[14px] shadow-lift">
+      <figure className="bg-card/70 backdrop-blur-[2px] rounded-[14px] p-1.5 sm:p-3 md:p-[14px] shadow-lift">
         <div className="md:aspect-[16/9] overflow-hidden rounded-[10px] border border-line bg-paper flex flex-col text-left">
           {/* app top bar */}
           <div className="shrink-0 h-[40px] md:h-[44px] flex items-center gap-2.5 px-3 md:px-3.5 border-b border-line bg-card">
@@ -329,7 +329,7 @@ function BoardPreview() {
           <div className="flex-1 min-h-0 flex flex-col md:flex-row">
             {/* the rail: real buttons, real panels */}
             <nav aria-label="Preview sections"
-              className="shrink-0 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible md:w-[176px] md:border-r border-line md:bg-sand px-2.5 md:px-2.5 py-2 md:py-3 border-b md:border-b-0">
+              className="hero-rail shrink-0 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible md:w-[176px] md:border-r border-line md:bg-sand px-2.5 md:px-2.5 py-2 md:py-3 border-b md:border-b-0">
               {RAIL.map((it) => {
                 const on = it.id === panel;
                 return (
@@ -407,9 +407,9 @@ export default function HomeHero() {
           Open source discovery for GitHub developers
         </span>
 
-        <h1 className="font-display font-extrabold tracking-[-.03em] leading-[1.04] mt-6 text-[clamp(38px,6vw,74px)] max-[700px]:mt-5 max-[700px]:text-[clamp(32px,9.4vw,40px)]">
+        <h1 className="font-display font-extrabold tracking-[-.03em] leading-[1.04] mt-6 text-[clamp(38px,6vw,74px)] max-[700px]:mt-5 max-[700px]:text-[clamp(29px,7.9vw,35px)] max-[700px]:leading-[1.06] max-[700px]:tracking-[-.025em]">
           <span className="block reveal" style={{ animationDelay: ".08s" }}>Discover open source.</span>
-          <span className="block reveal" style={{ animationDelay: ".2s" }}>Ship what <Word>matters</Word>.</span>
+          <span className="block reveal max-[700px]:mt-1" style={{ animationDelay: ".2s" }}>Ship what <Word>matters</Word>.</span>
         </h1>
 
         <p className="reveal mx-auto mt-4 max-w-[560px] text-cocoa text-[15.5px] leading-[1.6] max-[700px]:mt-3 max-[700px]:text-[14px] max-[700px]:leading-[1.55]" style={{ animationDelay: ".34s" }}>

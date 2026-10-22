@@ -140,7 +140,7 @@ export const PROGRAMS: Program[] = [
      a stipend. ── */
   {
     id: "24pr", name: "24 Pull Requests", owner: "24pullrequests",
-    img: "/assets/prog/graphite.svg", url: "https://24pullrequests.com",
+    img: "/assets/prog/24pr.svg", url: "https://24pullrequests.com",
     tag: "One pull request a day through December, given back to the projects you use.",
     pay: "No prize", payNote: "GIFT TO MAINTAINERS",
     status: "upcoming", window: "Runs 1 - 24 December",
@@ -152,7 +152,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "fossee", name: "FOSSEE Summer Fellowship", owner: "fossee",
-    img: "/assets/prog/graphite.svg", url: "https://fossee.in/fellowship/2026",
+    img: "/assets/prog/fossee.svg", url: "https://fossee.in/fellowship/2026",
     tag: "IIT Bombay mentored fellowship on FLOSS tooling: Scilab, Python, Oxide and more.",
     pay: "Unpaid", payNote: "NO HONORARIUM",
     status: "closed", window: "2026 cycle completed 8 June",
@@ -165,7 +165,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     id: "vercel-oss", name: "Vercel Open Source Program", owner: "vercel",
-    img: "/assets/prog/graphite.svg", url: "https://vercel.com/open-source-program",
+    img: "/assets/prog/vercel-oss.svg", url: "https://vercel.com/open-source-program",
     tag: "Platform credits and hosting for maintained projects - a grant for maintainers, not contributors.",
     pay: "$3,600 credits", payNote: "PER PROJECT / QUARTER",
     status: "closed", window: "Applications reopen next quarter",

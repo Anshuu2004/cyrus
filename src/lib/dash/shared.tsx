@@ -68,14 +68,18 @@ export const greet = () => {
 };
 
 /* ── the board's own pages. Everything else lives outside it. ───── */
-export type FeatureId = "issues" | "repos" | "matcher" | "mentors" | "compare" | "gitstart" | "settings";
+export type FeatureId = "issues" | "repos" | "calendar" | "matcher" | "mentors" | "compare" | "gitstart" | "drafts" | "analyser" | "demand" | "settings";
 export const FEATURES: { id: FeatureId; title: string; icon: string; desc: string }[] = [
   { id: "issues", title: "My Issues", icon: "issue", desc: "Every issue you took, held at the stage you left it: saved, interested, working, done." },
   { id: "repos", title: "My Repositories", icon: "repo", desc: "The repositories you follow, with the stars, open issues and last update that decide where you contribute." },
+  { id: "calendar", title: "Season calendar", icon: "calendar", desc: "Application windows and coding periods for all thirteen programs on one grid, with Google Calendar and .ics export." },
   { id: "matcher", title: "Co-pilot matcher", icon: "spark", desc: "Pick the skills you already have; it shortlists catalog repositories asking for exactly those, with their open issues." },
   { id: "mentors", title: "Mentor finder", icon: "target", desc: "Search the people who actually mentored a GSoC project, by name, organization or technology, straight from the archive." },
   { id: "compare", title: "Compare orgs", icon: "layers", desc: "Two organizations, every public number we track for them, side by side - stars, repos, issues and the programs each runs." },
   { id: "gitstart", title: "Git initializer", icon: "code", desc: "Paste the issue you claimed and get the seven commands that turn it into a branch, a commit and an open pull request." },
+  { id: "drafts", title: "Draft studio", icon: "file", desc: "Write the four files a repository is judged on - README, CONTRIBUTING, LICENSE and CODE_OF_CONDUCT - and download them clean." },
+  { id: "analyser", title: "Repo analyser", icon: "pulse", desc: "Any public repository, read live from GitHub: activity, open work, maintainer load and whether it is ready for a first contributor." },
+  { id: "demand", title: "Demand radar", icon: "star", desc: "What five years of accepted projects actually asked for - technologies, organizations and scale, counted from the archive." },
   { id: "settings", title: "Settings", icon: "settings", desc: "Theme, what the board holds about you, and a way to delete everything it remembers." },
 ];
 export const featureBy = (id: string) => FEATURES.find((f) => f.id === id);
@@ -118,4 +122,5 @@ export const DP: Record<string, string> = {
   download: "M12 4v11m0 0-4-4m4 4 4-4M4 19h16",
   link: "M10 13.5a3.5 3.5 0 0 0 5 0l3-3a3.54 3.54 0 0 0-5-5l-1 1M14 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.54 3.54 0 0 0 5 5l1-1",
   spark: "M12 4l1.7 4.9L18.6 10l-4.9 1.7L12 16.6l-1.7-4.9L5.4 10l4.9-1.4L12 4z",
+  file: "M14 3v5h5M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8l-5-5zM9 13h6M9 16.5h4",
 };

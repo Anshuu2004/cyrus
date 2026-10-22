@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { PROGRAMS } from "../data/orgs";
 import { avatarOf, fmt } from "../lib/util";
+import { useRosterIndex } from "../lib/programRoster";
 import { btn, Chip, OrgImg, Word } from "../components/ui";
 import type { Program } from "../lib/types";
 
@@ -34,7 +35,7 @@ const STATUS_PILL: Record<Program["status"], string> = {
 };
 
 /* ── one program card ─────────────────────────────────────────── */
-function ProgCard({ p }: { p: Program }) {
+function ProgCard({ p, roster }: { p: Program; roster?: RosterSlot }) {
   const archived = ARCHIVE_OF[p.id];
   return (
     <article className="group bg-card border border-line rounded-[20px] overflow-hidden flex flex-col shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift hover:border-accent/45">
@@ -56,6 +57,9 @@ function ProgCard({ p }: { p: Program }) {
           <Chip tone="blue">{p.slots}</Chip>
         </div>
         <p className="font-mono text-[10px] tracking-[.09em] uppercase text-dim">{p.window}</p>
+        <p className="font-mono text-[10px] tracking-[.09em] uppercase -mt-1.5 text-accent/80">
+          {roster ? `${fmt(roster.orgs)} orgs listed · ${roster.source}` : "Roster not published"}
+        </p>
         <div className="flex items-center gap-3 mt-auto pt-3 border-t border-liness">
           <Link to={`/programs/${p.id}`} className="text-[12.5px] font-bold text-accent hover:text-rust transition-colors">Program page</Link>
           <Link to={archived ? `/projects?prog=${encodeURIComponent(archived)}` : "/projects"}
@@ -68,10 +72,11 @@ function ProgCard({ p }: { p: Program }) {
   );
 }
 
-/* ── five-year archive band, counted from the JSON files ──────── */
+/* ── the participation record for all thirteen programs ─────── */
 type YearGrid = Map<string, Map<number, number>>;
+type RosterSlot = { orgs: number; projects: number; source: "archive" | "topics" };
 
-function ArchiveBand({ grid, loading }: { grid: YearGrid | null; loading: boolean }) {
+function ArchiveBand({ grid, loading, roster }: { grid: YearGrid | null; loading: boolean; roster: Record<string, RosterSlot> }) {
   const years = useMemo(() => {
     if (!grid) return [2026, 2025, 2024, 2023, 2022];
     const set = new Set<number>();
@@ -82,46 +87,59 @@ function ArchiveBand({ grid, loading }: { grid: YearGrid | null; loading: boolea
   const total = (name: string) =>
     grid ? [...(grid.get(name)?.values() ?? [])].reduce((a, b) => a + b, 0) : 0;
 
+  const orgTotal = Object.values(roster).reduce((s, r) => s + r.orgs, 0);
+
   return (
     <section className="bg-card border border-line rounded-[22px] p-[22px] shadow-soft overflow-x-auto">
       <div className="flex items-end justify-between gap-4 flex-wrap mb-5">
         <div>
           <h2 className="panel-h text-[18px]">Five years of <Word>accepted projects</Word></h2>
-          <p className="text-cocoa text-[12.5px] mt-1.5 max-w-[620px] leading-[1.6]">
-            Every mentored project in the archive, counted by program and cycle. Pick a cell to open
-            that slice in the projects listing - the filters come pre-set.
+          <p className="text-cocoa text-[12.5px] mt-1.5 max-w-[680px] leading-[1.6]">
+            Every program we track, with the organizations it actually named and the projects it
+            actually accepted. Pick a number to open that slice - the org count opens the roster on
+            the program page. Where an organizer publishes nothing, the row says so.
           </p>
         </div>
         <Link to="/projects" className={btn("outline", "sm")}>Browse the whole archive</Link>
       </div>
-      <table className="w-full border-collapse min-w-[560px]">
+      <table className="w-full border-collapse min-w-[680px]">
         <thead>
           <tr>
             <th className="text-left font-mono text-[9.5px] uppercase tracking-[.12em] text-dim pb-2.5 font-medium">Program</th>
+            <th className="font-mono text-[9.5px] uppercase tracking-[.12em] text-accent pb-2.5 font-medium text-right">Orgs</th>
             {years.map((y) => (
               <th key={y} className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim pb-2.5 font-medium text-right">
                 {loading ? "…" : y}
               </th>
             ))}
-            <th className="font-mono text-[9.5px] uppercase tracking-[.12em] text-accent pb-2.5 font-medium text-right">Total</th>
+            <th className="font-mono text-[9.5px] uppercase tracking-[.12em] text-dim pb-2.5 font-medium text-right">Projects</th>
           </tr>
         </thead>
         <tbody>
-          {[...PROGRAMS].filter((p) => ARCHIVE_OF[p.id]).map((p) => {
+          {PROGRAMS.map((p) => {
             const name = ARCHIVE_OF[p.id];
-            const byYear = grid?.get(name);
+            const byYear = name ? grid?.get(name) : undefined;
+            const r = roster[p.id];
             return (
               <tr key={p.id} className="border-t border-liness">
-                <td className="py-2.5">
+                <td className="py-2.5 pr-3">
                   <Link to={`/programs/${p.id}`} className="text-[13px] font-semibold text-ink hover:text-accent transition-colors">
                     {p.name}
                   </Link>
+                </td>
+                <td className="text-right py-2.5">
+                  {r ? (
+                    <Link to={`/programs/${p.id}`} title={`${r.source === "archive" ? "Counted from accepted projects" : "Counted from GitHub topics"}`}
+                      className="font-mono text-[12.5px] font-bold text-accent hover:text-rust transition-colors tabular-nums">
+                      {fmt(r.orgs)}
+                    </Link>
+                  ) : <span className="font-mono text-[10px] uppercase tracking-[.08em] text-dim/70">none</span>}
                 </td>
                 {years.map((y) => {
                   const n = byYear?.get(y) ?? 0;
                   return (
                     <td key={y} className="text-right py-2.5">
-                      {n > 0 ? (
+                      {n > 0 && name ? (
                         <Link to={`/projects?prog=${encodeURIComponent(name)}&year=${y}`}
                           className="font-mono text-[12.5px] text-cocoa hover:text-accent transition-colors tabular-nums">
                           {fmt(n)}
@@ -130,8 +148,8 @@ function ArchiveBand({ grid, loading }: { grid: YearGrid | null; loading: boolea
                     </td>
                   );
                 })}
-                <td className="text-right py-2.5 font-mono text-[12.5px] font-bold text-accent tabular-nums">
-                  {loading ? "…" : fmt(total(name))}
+                <td className="text-right py-2.5 font-mono text-[12.5px] font-bold text-cocoa tabular-nums">
+                  {name ? (loading ? "…" : fmt(total(name))) : r ? fmt(r.projects) : <span className="text-dim/60 font-normal">–</span>}
                 </td>
               </tr>
             );
@@ -141,7 +159,7 @@ function ArchiveBand({ grid, loading }: { grid: YearGrid | null; loading: boolea
       <p className="font-mono text-[10px] uppercase tracking-[.11em] text-dim mt-4">
         {loading
           ? "Counting the archive…"
-          : <>All counts read live from the archive files - <b className="text-cocoa">{fmt(total("GSoC") + total("LFX") + total("Outreachy") + total("Summer of Bitcoin"))}</b> projects in five cycles.</>}
+          : <>Org and project counts read from the archive files - <b className="text-cocoa">{fmt(orgTotal)}</b> distinct organizations across <b className="text-cocoa">{fmt(total("GSoC") + total("LFX") + total("Outreachy") + total("Summer of Bitcoin"))}</b> accepted projects. The {PROGRAMS.length - Object.keys(roster).length} programs with no public roster say so on their page instead of guessing.</>}
       </p>
     </section>
   );
@@ -150,6 +168,7 @@ function ArchiveBand({ grid, loading }: { grid: YearGrid | null; loading: boolea
 export default function Programs() {
   const [status, setStatus] = useState("all");
   const [grid, setGrid] = useState<YearGrid | null>(null);
+  const rst = useRosterIndex();
 
   useEffect(() => {
     let go = true;
@@ -196,7 +215,8 @@ export default function Programs() {
       </h1>
       <p className="text-ink font-medium max-w-[720px] text-[16.5px] leading-[1.6]">
         Mentored seasons with real stipends and a public record - {PROGRAMS.length} tracked programs,{" "}{live} in
-        session right now. Open any card for the calendar, the pay bands and who it is for.
+        session right now. Every page carries the organizations that took part and the projects they
+        accepted, counted from the archive rather than estimated.
       </p>
 
       {/* status filter */}
@@ -210,10 +230,13 @@ export default function Programs() {
           </button>
         ))}
       </div>
+      {!rst.ready && (
+        <p className="font-mono text-[10.5px] uppercase tracking-[.11em] text-dim mt-3">Loading the participation record…</p>
+      )}
 
       {/* the cards */}
       <div className="grid grid-cols-3 gap-5 mt-7 max-[1100px]:grid-cols-2 max-[680px]:grid-cols-1">
-        {list.map((p) => <ProgCard key={p.id} p={p} />)}
+        {list.map((p) => <ProgCard key={p.id} p={p} roster={rst.byId[p.id]} />)}
       </div>
       {list.length === 0 && (
         <p className="text-cocoa text-[14px] mt-10">Nothing in that bucket this cycle - try "Everything".</p>
@@ -221,7 +244,7 @@ export default function Programs() {
 
       {/* five-year archive */}
       <div className="mt-14">
-        <ArchiveBand grid={grid} loading={grid === null} />
+        <ArchiveBand grid={grid} loading={grid === null} roster={rst.byId} />
       </div>
 
       {/* close */}

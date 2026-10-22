@@ -52,3 +52,27 @@ export function programsOf(login: string): Assoc[] {
 
 /* every program key some tracked org actually runs, in badge order */
 export const PROGRAM_FILTERS: Assoc[] = Object.values(PROGRAM_BY_KEY).map((p) => ({ ...p, n: 0 }));
+
+/* ── the same record read the other way round ─────────────────
+   program id -> the organizations whose tracked repositories
+   advertise that program through their GitHub topics. Only the
+   programs with no public project archive need this, because for
+   those the topic tag is the only honest evidence we hold. */
+export type TopicOrg = { login: string; n: number };
+
+const byProgram = new Map<string, TopicOrg[]>();
+for (const [login, keys] of acc) {
+  for (const [key, n] of keys) {
+    const id = PROGRAM_BY_KEY[key]?.id;
+    if (!id) continue;
+    const list = byProgram.get(id) ?? [];
+    list.push({ login, n });
+    byProgram.set(id, list);
+  }
+}
+for (const list of byProgram.values()) list.sort((a, b) => b.n - a.n || a.login.localeCompare(b.login));
+
+export function topicOrgsOf(id: string): TopicOrg[] {
+  return byProgram.get(id) ?? [];
+}
+

@@ -366,6 +366,27 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
   border-color: color-mix(in srgb, var(--color-coffee) 24%, transparent);
 }
 
+/* ── the stage on a phone ─────────────────────────────────────
+   Three nested rectangles cost a phone about 90px of width, which leaves
+   the console too narrow to read its own rows. Below 700px the landscape
+   goes edge to edge and the console sits inside it with one small inset,
+   so the window gets the whole screen and the photograph still shows
+   above and below it. The registration dashes are a desktop detail and
+   are dropped rather than squeezed. */
+@media (max-width: 700px) {
+  .hero-stage > div { padding-left: 0; padding-right: 0; }
+  .hero-field { border: 0; border-radius: 0; padding: 0; }
+  .hero-field::before, .hero-field::after, .hero-field .mark { display: none; }
+  .hero-photo { border-left: 0; border-right: 0; border-radius: 0; }
+  .hero-photo-inner { padding: 15px 13px 17px; }
+  .board-ring::before { inset: -7px; border-radius: 15px; }
+  /* the rail scrolls, so say so instead of cutting a label in half */
+  .hero-rail {
+    -webkit-mask-image: linear-gradient(90deg, #000 0 calc(100% - 30px), transparent 100%);
+            mask-image: linear-gradient(90deg, #000 0 calc(100% - 30px), transparent 100%);
+  }
+}
+
 /* the other two corners of the registration frame: .frame draws the
    top-left and bottom-right with pseudo-elements, and the markup adds a
    pair of marks for the corners it cannot reach. */

@@ -180,7 +180,7 @@ export default function Sponsors() {
       {/* ── the directory ──────────────────────────────────────── */}
       <div className={`${W} mt-5`}>
         {shown.length ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [&>*]:min-w-0">
             {shown.map((f) => <FundCard key={f.repo} f={f} />)}
           </div>
         ) : data ? (
@@ -191,7 +191,7 @@ export default function Sponsors() {
             <button type="button" onClick={() => { setQ(""); setPlat("all"); write({ q: "", plat: "all" }); }} className={btn("outline", "sm", "mt-4")}>Show everything</button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [&>*]:min-w-0">
             {Array.from({ length: 9 }).map((_, i) => <div key={i} className="h-[228px] rounded-[18px] border border-line bg-card/40 animate-pulse" />)}
           </div>
         )}

@@ -158,7 +158,7 @@ function MentorsSection() {
   return (
     <Card>
       <DashHead title="Mentor finder" sub={rows ? `${shown.length} of ${fmt(mentors?.length ?? 0)} people who actually mentored a GSoC project, searchable by name or organization.` : "Reading the mentor names out of the project archive."} />
-      <div className="grid md:grid-cols-[1fr_220px] gap-3 mt-6">
+      <div className="grid md:grid-cols-[1fr_220px] gap-3 mt-6 [&>*]:min-w-0">
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-dim"><Ic d={DP.search} size={14} /></span>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="mentor or organization…" className={fin} />
@@ -171,7 +171,7 @@ function MentorsSection() {
       {!mentors ? (
         <div className="grid gap-2 mt-5">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-[58px] rounded-[12px] border border-line bg-cream/40 animate-pulse" />)}</div>
       ) : shown.length ? (
-        <div className="grid gap-2 mt-5">
+        <div className="grid gap-2 mt-5 [&>*]:min-w-0">
           {shown.map((m) => (
             <div key={m.name} className="flex items-center gap-3 rounded-[12px] border border-line bg-cream px-3.5 py-3 flex-wrap">
               <span className="min-w-0 flex-1 basis-[200px]">
