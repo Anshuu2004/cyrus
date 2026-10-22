@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="docs/readme/hero.svg" alt="cyrus.ai - agent skills, open-source programs and hackathons in one self-refreshing catalog" width="100%"/>
+  <img src="docs/readme/hero.svg" alt="cyrus.ai - agent skills, open-source programs and real open issues in one self-refreshing catalog" width="100%"/>
 </p>
 
 <h1 align="center">cyrus.ai</h1>
 
 <p align="center">
-  <b>The developer-program platform.</b> 1,528 AI-agent repos, 6,682 open-source program projects and 161 live hackathons - one warm, fast, self-refreshing catalog on Next.js 16 with <b>real OAuth sign-in</b> and a <b>full server backend on Neon Postgres</b>.
+  <b>The developer-program platform.</b> 1,528 AI-agent repos, 6,682 open-source program projects and 40,017 real open issues - one warm, fast, self-refreshing catalog on Next.js 16 with <b>real OAuth sign-in</b> and a <b>full server backend on Neon Postgres</b>.
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/repos_indexed-1%2C528-c9683f?style=for-the-badge" alt="Repos indexed"/></a>
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/stars_tracked-33.8M-7f9a4e?style=for-the-badge" alt="Stars tracked"/></a>
   <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/program_projects-6%2C682-a1739b?style=for-the-badge" alt="Program projects"/></a>
-  <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/hackathons-161-4e8f6b?style=for-the-badge" alt="Hackathons"/></a>
+  <a href="#-by-the-numbers"><img src="https://img.shields.io/badge/open_issues-40%2C017-4e8f6b?style=for-the-badge" alt="Open issues indexed"/></a>
   <img src="https://img.shields.io/badge/snapshot-3_Oct_2026-221a13?style=for-the-badge" alt="Data snapshot"/>
 </p>
 
@@ -32,7 +32,7 @@
   <table>
     <tr>
       <td align="center"><b>🚀 Start</b><br/><a href="https://cyrus-agent.vercel.app">Open the site</a><br/><a href="#-quick-start">Run locally</a><br/><a href="#-deploy-on-vercel">Deploy</a></td>
-      <td align="center"><b>🧭 Explore</b><br/><a href="https://cyrus-agent.vercel.app/projects">Skills catalog</a><br/><a href="https://cyrus-agent.vercel.app/hackathons">Hackathon board</a><br/><a href="https://cyrus-agent.vercel.app/opensource">Programs explorer</a></td>
+      <td align="center"><b>🧭 Explore</b><br/><a href="https://cyrus-agent.vercel.app/issues">Issue finder</a><br/><a href="https://cyrus-agent.vercel.app/skills">Skills catalog</a><br/><a href="https://cyrus-agent.vercel.app/programs">Programs explorer</a></td>
       <td align="center"><b>🔌 Data &amp; auth</b><br/><a href="#%EF%B8%8F-architecture">Refresh pipeline</a><br/><a href="#-sign-in-actually-real">OAuth design</a><br/><a href="#-see-it-in-action">Screenshot tour</a></td>
     </tr>
   </table>
@@ -45,12 +45,13 @@
 > **Works like a product, ships like a static site.**
 
 - **One catalog for the whole agent boom** - skills, Cursor rules, AGENTS.md files, MCP servers and dev agents: all 1,528 of them, filterable, with their real GitHub stats, downloadable as JSON.
-- **Programs, not guesswork** - 6,682 mentored open-source projects (5,238 GSoC 2021-2025, 941 LFX, 503 Outreachy and Season of Bots) across 402 organizations with thousands of tech tags, plus deep-dives on all 10 tracked programs (GSoC, GSSoC, LFX, Outreachy, Eclipse SoC, MLH, Season of KDE, Hacktoberfest, Summer of Bitcoin, Nexus Spring of Code).
-- **Never miss a build window** - 161 hackathons (18 curated + 143 live Devpost listings) with deadlines, prize pools, cover art and prep playbooks.
-- **A dashboard that remembers you** - saved projects and organizations, a watchlist, mentor finder, org matcher, org comparison and a personal "next steps" checklist, all stored locally until you sign in.
-- **nova.ai** - the in-site recommender: describe what you want to build, get the skills, orgs and programs that fit, with reasoning.
+- **Programs, not guesswork** - 6,682 mentored open-source projects (5,238 GSoC 2022-2026, plus LFX, Outreachy, Code Across and MLH) across 402 organizations with thousands of tech tags, plus deep-dives on all 10 tracked programs (GSoC, GSSoC, LFX, Outreachy, Eclipse SoC, MLH, Season of KDE, Hacktoberfest, Summer of Bitcoin, Nexus Spring of Code).
+- **40,017 real open issues** - the Issue Finder crawls good-first-issue and help-wanted labels across the catalog with GitHub Search API, then filters by language, label, size and how recently each repo merged a PR.
+- **Follow the money** - the Sponsors directory reads `.github/FUNDING.yml` from the top 260 catalog repos by stars and lists the 82 that actually take funding, with the right link to fund each one.
+- **Proof over promises** - the PR Leaderboard ranks contributors from merged pull requests on real repos, not self-reported points.
+- **A dashboard that works** - saved issues and repositories, plus four tools built on the same datasets: a co-pilot matcher (language + interest to repo fits), a mentor finder (over the GSoC archive), an org comparison, and a git-start script generator from any issue URL.
 - **Real sign-in** - Google OIDC and GitHub OAuth with PKCE, verified end to end. No fake "demo mode".
-- **A real backend, not a mock** - 13 Next.js route handlers, 18 endpoints and a 12-table Drizzle schema on Neon Postgres: signed-cookie sessions, cross-device saved items, applications, submissions, a catalog query API and the Co-pilot assistant proxy. [The backend](#-the-backend) has the details, including what is switched on by env vars.
+- **A real backend, not a mock** - 13 Next.js route handlers with signed-cookie sessions, cross-device saved items, applications, submissions and a catalog query API on Neon Postgres. [The backend](#-the-backend) has the details, including what is switched on by env vars.
 - **Static where it should be** - typed JSON snapshots are checked into the repo and regenerated by scripts, so catalog pages prerender and the first paint needs no server round trip.
 
 ## 📸 See it in action
@@ -63,47 +64,47 @@ Every shot below is the live site, captured at 1440px in the light theme.
     <td width="50%"><img src="docs/readme/shots/projects.png" alt="Skills catalog" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Home</b> - warm editorial start with search, program shelves and the org marquee</td>
+    <td align="center"><b>Home</b> - the editorial hero, a live look at the issue board and the org marquee</td>
     <td align="center"><b>Skills catalog</b> - 1,528 repos with a filter rail, live stats and JSON export</td>
   </tr>
   <tr>
-    <td><img src="docs/readme/shots/opensource.png" alt="Programs explorer" width="100%"/></td>
-    <td><img src="docs/readme/shots/hackathons.png" alt="Hackathon board" width="100%"/></td>
+    <td><img src="docs/readme/shots/issues.png" alt="Issue finder" width="100%"/></td>
+    <td><img src="docs/readme/shots/programs.png" alt="Programs" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Programs explorer</b> - 6,682 mentored projects, filter by year, org and tech</td>
-    <td align="center"><b>Hackathon board</b> - deadlines, prize pools and cover art for 161 events</td>
+    <td align="center"><b>Issue finder</b> - 40,017 real open issues, filtered by label, language and difficulty</td>
+    <td align="center"><b>Programs</b> - 13 funded programs with calendars, pay bands and project archives</td>
   </tr>
   <tr>
     <td><img src="docs/readme/shots/organizations.png" alt="Organizations" width="100%"/></td>
-    <td><img src="docs/readme/shots/home-orgs.png" alt="Popular organizations marquee" width="100%"/></td>
+    <td><img src="docs/readme/shots/sponsors.png" alt="Sponsors directory" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Organization intel</b> - 43 real GitHub orgs with live stats and program history</td>
-    <td align="center"><b>Popular organizations</b> - the two-row drifting marquee on the home page</td>
+    <td align="center"><b>Organization intel</b> - 43 real GitHub orgs with live stats and GSoC / LFX / MLH badges</td>
+    <td align="center"><b>Sponsors directory</b> - the 82 catalog repos that take funding, straight from their FUNDING.yml</td>
   </tr>
   <tr>
     <td><img src="docs/readme/shots/dashboard.png" alt="Signed-in dashboard" width="100%"/></td>
-    <td><img src="docs/readme/shots/nova.png" alt="nova.ai recommender" width="100%"/></td>
+    <td><img src="docs/readme/shots/leaderboard.png" alt="PR Leaderboard" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Dashboard</b> - signed-in home: saved shelf, checklist, deadlines and pulse strip</td>
-    <td align="center"><b>nova.ai</b> - describe a build, get matched skills, orgs and programs with reasons</td>
+    <td align="center"><b>Dashboard</b> - signed-in home with saved issues, tracked repos and four working tools</td>
+    <td align="center"><b>PR Leaderboard</b> - contributors ranked from merged pull requests on real repos</td>
   </tr>
   <tr>
-    <td><img src="docs/readme/shots/resources.png" alt="Learning resources" width="100%"/></td>
-    <td><img src="docs/readme/shots/home-stories.png" alt="Developer stories" width="100%"/></td>
+    <td><img src="docs/readme/shots/tools.png" alt="Dashboard tools" width="100%"/></td>
+    <td><img src="docs/readme/shots/archive.png" alt="Project archive" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Resources</b> - 58 first-party learning picks with why-and-when notes</td>
-    <td align="center"><b>Developer stories</b> - the testimonial wall drifting on coffee brown</td>
+    <td align="center"><b>Dashboard tools</b> - the co-pilot matcher shortlisting repos and live issues</td>
+    <td align="center"><b>Project archive</b> - 6,682 mentored projects, filter by year, org and tech</td>
   </tr>
   <tr>
     <td><img src="docs/readme/shots/platform-features.png" alt="Platform features" width="100%"/></td>
     <td><img src="docs/readme/shots/about.png" alt="About page with companies band" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Platform / Features</b> - one of four marketing pages under <code>/platform/*</code></td>
+    <td align="center"><b>Platform / Features</b> - one of three marketing pages under <code>/platform/*</code></td>
     <td align="center"><b>About</b> - the orbit hero, capability cards and the companies band</td>
   </tr>
 </table>
@@ -115,12 +116,13 @@ Dark mode is one click away in the header - the same warm palette, roasted.
 | Section | Size | Source of truth |
 |---|---:|---|
 | Agent-skills catalog | **1,528 repos** · 33.79M stars · 4.61M forks | GitHub REST via `gh api` |
-| Open-source programs | **6,682 projects** · 402 orgs · 3,075 tags | GSoC archive (2021-2025) + LFX + Outreachy + SoB |
+| Open-source programs | **6,682 projects** · 402 orgs · 3,075 tags | GSoC archive (2022-2026, 5,238) + other programs (LFX / Outreachy / Code Across / MLH, 1,444) |
+| Good-first issues board | **40,017 open issues** across the catalog | GitHub Search API via `scripts/build-issue-index.mjs` |
+| Sponsors directory | **82 funded repos**, found in the top 260 by stars | `.github/FUNDING.yml`, read repo by repo |
 | Program deep dives | **10** full stat pages | `src/data/programDetails.ts` |
-| Hackathon board | **161 events** (18 curated + 143 live) | `devpost.com/api/hackathons` |
 | Organization intel | **43** live org profiles | `scripts/fetch-orgs.mjs` |
-| Learning resources | **58** first-party picks | curated |
-| Routes | **27** page routes + 13 API handlers (18 endpoints) | `src/app/` (App Router) |
+| Dashboard tools | 7 features - issues, repos, matcher, mentors, compare, git-start, settings | the datasets above, in the browser |
+| Routes | **21** page routes + 13 API handlers | `src/app/` (App Router) |
 
 ### What the catalog is made of
 
@@ -153,20 +155,23 @@ Dark mode is one click away in the header - the same warm palette, roasted.
 - **Living shelves** - counter-drifting marquees for organizations and developer stories, hover to pause, click through to the real profile.
 - **Clear section seams** - full-bleed hairline rules divide every marketing section, tuned to stay visible in the light theme.
 - **Repo detail that answers questions** - stats, tags, related projects and an honest "why this is here" note on every listing.
-- **Self-refreshing data** - `npm run refresh` re-pulls Devpost and the catalog; `npm run orgs` regenerates org intel from live GitHub. Both stamp this README with the newest repository `updated` date in `src/data/repos.ts`, not the refresh date.
+- **Self-refreshing data** - `npm run refresh` re-pulls the GSoC archive; `npm run orgs` regenerates org intel from live GitHub; `node scripts/build-issue-index.mjs` re-crawls the issue snapshot. Refresh stamps this README with the newest repository `updated` date in `src/data/repos.ts`, not the refresh date.
 
 ## 🗺 Pages
 
 | Route | What it is |
 |---|---|
-| `/` | Warm editorial home: programs, hackathon shelves, org marquee, stories, FAQ |
-| `/organizations` · `/organizations/:login` | 43 real GitHub orgs with live stats and program participation |
-| `/opensource` · `/programs/:id` | listing of 6,682 mentored projects, filter by year / org / tech |
-| `/hackathons` · `/hackathons/:id` | Deadlines, prize pools, prep playbooks and "The brief" panel |
-| `/projects` | The 1,528-repo agent-skills catalog, downloadable |
-| `/resources` · `/resources/:id` | 58 first-party learning resources with why/use notes |
-| `/dashboard` · `/nova` | Signed-in home + the nova.ai recommender |
-| `/platform/features` · `/platform/nova` · `/platform/trust` · `/platform/how` | Marketing pages for the platform, nova.ai and the trust centre |
+| `/` | Warm editorial home: interactive hero, programs, contribution timeline, org marquee, skills, stories, FAQ |
+| `/issues` | Good-first-issue finder over 40,017 real open issues - labels, languages, orgs, difficulty |
+| `/organizations` · `/organizations/:login` | 43 real GitHub orgs with live stats and GSoC / LFX / MLH program badges |
+| `/leaderboard` | Real contributor rankings from merged pull requests |
+| `/projects` | The 6,682-project mentored-program archive (2022-2026), filter by year / org / tech |
+| `/programs` · `/programs/:id` | 13 funded programs - calendars, pay bands, who they are for, and their project archives |
+| `/skills` | The 1,528-repo agent-skills catalog, filterable and downloadable |
+| `/sponsors` | 82 catalog repos that actually take funding, read from their FUNDING.yml |
+| `/dashboard` | Signed-in home - saved issues, tracked repos, and the setup checklist |
+| `/dashboard/matcher` · `/mentors` · `/compare` · `/gitstart` | Co-pilot matcher, mentor finder, org compare, and the git-start script generator |
+| `/platform/features` · `/platform/how` · `/platform/trust` | Marketing pages for the platform and the trust centre |
 | `/about` | The story, the method and the companies behind the index |
 | `/repo/:id` | Repo detail with stats, tags and related projects |
 | `/privacy` · `/terms` · `/cookies` · `/affiliations` | The honest legal corner |
@@ -184,8 +189,9 @@ npm run dev                 # http://localhost:5330
 npm run build               # next build (strict tsc runs via npm run check)
 npm test                    # vitest: unit + data-integrity suites
 npm run check               # tsc --noEmit + next build
-npm run refresh             # re-pull Devpost hackathons + catalog data
+npm run refresh             # re-pull the GSoC archive + stamp this README's snapshot date
 npm run orgs                # regenerate realOrgs.ts from live GitHub
+node scripts/build-issue-index.mjs   # re-crawl the 40k good-first-issue snapshot
 npm run gh-relay            # local GitHub token-exchange relay on :8787
 npm run db:push && npm run db:seed   # only with a DATABASE_URL (Neon)
 ```
@@ -239,7 +245,7 @@ sequenceDiagram
 
 ## 🖥️ The backend
 
-cyrus.ai is not a static page with a fake sign-in. The server side is a real Next.js App Router API: **13 route handlers, 18 endpoints, a 12-table Postgres schema** managed by Drizzle, on Neon's serverless driver.
+cyrus.ai is not a static page with a fake sign-in. The server side is a real Next.js App Router API: **13 route handlers and a 12-table Postgres schema** managed by Drizzle, on Neon's serverless driver.
 
 <details>
 <summary><b>Every endpoint, what it does and who may call it</b></summary>
@@ -252,12 +258,12 @@ cyrus.ai is not a static page with a fake sign-in. The server side is a real Nex
 | `/api/auth/email/verify` | POST | Checks the code (6 tries before it burns) and signs the session in | public |
 | `/api/auth/logout` | POST | Clears the session cookie | session |
 | `/api/me` | GET | Current user profile for the dashboard and header avatar | session |
-| `/api/me/saved` | GET · POST · DELETE | Cross-device saved repos, orgs, hackathons, programs and resources | session, own rows only |
+| `/api/me/saved` | GET · POST · DELETE | Cross-device saved repos, orgs and programs | session, own rows only |
 | `/api/me/applications` | GET · POST · PATCH · DELETE | Program applications in progress: status, drafts, notes | session, own rows only |
+| `/api/issues` | GET | Rate-capped search over the 40k-issue snapshot, facets included | public |
 | `/api/catalog/repos` | GET | Catalog rows with filters and paging, straight from the database | public |
 | `/api/catalog/counts` | GET | Live totals the chrome and the README badges quote | public |
 | `/api/submissions` | POST | "Submit a project" intake | public |
-| `/api/assistant` | POST | Co-pilot chat and prompt-builder coaching, proxied to Hugging Face Inference (Llama) when `HF_TOKEN` is set, answered locally otherwise | public |
 | `/api/health` | GET | `{ ok, db, auth, time }` - the deployment probe | public |
 
 </details>
@@ -274,7 +280,7 @@ Two halves, in `src/lib/db/schema.ts`:
 | `saved_items` | what a person starred, unique per `(user, type, item)`, cascaded on user delete |
 | `applications` | program applications with status and free-form notes |
 | `submissions` | projects people ask to have listed |
-| `repos` · `orgs` · `org_repos` · `hackathons` · `program_projects` · `resources` | the catalog mirrored server-side so counts and filters can come from the database instead of a bundle |
+| `repos` · `orgs` · `org_repos` · `hackathons` · `program_projects` · `resources` | the catalog mirrored server-side so counts and filters can come from the database instead of a bundle; `hackathons` and `resources` are legacy tables kept for old rows - no page serves them |
 | `catalog_meta` | snapshot stamp and totals for `/api/catalog/counts` |
 
 Migrations live in `drizzle/`; `npm run db:generate`, `db:push`, `db:migrate`, `db:seed` and `db:studio` are all wired in `package.json`.
@@ -295,32 +301,34 @@ flowchart LR
     subgraph sources [Data sources]
         GH[GitHub API] -->|npm run refresh| D1[src/data/repos.ts]
         GH -->|npm run orgs| D2[src/data/realOrgs.ts]
-        DP[Devpost API] -->|npm run refresh| D3[src/data/hackathonsLive.ts]
-        SOC[GSoC archive] --> D4[public/data/gsoc-projects.json]
+        GH -->|node scripts/build-issue-index.mjs| D3[public/data/issues.json.gz]
+        SOC[GSoC archive + FUNDING.yml] --> D4[public/data/*.json]
     end
     subgraph app [Next.js 16 - App Router, React 19]
-        D1 & D2 & D3 & D4 --> PAGES[27 prerendered routes: Home, /organizations,<br/>/opensource, /hackathons, /projects,<br/>/resources, /dashboard, /nova,<br/>/platform/*, /tools/* ...]
-        API[13 API handlers: auth, me,<br/>catalog, submissions, assistant, health]
+        D1 & D2 & D3 & D4 --> PAGES[21 prerendered routes: Home, /issues,<br/>/skills, /programs, /organizations, /sponsors,<br/>/leaderboard, /dashboard/*, /platform/*, /repo/:id ...]
+        API[13 API handlers: auth, me, issues,<br/>catalog, submissions, health]
     end
     PAGES --> V[(Vercel<br/>cyrus-agent.vercel.app)]
     API --> DB[(Neon Postgres<br/>12-table Drizzle schema)]
 ```
 
-Catalog pages render from typed, checked-in snapshots, so the first paint needs no server. Charts, cover gradients and the nova.ai recommender are computed in-app. The API layer is additive on top of that: it owns sessions, saved items, applications and submissions, and answers 503 with a clear `backend offline` body rather than half-working when its env vars are absent.
+Catalog pages render from typed, checked-in snapshots, so the first paint needs no server. Charts, filters and the four dashboard tools are computed in-app from those same snapshots. The API layer is additive on top of that: it owns sessions, saved items, applications and submissions, and answers 503 with a clear `backend offline` body rather than half-working when its env vars are absent.
 
 ```
 src/
-├── app/          App Router: route folders + 13 API route handlers
-├── views/        19 page components (Home, OpenSource, Hackathons, ...)
-├── components/   chrome, cards, auth modal, platform kit, UI primitives
+├── app/          App Router: 21 pages + 13 API route handlers
+├── views/        19 page components (Home, IssueFinder, Programs, Sponsors, ...)
+├── components/   chrome, cards, auth modal, hero, UI primitives
 ├── lib/          store, router shim, google.ts (OIDC), github.ts (PKCE),
-│                 api.ts (client) and lib/server/ (auth, db, queries, email)
-└── data/         typed dataset snapshots (repos, orgs, hackathons, programs...)
+│                 dash/ (dashboard shell + tools), api.ts (client),
+│                 lib/server/ (auth, db, queries, email, issueIndex)
+└── data/         typed dataset snapshots (repos, orgs, programs, leaderboard...)
+public/data/      issues.json.gz · gsoc-projects.json · sponsors.json · otherProjects.json
 scripts/
-├── refresh.mjs               Devpost + catalog re-pull
+├── refresh.mjs               GSoC archive re-pull + README snapshot stamp
+├── build-issue-index.mjs     GitHub Search API -> the 40k-issue snapshot
+├── build-crawl-data.mjs      catalog crawl -> repos.ts + crawlStats.ts
 ├── fetch-orgs.mjs            live GitHub org intel -> realOrgs.ts
-├── fetch-covers.mjs          hackathon credit/covers pipeline
-├── check-tools.ts            artifact tool dataset integrity check
 ├── github-exchange.local.mjs dev token-exchange relay (:8787)
 └── github-exchange.worker.mjs  Cloudflare Worker relay (static-hosting prod)
 drizzle/                      SQL migrations for the Neon schema
@@ -349,7 +357,7 @@ A `vercel.json` pins the Next.js preset, so importing the repo is all it takes:
 | Auth | Google OIDC · GitHub PKCE · email codes | server routes first, Cloudflare/local relay as static fallback |
 | Database | Neon Postgres + Drizzle ORM | 12 tables: accounts, saved items, applications, submissions and a server-side mirror of the catalog; migrations in `drizzle/` |
 | Sessions | `jose` HS256 JWT | `httpOnly` `sameSite=lax` cookie, 30-day expiry, no session table |
-| AI | Hugging Face Inference | Co-pilot chat and prompt coaching on an open model via `HF_TOKEN`, with a local fallback so the UI never dead-ends |
+| AI | - | the "Co-pilot" is now the matcher tool in the dashboard; the old HF Inference chat endpoint and its `src/lib/server/hf.ts` helper are retired leftovers, not a live feature |
 | Email | Resend | one-tap sign-in codes; only the hash of a code is stored |
 | Tests | Vitest + Playwright | unit/data-integrity suites plus an e2e smoke pass |
 | Charts | hand-rolled SVG | catalog charts, program stats, sparklines - no chart lib |
@@ -362,7 +370,7 @@ This is a solo build that grew into a platform - and it gets better every time s
 **Good first contributions:**
 
 - 📚 **Catalog gaps** - know an agent-skills, MCP or Cursor-rules repo we should index? Open an issue with the `github.com/owner/name` and we'll pull it in on the next refresh.
-- 🏃 **Hackathon spot-checks** - if a deadline or prize pool looks off on the board, a one-line fix to `src/data/` is a perfect first PR.
+- 🏃 **Issue-board spot-checks** - if a repo on the issue finder looks stale, closed or wrongly labelled, a one-line fix to the crawler filters in `scripts/` is a perfect first PR.
 - 🎨 **Design notes** - screenshots of anything that looks off in light or dark mode, at any viewport, are genuinely useful.
 - 📊 **Data plumbing** - the scripts in `scripts/` are plain Node ESM; new sources or smarter merges are always interesting.
 
@@ -396,11 +404,11 @@ Not a code person? The cheapest support with the biggest impact:
 
 1. **Star the repo** - it helps the catalog get discovered by the people who need it.
 2. **Share a screenshot** of your dashboard or your favorite org page - the stories wall on the home page is real and hungry for more.
-3. **Send one link** to a builder who is trying to pick their first program or hackathon.
+3. **Send one link** to a builder who is hunting their first good issue or picking a program.
 
 ## 🙏 Thanks to the data neighbors
 
-Every number on this site belongs to the teams who produced it: Google Summer of Code and its mentoring organizations, the Linux Foundation, Outreachy, Devpost, and the 1,528 open-source repos indexed from GitHub. Each listing links out to its official page.
+Every number on this site belongs to the teams who produced it: Google Summer of Code and its mentoring organizations, the Linux Foundation, Outreachy, MLH, and the 1,528 open-source repos indexed from GitHub. Each listing links out to its official page.
 
 ## 📜 License & credits
 
