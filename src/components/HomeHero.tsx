@@ -402,31 +402,33 @@ export default function HomeHero() {
       <div className="hero-pattern" />
 
       <div className="relative z-[1] max-w-[1060px] mx-auto px-5 sm:px-6 text-center">
-        <span className="reveal inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-[7px] font-mono text-[10.5px] uppercase tracking-[.14em] text-cocoa">
-          <i className="not-italic w-[6px] h-[6px] rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-accent)_22%,transparent)]" />
+        <span className="reveal inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-[7px] font-mono text-[10.5px] uppercase tracking-[.14em] text-cocoa max-[700px]:gap-1.5 max-[700px]:px-3 max-[700px]:py-[6px] max-[700px]:text-[8.5px] max-[700px]:tracking-[.09em]">
+          <i className="not-italic w-[6px] h-[6px] rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-accent)_22%,transparent)] max-[700px]:w-[5px] max-[700px]:h-[5px]" />
           Open source discovery for GitHub developers
         </span>
 
-        <h1 className="font-display font-extrabold tracking-[-.03em] leading-[1.04] mt-6 text-[clamp(38px,6vw,74px)]">
+        <h1 className="font-display font-extrabold tracking-[-.03em] leading-[1.04] mt-6 text-[clamp(38px,6vw,74px)] max-[700px]:mt-5 max-[700px]:text-[clamp(32px,9.4vw,40px)]">
           <span className="block reveal" style={{ animationDelay: ".08s" }}>Discover open source.</span>
           <span className="block reveal" style={{ animationDelay: ".2s" }}>Ship what <Word>matters</Word>.</span>
         </h1>
 
-        <p className="reveal mx-auto mt-4 max-w-[560px] text-cocoa text-[15.5px] leading-[1.6]" style={{ animationDelay: ".34s" }}>
+        <p className="reveal mx-auto mt-4 max-w-[560px] text-cocoa text-[15.5px] leading-[1.6] max-[700px]:mt-3 max-[700px]:text-[14px] max-[700px]:leading-[1.55]" style={{ animationDelay: ".34s" }}>
           {fmt(CRAWL.issues)} real open issues, {PROGRAMS.length} funded programs, one contribution board.
         </p>
 
-        <div className="reveal flex gap-3 justify-center flex-wrap mt-8" style={{ animationDelay: ".46s" }}>
-          <Link to="/issues" className={btn("dark", "lg")}>
+        {/* ossium keeps its two actions on one row on phones, so the pair
+            shrinks to fit instead of stacking */}
+        <div className="reveal flex gap-3 justify-center flex-wrap mt-8 max-[700px]:gap-2.5 max-[700px]:mt-6" style={{ animationDelay: ".46s" }}>
+          <Link to="/issues" className={btn("dark", "lg", "max-[700px]:px-[18px] max-[700px]:py-[11px] max-[700px]:text-[13.5px] max-[700px]:gap-1.5")}>
             Start searching
-            <span className="grid place-items-center w-[22px] h-[22px] rounded-full bg-paper text-ink shrink-0">
+            <span className="grid place-items-center w-[22px] h-[22px] rounded-full bg-paper text-ink shrink-0 max-[700px]:w-[19px] max-[700px]:h-[19px]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </span>
           </Link>
-          <Link to="/projects" className={btn("outline", "lg")}>Browse programs</Link>
+          <Link to="/projects" className={btn("outline", "lg", "max-[700px]:px-[18px] max-[700px]:py-[11px] max-[700px]:text-[13.5px]")}>Browse programs</Link>
         </div>
 
-        <div className="reveal flex items-center justify-center gap-3.5 mt-6 flex-wrap" style={{ animationDelay: ".58s" }}>
+        <div className="reveal flex items-center justify-center gap-3.5 mt-6 flex-wrap max-[700px]:gap-2.5 max-[700px]:mt-5" style={{ animationDelay: ".58s" }}>
           <span className="flex items-center">
             {PROOF.map((o, i) => (
               <OrgImg key={o} src={avatarOf(o, 64)} name={o} title={o}
