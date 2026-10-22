@@ -7,6 +7,7 @@ import { REPOS } from "../data/repos";
 import { ORGS } from "../data/orgs";
 import { REAL_REPOS, REAL_STATS } from "../data/realOrgs";
 import { programLink } from "../data/programDetails";
+import { programsOf } from "../data/programAssoc";
 import { useStore } from "../lib/store";
 import { btn, Chip, LevelChip, OrgImg, Tag, Word, Avatar } from "../components/ui";
 import NotFound from "./NotFound";
@@ -275,6 +276,12 @@ export default function OrgProfile() {
   const active2026 = orgProjects.some((p) => p.y >= 2026);
 
   const on = savedOrgs.includes(org.login);
+  /* honest program badges: what the archive proves + what their repos' GitHub topics say */
+  const archiveProgs = [...new Set(orgProjects.map((p) => p.program ?? "GSoC"))].map((name) => ({
+    name, n: orgProjects.filter((p) => (p.program ?? "GSoC") === name).length,
+  })).sort((a, b) => b.n - a.n);
+  const ARCHIVE_ID: Record<string, string> = { GSoC: "gsoc", LFX: "lfx", Outreachy: "outreachy", "Summer of Bitcoin": "sob", GSSoc: "gssoc" };
+  const assocExtra = programsOf(org.login).filter((a) => !Object.values(ARCHIVE_ID).includes(a.id));
   const programYears = history.reduce((s, h) => s + h.years.length, 0);
   const progProjects = history.reduce((s, h) => s + h.perYear.reduce((a, p) => a + p.n, 0), 0);
   const top = repos[0];
@@ -309,9 +316,29 @@ export default function OrgProfile() {
             <span className="text-cocoa">{org.login}</span>
           </p>
           <div className="flex gap-2 flex-wrap mb-4">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-denim border-denim/35 bg-denim/8">Google Summer of Code</span>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-leaf border-leaf/35 bg-leaf/8">{active2026 ? "● Active 2026" : `● ${projYears[0] ?? "Archive"} archive`}</span>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-cocoa border-line bg-cream">{fmt(orgProjects.length)} archived projects</span>
+            {archiveProgs.map(({ name, n }) => (ARCHIVE_ID[name]
+              ? <Link key={name} to={`/programs/${ARCHIVE_ID[name]}`}
+                  className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-denim border-denim/35 bg-denim/8 hover:bg-denim/15 transition-colors">
+                  {name} · {fmt(n)}
+                </Link>
+              : <span key={name} className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-denim border-denim/35 bg-denim/8">
+                  {name} · {fmt(n)}
+                </span>))}
+            {assocExtra.map((a) => (
+              <Link key={a.id} to={`/programs/${a.id}`}
+                className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-honey border-honey/40 bg-honey/8 hover:bg-honey/15 transition-colors">
+                {a.label} topic · {fmt(a.n)}
+              </Link>
+            ))}
+            {archiveProgs.length === 0 && assocExtra.length === 0 && (
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-cocoa border-line bg-cream">
+                Not in the program archive yet
+              </span>
+            )}
+            {orgProjects.length > 0 && <>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-leaf border-leaf/35 bg-leaf/8">{active2026 ? "● Active 2026" : `● ${projYears[0] ?? "Archive"} archive`}</span>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-lg border text-cocoa border-line bg-cream">{fmt(orgProjects.length)} archived projects</span>
+            </>}
           </div>
           <div className="flex items-center gap-4 flex-wrap">
             <div className="min-w-0">

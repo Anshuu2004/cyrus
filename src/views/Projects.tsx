@@ -155,13 +155,38 @@ export default function Projects() {
   );
   const [shown, setShown] = useState(60);
 
-  const setQUrl = (v: string) => { setQ(v); setParams({ q: v }); };
-  const setProgUrl = (v: string) => { setProg(v); setParams({ prog: v }); };
-  const setDiffUrl = (v: string) => { setDiff(v); setParams({ diff: v }); };
-  const setYearUrl = (v: string) => { setYear(v); setParams({ year: v }); };
-  const setTechUrl = (v: string) => { setTech(v); setParams({ tech: v }); };
-  const setSortUrl = (v: "recent" | "org" | "title") => { setSort(v); setParams({ sort: v }); };
+  /* every filter change rewrites the whole query so stacked facets
+     survive, and the sync effect below never sees a partial URL */
+  const write = (over: Partial<{ q: string; prog: string; diff: string; year: string; tech: string; sort: string }>) => {
+    const m = { q, prog, diff, year, tech, sort, ...over };
+    const rec: Record<string, string> = {};
+    if (m.q) rec.q = m.q;
+    if (m.prog !== "all") rec.prog = m.prog;
+    if (m.diff !== "all") rec.diff = m.diff;
+    if (m.year !== "all") rec.year = m.year;
+    if (m.tech !== "all") rec.tech = m.tech;
+    if (m.sort !== "recent") rec.sort = m.sort;
+    setParams(rec);
+  };
+  const setQUrl = (v: string) => { setQ(v); write({ q: v }); };
+  const setProgUrl = (v: string) => { setProg(v); write({ prog: v }); };
+  const setDiffUrl = (v: string) => { setDiff(v); write({ diff: v }); };
+  const setYearUrl = (v: string) => { setYear(v); write({ year: v }); };
+  const setTechUrl = (v: string) => { setTech(v); write({ tech: v }); };
+  const setSortUrl = (v: "recent" | "org" | "title") => { setSort(v); write({ sort: v }); };
   const clearUrl = () => { setQ(""); setProg("all"); setDiff("all"); setYear("all"); setTech("all"); setParams({}); };
+
+  /* search arrives one effect after mount, so deep links from /programs
+     (?prog=LFX&year=2024) are invisible to the useState initialisers -
+     mirror the URL into state whenever it changes */
+  useEffect(() => {
+    setQ(params.get("q") ?? "");
+    setProg(params.get("prog") ?? "all");
+    setDiff(params.get("diff") ?? "all");
+    setYear(params.get("year") ?? "all");
+    setTech(params.get("tech") ?? "all");
+    setSort(SORT_VALUES.includes(params.get("sort") as any) ? (params.get("sort") as "recent" | "org" | "title") : "recent");
+  }, [params]);
 
   useEffect(() => {
     let go = true;

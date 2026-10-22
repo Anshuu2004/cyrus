@@ -1,6 +1,6 @@
 "use client"
 /* ══ Skills.tsx — filter rail + sortable skill cards ════ */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "@/lib/router";
 import { REPOS, CATEGORIES } from "../data/repos";
 import { ORGS } from "../data/orgs";
@@ -124,6 +124,9 @@ export default function Skills() {
   const [params] = useSearchParams();
   const { downloads } = useStore();
   const [q, setQ] = useState(params.get("q") ?? "");
+  /* the router's search only lands one effect after mount - mirror it
+     so a shared /skills?q=linkedin link actually prefills */
+  useEffect(() => { setQ(params.get("q") ?? ""); }, [params]);
   const [level, setLevel] = useState<"all" | Level>("all");
   const [cat, setCat] = useState("all");
   const [org, setOrg] = useState("all");
