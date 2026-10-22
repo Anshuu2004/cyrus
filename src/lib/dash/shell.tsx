@@ -90,6 +90,15 @@ function rail(d: Dash): { label: string; items: { icon: string; text: string; to
       ],
     },
     {
+      label: "Tools",
+      items: [
+        { icon: DP.spark, text: "Co-pilot matcher", to: "/dashboard/matcher" },
+        { icon: DP.target, text: "Mentor finder", to: "/dashboard/mentors" },
+        { icon: DP.layers, text: "Compare orgs", to: "/dashboard/compare" },
+        { icon: DP.code, text: "Git initializer", to: "/dashboard/gitstart" },
+      ],
+    },
+    {
       label: "Discover",
       items: [
         { icon: DP.search, text: "Issue finder", to: "/issues" },

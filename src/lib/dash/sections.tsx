@@ -9,6 +9,7 @@ import { DP, featureBy } from "./shared";
 import { IssuesSection } from "./issues";
 import { ReposSection } from "./repos";
 import { SettingsSection } from "./settings";
+import { TOOL_SECTIONS } from "./tools";
 import type { Dash } from "./useDash";
 
 export { AttentionList, IssuesSection } from "./issues";
@@ -20,6 +21,9 @@ export function FeaturePage({ d, id }: { d: Dash; id: string }) {
   if (!f) return <MissingFeature id={id} />;
   if (f.id === "issues") return <IssuesSection d={d} />;
   if (f.id === "repos") return <ReposSection d={d} />;
+  if (f.id === "settings") return <SettingsSection d={d} />;
+  const Tool = TOOL_SECTIONS[f.id];
+  if (Tool) return <Tool d={d} />;
   return <SettingsSection d={d} />;
 }
 
@@ -32,7 +36,7 @@ function MissingFeature({ id }: { id: string }) {
       <h1 className="font-display font-extrabold text-[26px] tracking-[-.02em]">
         There is no page called “{id}”.
       </h1>
-      <p className="text-cocoa text-[13.5px] mt-2">The board has three pages: issues, repositories and settings.</p>
+      <p className="text-cocoa text-[13.5px] mt-2">The board holds your issues, your repositories, four working tools and settings.</p>
       <Link to="/dashboard" className={btn("primary", "md") + " mt-6"}>Back to the overview</Link>
     </Card>
   );
