@@ -102,7 +102,7 @@ export default function ProgramDetail() {
         <span aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#0f1012]/55 via-[#0f1012]/75 to-[#0f1012]/95" />
         <div className={`${W} py-14 relative z-[1]`}>
           <p className="font-mono text-[10.5px] tracking-[.14em] uppercase text-foam/55 mb-5">
-            <Link to="/" className="hover:text-white">Home</Link> / <Link to="/organizations" className="hover:text-white">Programs</Link> / <span className="text-foam/80">{p.name}</span>
+            <Link to="/" className="hover:text-white">Home</Link> / <Link to="/programs" className="hover:text-white">Programs</Link> / <span className="text-foam/80">{p.name}</span>
           </p>
           <div className="flex items-center gap-4 flex-wrap">
             <span className="w-14 h-14 rounded-[15px] overflow-hidden shrink-0 bg-white border border-white/25 shadow-soft">

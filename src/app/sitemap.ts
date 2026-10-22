@@ -20,6 +20,7 @@ const HUBS: [string, number][] = [
   ["/issues", 0.9],
   ["/leaderboard", 0.9],
   ["/projects", 0.9],
+  ["/programs", 0.9],
   ["/organizations", 0.8],
   ["/about", 0.5],
   ["/platform/features", 0.6],
