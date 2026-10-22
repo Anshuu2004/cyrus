@@ -21,6 +21,7 @@ const HUBS: [string, number][] = [
   ["/leaderboard", 0.9],
   ["/projects", 0.9],
   ["/programs", 0.9],
+  ["/sponsors", 0.8],
   ["/organizations", 0.8],
   ["/about", 0.5],
   ["/platform/features", 0.6],
