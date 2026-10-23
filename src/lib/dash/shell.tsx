@@ -115,6 +115,7 @@ function rail(d: Dash): { label: string; items: { icon: string; text: string; to
         { icon: DP.flag, text: "Leaderboard", to: "/leaderboard" },
         { icon: DP.layers, text: "Project archive", to: "/projects" },
         { icon: DP.star, text: "Skill catalog", to: "/skills" },
+        { icon: DP.spark, text: "Sponsors", to: "/sponsors" },
       ],
     },
     {

@@ -17,6 +17,7 @@ const LINKS = [
   { to: "/projects", label: "Projects" },
   { to: "/programs", label: "Programs" },
   { to: "/skills", label: "Skills" },
+  { to: "/sponsors", label: "Sponsors" },
   { to: "/about", label: "About us" },
 ];
 
