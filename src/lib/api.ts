@@ -10,10 +10,12 @@ export type ServerUser = {
 };
 export type SavedRow = { itemType: string; itemId: string; title?: string | null };
 export type EmailStartRes = {
-  ok: boolean; sent?: boolean; demo?: boolean; code?: string;
+  ok: boolean; sent?: boolean; demo?: boolean; code?: string; challenge?: string | null;
   reason?: string; error?: string; expires_in_seconds?: number;
 };
-export type EmailVerifyRes = { ok: boolean; user?: ServerUser; offline?: boolean; reason?: string };
+export type EmailVerifyRes = {
+  ok: boolean; user?: ServerUser; offline?: boolean; reason?: string; challenge?: string | null;
+};
 export type AppRow = {
   id: string; kind: "program" | "hackathon"; targetId: string; targetTitle: string | null;
   status: string; notes?: unknown; createdAt: string; updatedAt: string;
@@ -59,8 +61,8 @@ export const api = {
 
   emailStart: (email: string, turnstile?: string) =>
     postJson<EmailStartRes>("/api/auth/email/start", { email, turnstile }),
-  emailVerify: (email: string, code: string, name?: string) =>
-    postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name }),
+  emailVerify: (email: string, code: string, name?: string, challenge?: string) =>
+    postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name, challenge }),
 
   savedList: () => getJson<{ items: SavedRow[] }>("/api/me/saved"),
   savedAdd: (itemType: string, itemId: string, title?: string) =>

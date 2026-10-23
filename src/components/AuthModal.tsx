@@ -52,6 +52,10 @@ export default function AuthModal() {
   const tsHandle = useRef<TurnstileHandle | null>(null);
   const [tsToken, setTsToken] = useState("");
 
+  /* signed code envelope handed back by /start when the deploy has no database:
+     it has to travel with the verify call or the code cannot be checked. */
+  const mailCh = useRef("");
+
   useEffect(() => {
     if (!authOpen || !tsOn) return;
     const el = tsSlot.current;
@@ -106,6 +110,7 @@ export default function AuthModal() {
   useEffect(() => {
     if (authOpen) return;
     setStep("form"); setCode(""); setResendIn(0); setBusyMail(false);
+    mailCh.current = "";
   }, [authOpen]);
 
   if (!authOpen) return null;
@@ -121,8 +126,8 @@ export default function AuthModal() {
 
   const isEmail = (m: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m);
 
-  /* step 1: ask the server for a code. Without a reachable backend we keep
-     the old browser-only demo sign-in so the sheet never dead-ends. */
+  /* step 1: ask the server for a code. Nobody gets signed in from here - the
+     6 digits have to come back from the mailbox first. */
   const sendCode = async (e: FormEvent) => {
     e.preventDefault();
     const mail = email.trim().toLowerCase();
@@ -132,12 +137,9 @@ export default function AuthModal() {
     const token = tsToken; tsBurn();
     try {
       const r = await api.emailStart(mail, token || undefined);
-      if (!r) {
-        const who = tab === "signup" ? (name.trim() || mail.split("@")[0]) : mail.split("@")[0];
-        done(who, "Email", tab === "signup" ? `Account created - welcome, ${who}!` : `Welcome back, ${who}!`, { email: mail });
-        return;
-      }
+      if (!r) { toast("Sign-in isn't reachable right now - try again in a moment."); return; }
       if (r.ok) {
+        mailCh.current = r.challenge || "";
         setStep("code"); setCode(""); setResendIn(30);
         toast(r.demo && r.code
           ? `Demo mode (no mail key configured) - your code is ${r.code}`
@@ -161,12 +163,13 @@ export default function AuthModal() {
     if (!/^\d{6}$/.test(code)) { toast("Enter the 6-digit code from the email."); return; }
     setBusyMail(true);
     try {
-      const r = await api.emailVerify(mail, code, tab === "signup" ? name.trim() || undefined : undefined);
+      const r = await api.emailVerify(mail, code, tab === "signup" ? name.trim() || undefined : undefined, mailCh.current || undefined);
       if (r?.ok && r.user) {
         const first = r.user.name.split(" ")[0];
         done(r.user.name, "Email", tab === "signup" ? `Account created - welcome, ${first}!` : `Welcome back, ${first}!`, { email: mail });
         return;
       }
+      if (r?.challenge) mailCh.current = r.challenge;
       toast(!r ? "Sign-in didn't complete - try again."
         : r.reason === "expired" ? "That code expired - send yourself a new one."
         : r.reason === "locked" || r.reason === "no_code" ? "That code is no longer active - send a new one."
@@ -184,6 +187,7 @@ export default function AuthModal() {
     try {
       const r = await api.emailStart(email.trim().toLowerCase(), token || undefined);
       if (r?.ok) {
+        mailCh.current = r.challenge || "";
         setResendIn(30);
         toast(r.demo && r.code ? `Demo mode - your new code is ${r.code}` : "A fresh code is on its way.");
       } else {
@@ -335,7 +339,7 @@ export default function AuthModal() {
                   {busyMail ? "Verifying..." : "Verify & Continue"}
                 </button>
                 <div className="flex items-center justify-between font-mono text-[11px] font-bold tracking-[.08em]">
-                  <button type="button" onClick={() => { setStep("form"); setCode(""); }}
+                  <button type="button" onClick={() => { setStep("form"); setCode(""); mailCh.current = ""; }}
                     className="text-rust hover:text-accent cursor-pointer">Change email</button>
                   <button type="button" onClick={resend} disabled={resendIn > 0 || busyMail}
                     className="text-cocoa hover:text-rust transition-all cursor-pointer disabled:text-dim disabled:cursor-not-allowed">
