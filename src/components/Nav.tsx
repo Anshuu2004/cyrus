@@ -36,12 +36,15 @@ export default function Nav() {
   const { user, signOut, saved, savedOrgs, setAuthOpen } = useStore();
   const [pop, setPop] = useState(false);
   const [menu, setMenu] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const accountRef = useRef<HTMLDivElement>(null);
   const loc = useLocation();
 
   useEffect(() => { setPop(false); setMenu(false); }, [loc.pathname]);
   useEffect(() => {
-    const close = () => { setPop(false); };
+    const close = (e: MouseEvent) => {
+      if (accountRef.current?.contains(e.target as Node)) return;
+      setPop(false);
+    };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
@@ -84,8 +87,8 @@ export default function Nav() {
               <ThemeToggle />
               <span className="w-px h-6 bg-line shrink-0 max-[700px]:hidden" aria-hidden />
               {user ? (
-                <div className="relative" ref={menuRef}>
-                  <button className="!p-0 border-0" onClick={(e) => { e.stopPropagation(); setPop(!pop); }} aria-label="Account">
+                <div className="relative" ref={accountRef}>
+                  <button className="!p-0 border-0" onClick={() => setPop((open) => !open)} aria-label="Account" aria-expanded={pop}>
                     <Avatar name={user.name} size={34} src={user.picture} />
                   </button>
                   {pop && (
@@ -199,17 +202,21 @@ export function SignInButton({ label = "Sign in", size = "md" as const, variant 
 /* ── Platform dropdown (desktop row): caret pill + card panel ── */
 function PlatformMenu() {
   const [pop, setPop] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
   const loc = useLocation();
   useEffect(() => setPop(false), [loc.pathname]);
   useEffect(() => {
-    const close = () => setPop(false);
+    const close = (e: MouseEvent) => {
+      if (boxRef.current?.contains(e.target as Node)) return;
+      setPop(false);
+    };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
   const on = loc.pathname.startsWith("/platform");
   return (
-    <div className="relative">
-      <button onClick={(e) => { e.stopPropagation(); setPop(!pop); }} aria-expanded={pop}
+    <div className="relative" ref={boxRef}>
+      <button onClick={() => setPop((open) => !open)} aria-expanded={pop}
         className={`${PILL} flex items-center gap-1.5 ${pillCls(on)}`}>
         Platform
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden
