@@ -204,6 +204,7 @@ Environment, all optional - the site degrades gracefully without any of them:
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=...      # Google OAuth web client id
 NEXT_PUBLIC_GITHUB_CLIENT_ID=...      # GitHub OAuth app client id
 NEXT_PUBLIC_GITHUB_EXCHANGE_URL=...   # relay only if you skip the server routes
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=...    # Cloudflare widget key, with the secret below
 
 # server-side, never bundled
 DATABASE_URL=...                      # Neon Postgres (pooled)
@@ -211,6 +212,7 @@ SESSION_SECRET=...                    # signs the session cookie
 GITHUB_CLIENT_SECRET=...              # enables /api/auth/github exchange
 RESEND_API_KEY=...                    # email sign-in codes (demo mode without)
 EMAIL_FROM=...                        # verified sender address
+TURNSTILE_SECRET_KEY=...              # siteverify secret, with the site key above
 ```
 
 ## 🔐 Sign-in, actually real
@@ -221,6 +223,7 @@ EMAIL_FROM=...                        # verified sender address
 - **Google** - raw OIDC implicit flow (full-page redirect, no GIS script dependency). The `id_token` returns in the URL fragment; the nonce is verified against `sessionStorage`, and with the backend configured the token is re-verified server-side at `/api/auth/google` before a session cookie is issued.
 - **GitHub** - OAuth **PKCE (S256)** in a popup. The code lands on same-origin `github-callback.html` and is post-Messaged back. With the backend configured, `/api/auth/github` performs the token exchange server-side (the client secret never touches the browser); for a pure-static deployment a tiny relay does the same job - `npm run gh-relay` in dev, the Cloudflare Worker in prod.
 - **Email** - a six-digit code via Resend at `/api/auth/email/*`, demo mode in the UI when no key is set.
+- **Cloudflare Turnstile** - once `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are both set, the sign-in sheet renders a managed widget and `POST /api/auth/email/start` refuses to send a code without a token that `siteverify` accepts. It is deliberately all-or-nothing: with either key missing the widget never mounts and no Cloudflare script loads, and with both present the check fails closed, so a Cloudflare outage stops code sending instead of quietly skipping the gate. The 30-second resend lock and the six-try code lock in `email.ts` stay, and the `/api/health` payload reports the state as `captcha: true|false`.
 
 ```mermaid
 sequenceDiagram
@@ -342,7 +345,7 @@ drizzle/                      SQL migrations for the Neon schema
 A `vercel.json` pins the Next.js preset, so importing the repo is all it takes:
 
 1. [vercel.com/new](https://vercel.com/new) - import `cyrus-ai` - Deploy.
-2. Retype the env vars from `.env.example` in Project Settings (Production + Preview). Never upload your `.env` file. Public client ids are safe; `SESSION_SECRET`, `GITHUB_CLIENT_SECRET`, `DATABASE_URL` and `RESEND_API_KEY` belong only here.
+2. Retype the env vars from `.env.example` in Project Settings (Production + Preview). Never upload your `.env` file. Public client ids and the Turnstile site key are safe; `SESSION_SECRET`, `GITHUB_CLIENT_SECRET`, `DATABASE_URL`, `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` belong only here.
 3. Register the production origin with Google (JS origin **and** redirect URI with trailing slash) and GitHub (callback `<origin>/github-callback.html`).
 4. To switch the backend on: attach a Neon Postgres, set `DATABASE_URL` and `SESSION_SECRET`, run `npm run db:migrate` and `npm run db:seed`. `/api/health` flips to `{"db":true,"auth":true}`, sessions persist across devices, and submissions land in the database. Until then the routes answer 503 and the site runs on checked-in snapshots plus localStorage.
 5. Pure-static alternative for GitHub sign-in: deploy `scripts/github-exchange.worker.mjs` as a Cloudflare Worker and point `NEXT_PUBLIC_GITHUB_EXCHANGE_URL` at it.

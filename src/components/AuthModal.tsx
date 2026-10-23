@@ -2,7 +2,7 @@
 /* ══ AuthModal.tsx — full-screen split sign-in sheet ═
    left: cyrus.ai logo + programming-language wall · right: LOGIN/SIGN UP tabs,
    email + 6-digit verification code (server-issued), OAuth row */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { useNavigate } from "@/lib/router";
 import { useStore } from "../lib/store";
@@ -10,6 +10,8 @@ import { fmt, LANG_COLORS } from "../lib/util";
 import { googleConfigured, promptGoogle, readGoogleRedirectCredential } from "../lib/google";
 import { githubConfigured, promptGitHub } from "../lib/github";
 import { api, serverAuthReady } from "../lib/api";
+import { mountTurnstile, turnstileConfigured } from "../lib/turnstile";
+import type { TurnstileHandle } from "../lib/turnstile";
 import { REPOS } from "../data/repos";
 import { PROGRAMS } from "../data/orgs";
 import { CRAWL } from "../data/crawlStats";
@@ -40,6 +42,39 @@ export default function AuthModal() {
   const [resendIn, setResendIn] = useState(0);
   const [busyGoogle, setBusyGoogle] = useState(false);
   const [busyGithub, setBusyGithub] = useState(false);
+
+  /* ── Cloudflare Turnstile: the sheet owns the slot, the widget owns the token.
+     Tokens are single-use, so every attempt - pass or fail - burns one and the
+     handle resets the widget for the next. Without a site key configured none of
+     this exists: no script, no slot, no gate. ── */
+  const tsOn = turnstileConfigured();
+  const tsSlot = useRef<HTMLDivElement>(null);
+  const tsHandle = useRef<TurnstileHandle | null>(null);
+  const [tsToken, setTsToken] = useState("");
+
+  useEffect(() => {
+    if (!authOpen || !tsOn) return;
+    const el = tsSlot.current;
+    if (!el) return;
+    let live = true;
+    void mountTurnstile(el, (t) => { if (live) setTsToken(t); }).then((h) => {
+      if (!live) { h?.remove(); return; }
+      tsHandle.current = h;
+    });
+    return () => {
+      live = false;
+      tsHandle.current?.remove();
+      tsHandle.current = null;
+      setTsToken("");
+    };
+  }, [authOpen, tsOn]);
+
+  const tsGuard = (): boolean => {
+    if (!tsOn || tsToken) return true;
+    toast("Tick the verification box, then we send the code.");
+    return false;
+  };
+  const tsBurn = () => { tsHandle.current?.reset(); };
 
   /* landing spot for the Google redirect fallback: when the chooser popup was
      blocked we navigated the whole tab to Google, which returns here with
@@ -92,9 +127,11 @@ export default function AuthModal() {
     e.preventDefault();
     const mail = email.trim().toLowerCase();
     if (!isEmail(mail)) { toast("That email doesn't look right."); return; }
+    if (!tsGuard()) return;
     setBusyMail(true);
+    const token = tsToken; tsBurn();
     try {
-      const r = await api.emailStart(mail);
+      const r = await api.emailStart(mail, token || undefined);
       if (!r) {
         const who = tab === "signup" ? (name.trim() || mail.split("@")[0]) : mail.split("@")[0];
         done(who, "Email", tab === "signup" ? `Account created - welcome, ${who}!` : `Welcome back, ${who}!`, { email: mail });
@@ -109,6 +146,8 @@ export default function AuthModal() {
       }
       toast(r.reason === "too_soon" ? "A code was just sent - give it half a minute, then try again."
         : r.reason === "invalid_email" ? "That email doesn't look right."
+        : r.reason === "captcha_required" ? "Tick the verification box first, then send again."
+        : r.reason === "captcha_failed" ? "Cloudflare did not recognise that check - tick it again and resend."
         : "Couldn't send the code right now - GitHub or Google sign-in work instantly.");
     } finally {
       setBusyMail(false);
@@ -139,28 +178,31 @@ export default function AuthModal() {
 
   const resend = async () => {
     if (resendIn > 0 || busyMail) return;
+    if (!tsGuard()) return;
     setBusyMail(true);
+    const token = tsToken; tsBurn();
     try {
-      const r = await api.emailStart(email.trim().toLowerCase());
+      const r = await api.emailStart(email.trim().toLowerCase(), token || undefined);
       if (r?.ok) {
         setResendIn(30);
         toast(r.demo && r.code ? `Demo mode - your new code is ${r.code}` : "A fresh code is on its way.");
       } else {
-        toast(r?.reason === "too_soon" ? "Almost - give it a few more seconds." : "Couldn't resend right now - try again.");
+        toast(r?.reason === "too_soon" ? "Almost - give it a few more seconds."
+          : r?.reason === "captcha_required" || r?.reason === "captcha_failed" ? "Tick the verification box again, then resend."
+          : "Couldn't resend right now - try again.");
       }
     } finally {
       setBusyMail(false);
     }
   };
 
-  const oauth = (p: string) => {
-    const typed = window.prompt(`Your ${p} username (demo - no real ${p} call is made):`);
-    if (!typed) return;
-    done(typed.trim().replace(/^@/, "") || "you", p, `Signed in with ${p}. Opening your dashboard…`);
-  };
+  /* a provider button with no OAuth app configured must say so instead of
+     inventing an identity - email codes are the path that works today. */
+  const notWired = (p: string) =>
+    toast(`${p} sign-in is not connected on this deploy - use the email code below.`);
 
   const signInGoogle = async () => {
-    if (!googleConfigured()) { oauth("Google"); return; }
+    if (!googleConfigured()) { notWired("Google"); return; }
     setBusyGoogle(true);
     try {
       const g = await promptGoogle();
@@ -174,7 +216,7 @@ export default function AuthModal() {
   };
 
   const signInGitHub = async () => {
-    if (!githubConfigured()) { oauth("GitHub"); return; }
+    if (!githubConfigured()) { notWired("GitHub"); return; }
     setBusyGithub(true);
     try {
       const g = await promptGitHub();
@@ -257,6 +299,9 @@ export default function AuthModal() {
               ))}
             </div>
 
+            {/* Cloudflare Turnstile - only present when a site key is configured */}
+            {tsOn && <div ref={tsSlot} className="mb-7 min-h-[68px]" aria-live="polite" />}
+
             {step === "form" ? (
               <form onSubmit={sendCode} className="grid gap-5">
                 {tab === "signup" && (
@@ -318,14 +363,9 @@ export default function AuthModal() {
 
             <p className="text-center text-[12.5px] text-cocoa leading-[1.7] mt-8">
               By logging in or signing up, you agree to our{" "}
-              <button onClick={() => toast("Demo preview - Terms page is on the roadmap.")} className="text-rust font-semibold hover:underline cursor-pointer">Terms &amp; Conditions</button>{" "}
+              <button onClick={() => toast("Terms page is on the roadmap - nothing to accept yet.")} className="text-rust font-semibold hover:underline cursor-pointer">Terms &amp; Conditions</button>{" "}
               and{" "}
-              <button onClick={() => toast("Demo preview - Privacy page is on the roadmap.")} className="text-rust font-semibold hover:underline cursor-pointer">Privacy Policy</button>.
-            </p>
-            <p className="text-center font-mono text-[10px] text-dim mt-3">
-              {googleConfigured()
-                ? "Google sign-in is live - your profile stays in this browser, nothing is sent to a cyrus server"
-                : "demo auth - everything stays in your browser, nothing is sent anywhere"}
+              <button onClick={() => toast("Privacy page is on the roadmap - nothing to accept yet.")} className="text-rust font-semibold hover:underline cursor-pointer">Privacy Policy</button>.
             </p>
           </div>
         </div>

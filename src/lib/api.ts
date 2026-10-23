@@ -57,7 +57,8 @@ export const api = {
     postJson<{ ok: true; user: ServerUser }>("/api/auth/github", { code, verifier }),
   authGoogle: (idToken: string) => postJson<{ ok: true; user: ServerUser }>("/api/auth/google", { idToken }),
 
-  emailStart: (email: string) => postJson<EmailStartRes>("/api/auth/email/start", { email }),
+  emailStart: (email: string, turnstile?: string) =>
+    postJson<EmailStartRes>("/api/auth/email/start", { email, turnstile }),
   emailVerify: (email: string, code: string, name?: string) =>
     postJson<EmailVerifyRes>("/api/auth/email/verify", { email, code, name }),
 
