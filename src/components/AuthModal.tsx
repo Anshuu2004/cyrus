@@ -150,7 +150,7 @@ export default function AuthModal() {
         : r.reason === "invalid_email" ? "That email doesn't look right."
         : r.reason === "captcha_required" ? "Tick the verification box first, then send again."
         : r.reason === "captcha_failed" ? "Cloudflare did not recognise that check - tick it again and resend."
-        : "Couldn't send the code right now - GitHub or Google sign-in work instantly.");
+        : "Couldn't send the code right now - sign in with Google, or try again shortly.");
     } finally {
       setBusyMail(false);
     }
