@@ -9,6 +9,7 @@ import { Link } from "@/lib/router";
 import { REPOS, CATEGORIES } from "../data/repos";
 import { ORGS, PROGRAMS } from "../data/orgs";
 import { CRAWL } from "../data/crawlStats";
+import { STATS } from "../lib/siteStats";
 import { avatarOf, fmt } from "../lib/util";
 import { btn, Word, SectionTag, OrgImg, Logo } from "../components/ui";
 import { Rule } from "../components/plat";
@@ -215,8 +216,9 @@ export default function About() {
               So we built the index we kept wishing for: {fmt(CRAWL.issues)} open issues crawled
               from {fmt(CRAWL.reposWithIssues)} repositories on {CRAWL.crawledAt}, a skill catalog of{" "}
               {REPOS.length} repositories across {CATEGORIES.length} shelves published by {ORGS.length}{" "}
-              curated organizations, the {PROGRAMS.length} mentored programs those orgs join every
-              year and {fmt(6600)}+ accepted program projects from 2022 to 2026 - each with the
+              hand-picked organizations, {fmt(CRAWL.orgs)} organizations in the issue crawl, the{" "}
+              {PROGRAMS.length} mentored programs they join every year, and {fmt(STATS.archive)} accepted
+              projects from 2022 to 2026 - each with the
               boring-but-decisive facts: stars, forks, open issues, language, license and last push.
             </p>
             <p>
@@ -266,7 +268,7 @@ export default function About() {
             <li><b className="text-ink">Difficulty labels</b> - derived, not claimed: beginner under 10k★, intermediate to 50k★, advanced above.</li>
             <li><b className="text-ink">Beginner signal</b> - an issue counts as beginner-labelled only when GitHub carries a real good-first-issue or help-wanted label: {CRAWL.beginnerLabelled.toLocaleString("en-US")} of {CRAWL.issues.toLocaleString("en-US")} right now.</li>
             <li><b className="text-ink">Logos</b> - official org avatars via GitHub, and program covers are our own generated SVG artwork, never copied branding.</li>
-            <li><b className="text-ink">Sessions</b> - the demo sign-in and saved items live only in your browser's localStorage.</li>
+            <li><b className="text-ink">Sign-in</b> - Google and email codes start a real session: an <code>httpOnly</code> cookie this server signs, not a value the page writes for itself. Your browsing state and saved items stay in your browser until a database is attached to the deploy.</li>
           </ul>
 
           <h2 id="faq" className="font-display font-extrabold text-[24px] tracking-[-.02em] mt-9 mb-5 scroll-mt-24">Frequently asked</h2>
@@ -286,12 +288,14 @@ export default function About() {
           <div className="bg-card border border-line rounded-[20px] p-6 shadow-soft">
             <h3 className="panel-h text-[17px] mb-4">Catalog at a glance</h3>
             {[
-              [CRAWL.issues.toLocaleString("en-US"), "open issues, crawled"],
-              [CRAWL.reposWithIssues.toLocaleString("en-US"), "repositories crawled for issues"],
+              [fmt(CRAWL.issues), "open issues, crawled"],
+              [fmt(CRAWL.reposWithIssues), "repositories crawled for issues"],
+              [fmt(STATS.archive), "accepted program projects"],
               [String(REPOS.length), "repos in the skill snapshot"],
               [String(ORGS.length), "organizations hand-picked"],
               [String(PROGRAMS.length), "mentorship programs tracked"],
-              ["2026-10-02", "current snapshot date"],
+              ["2026-10-02", "skill snapshot date"],
+              [CRAWL.crawledAt, "issue crawl date"],
             ].map(([v, l]) => (
               <div key={l} className="flex items-baseline justify-between gap-3 py-2.5 border-b border-liness last:border-0">
                 <b className="font-mono text-[17px]">{v}</b><span className="text-cocoa text-[12.5px] text-right">{l}</span>
