@@ -84,6 +84,7 @@
   --animate-blink: blink 1s steps(1) infinite;
   --animate-blink-soft: blink 1.6s infinite;
   --animate-diamond: diamondTurn 9s ease-in-out infinite;
+  --animate-hero-diamond: heroDiamond 5.4s cubic-bezier(.62,.02,.38,.98) infinite;
   --animate-rise: riseIn 0.6s cubic-bezier(0.22, 0.8, 0.36, 1) both;
   --animate-grow-x: growX 0.9s cubic-bezier(0.22, 0.8, 0.36, 1) backwards;
   --animate-grow-bar: growBar 0.9s cubic-bezier(0.22, 0.8, 0.36, 1) backwards;
@@ -98,6 +99,13 @@
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(180deg) scale(.82); }
     100% { transform: rotate(360deg) scale(1); }
+  }
+  /* the hero marker: a square held at 45deg so it reads as a diamond at
+     both ends of the spin, easing through the flat part of the turn */
+  @keyframes heroDiamond {
+    0% { transform: rotate(45deg) scale(1); }
+    50% { transform: rotate(225deg) scale(.72); }
+    100% { transform: rotate(405deg) scale(1); }
   }
 }
 
@@ -552,7 +560,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .cta-close + footer { margin-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marq-track, .logocell, .caret, .pulse-bar, .grow-x, .reveal, .tg-star, .tg-cloud, .tg-rays, .footer-arc, .footer-arc::after, .animate-diamond { animation: none !important; }
+  .marq-track, .logocell, .caret, .pulse-bar, .grow-x, .reveal, .tg-star, .tg-cloud, .tg-rays, .footer-arc, .footer-arc::after, .animate-diamond, .animate-hero-diamond { animation: none !important; }
+  /* parked at the diamond end of the turn rather than flat on its corners */
+  .animate-hero-diamond { transform: rotate(45deg); }
   .search-pulse::after, .pulse-grid > *::after { display: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
   html { scroll-behavior: auto; }

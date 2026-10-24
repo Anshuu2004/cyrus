@@ -403,7 +403,7 @@ export default function HomeHero() {
 
       <div className="relative z-[1] max-w-[1060px] mx-auto px-5 sm:px-6 text-center">
         <span className="reveal inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-[7px] font-mono text-[10.5px] uppercase tracking-[.14em] text-cocoa max-[700px]:gap-1.5 max-[700px]:px-3 max-[700px]:py-[6px] max-[700px]:text-[8.5px] max-[700px]:tracking-[.09em]">
-          <i className="not-italic w-[6px] h-[6px] rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-accent)_22%,transparent)] max-[700px]:w-[5px] max-[700px]:h-[5px]" />
+          <i aria-hidden className="not-italic block w-[8px] h-[8px] shrink-0 rounded-[2px] bg-accent animate-hero-diamond shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] max-[700px]:w-[7px] max-[700px]:h-[7px]" />
           Open source discovery for GitHub developers
         </span>
 

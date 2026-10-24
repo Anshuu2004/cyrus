@@ -1,23 +1,22 @@
 "use client"
-/* ══ tools.tsx — the four working tools on the board ═══════════════
-   Co-pilot matcher, mentor finder, compare orgs and the git
-   initializer. Every number here comes from data the site already
-   keeps honest: the repo catalog, the crawled issue sample, the real
-   GSoC project archive (mentor names included) and the org profiles.
-   Nothing is simulated; where a fact is not in the data the tools say
-   so instead of guessing.
+/* ══ tools.tsx — the working tools on the board ══════════════════
+   The co-pilot lives in copilot.tsx; mentor finder, compare orgs and
+   the git initializer live here. Every number comes from data the site
+   already keeps honest: the repo catalog, the real GSoC project archive
+   (mentor names included) and the org profiles. Nothing is simulated;
+   where a fact is not in the data the tools say so instead of guessing.
    ═══════════════════════════════════════════════════════════════════ */
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { Link } from "@/lib/router";
 import { REPOS } from "../../data/repos";
 import { ORGS } from "../../data/orgs";
-import { ISSUE_SIGNALS } from "../../data/issueSignals";
 import { programsOf } from "../../data/programAssoc";
-import { avatarOf, byStars, fmt } from "../../lib/util";
+import { avatarOf, fmt } from "../../lib/util";
 import { btn, OrgImg } from "../../components/ui";
 import { Card, DashHead, Ic } from "./shell";
 import { DP, parseIssueUrl } from "./shared";
+import { CoPilotSection } from "./copilot";
 import type { Dash } from "./useDash";
 
 const GSOC_URL = "https://summerofcode.withgoogle.com";
@@ -29,79 +28,6 @@ function ToolNote({ children }: { children: ReactNode }) {
   return <p className="font-mono text-[9.5px] uppercase tracking-[.1em] text-dim leading-[1.8] mt-4">{children}</p>;
 }
 
-/* ── 1. co-pilot matcher ──────────────────────────────────────── */
-const LANGS = ["TypeScript", "Python", "Go", "Rust", "JavaScript", "Java", "C++"];
-const INTERESTS = ["ai-agents", "mcp", "cli", "docs", "web"];
-
-function MatcherSection() {
-  const [skills, setSkills] = useState<string[]>([]);
-  const toggle = (s: string) => setSkills((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
-
-  const repos = useMemo(() => {
-    if (!skills.length) return [];
-    const hit = REPOS.filter((r) => skills.some((s) =>
-      r.lang === s || r.tags.includes(s) || (s === "docs" && /doc|guide|readme/i.test(r.desc))));
-    return hit.sort(byStars).slice(0, 6);
-  }, [skills]);
-  const issues = useMemo(() => {
-    if (!skills.length) return [];
-    return ISSUE_SIGNALS.filter((i) => skills.some((s) => i.lang === s || (i.labels ?? []).some((l) => l.toLowerCase().includes(s)))).slice(0, 4);
-  }, [skills]);
-
-  return (
-    <Card>
-      <DashHead title="Co-pilot matcher" sub="Tell it what you already write. It shortlists catalog repositories that ask for exactly that, and the live issues waiting in them." />
-      <div className="flex flex-wrap gap-1.5 mt-6">
-        {[...LANGS, ...INTERESTS].map((s) => {
-          const on = skills.includes(s);
-          return (
-            <button key={s} type="button" onClick={() => toggle(s)} aria-pressed={on}
-              className={`font-mono text-[10.5px] rounded-full px-3 py-[7px] border transition-colors cursor-pointer ${on ? "border-accent/50 bg-peach text-accent font-bold" : "border-line bg-cream text-cocoa hover:border-accent/40"}`}>
-              {s}
-            </button>
-          );
-        })}
-      </div>
-
-      {!skills.length ? (
-        <p className="text-[13.5px] text-dim mt-6">Pick at least one skill and the shortlist appears here.</p>
-      ) : (
-        <>
-          <div className="grid gap-2 mt-6">
-            {repos.map((r) => {
-              const [owner, name] = r.repo.split("/");
-              return (
-                <div key={r.repo} className="flex items-center gap-3 rounded-[12px] border border-line bg-cream px-3.5 py-3">
-                  <OrgImg src={avatarOf(owner, 48)} name={owner} className="w-[26px] h-[26px] rounded-[7px] object-cover bg-sand shrink-0" />
-                  <span className="min-w-0 flex-1">
-                    <Link to={`/repo/${encodeURIComponent(r.repo)}`} className="block text-[13px] font-semibold text-ink hover:text-accent transition-colors truncate">{r.repo}</Link>
-                    <span className="block font-mono text-[9.5px] text-dim truncate">{r.lang} · {r.license} · {fmt(r.issues)} open issues</span>
-                  </span>
-                  <span className="font-mono text-[10.5px] font-bold text-honey shrink-0">★ {fmt(r.stars)}</span>
-                  <Link to={`/issues?q=${encodeURIComponent(name)}`} className={btn("outline", "sm", "shrink-0 max-[640px]:hidden")}>Issues</Link>
-                </div>
-              );
-            })}
-            {!repos.length && <p className="text-[13.5px] text-dim">No catalog repository asks for that combination yet - try one skill at a time.</p>}
-          </div>
-          {issues.length > 0 && (
-            <div className="mt-6">
-              <b className="block font-mono text-[9.5px] uppercase tracking-[.14em] text-dim mb-2">Open issues matching the same skills</b>
-              {issues.map((i) => (
-                <a key={i.url} href={i.url} target="_blank" rel="noopener" className="flex items-center gap-2.5 py-2 border-b border-liness last:border-0 group">
-                  <span className="font-mono text-[9.5px] text-dim truncate w-[160px] shrink-0">{i.repo}</span>
-                  <span className="text-[12.5px] text-cocoa group-hover:text-ink transition-colors truncate flex-1">{i.title}</span>
-                  {i.beginner && <span className="font-mono text-[8.5px] rounded-[5px] border border-accent/35 bg-peach px-1.5 py-px text-accent shrink-0">good first issue</span>}
-                </a>
-              ))}
-            </div>
-          )}
-        </>
-      )}
-      <ToolNote>Matched against the {fmt(REPOS.length)}-repository catalog shipped with the site. Signed-in state is not needed; nothing is stored.</ToolNote>
-    </Card>
-  );
-}
 
 /* ── 2. mentor finder ─────────────────────────────────────────── */
 type GRow = { y: number; u: string; t: string; o: string; tt?: string[]; m?: string };
@@ -330,7 +256,7 @@ function GitStartSection({ d }: { d: Dash }) {
 }
 
 export const TOOL_SECTIONS: Record<string, (p: { d: Dash }) => ReactNode> = {
-  matcher: MatcherSection,
+  matcher: CoPilotSection,
   mentors: MentorsSection,
   compare: CompareSection,
   gitstart: GitStartSection,
