@@ -240,7 +240,7 @@ export default function AuthModal() {
     <div className="fixed inset-0 z-[100] overflow-y-auto" style={{ background: "var(--color-paper)" }}
       role="dialog" aria-modal="true" aria-label="Sign in">
       {/* pinned to the top-left corner of the screen, over the brand wall */}
-      <button onClick={() => { setAuthOpen(false); nav("/"); }}
+      <button onClick={() => setAuthOpen(false)}
         className="fixed top-6 left-6 z-[110] max-[900px]:top-4 max-[900px]:left-4 inline-flex items-center gap-2.5 bg-card border border-line rounded-full pl-4 pr-5 py-2.5 font-mono text-[12px] font-bold tracking-[.06em] text-ink shadow-soft hover:border-accent hover:text-rust transition-all cursor-pointer">
         {ARROW} Back to Home
       </button>
