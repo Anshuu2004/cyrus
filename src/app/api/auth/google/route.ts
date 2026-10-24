@@ -11,9 +11,11 @@ export const dynamic = "force-dynamic";
 const ISSUERS = ["https://accounts.google.com", "accounts.google.com"];
 
 export async function POST(req: Request) {
+  /* googleReady is sessionsReady + a client id, so there is nothing left to
+     check for configuration here - the audience below is the only secret part
+     of a Google token this server trusts. */
   if (!googleReady()) return OFFLINE();
-  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  if (!clientId) return Response.json({ error: "Google OAuth is not configured on this server" }, { status: 500 });
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "";
 
   let body: { idToken?: string };
   try { body = await req.json(); } catch { body = {}; }
