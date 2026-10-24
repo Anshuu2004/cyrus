@@ -1,5 +1,6 @@
 /* ══ util.ts — formatting, hashing, storage helpers ═════════ */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { SetStateAction } from "react";
 import { REPOS } from "../data/repos";
 import { PROGRAM_REPOS } from "../data/programRepos";
 import type { Level, Repo } from "./types";
@@ -77,10 +78,20 @@ export const rnd = (seed: string, i = 0) => {
 export function useStored<T>(key: string, initial: T) {
   const [val, setVal] = useState<T>(initial);
   const [ready, setReady] = useState(false);
+  /* React runs a child's effects before its parent's, so anything mounted
+     inside the provider can write to this store before the load below has
+     run. Google sign-in is exactly that case: the tab comes back from
+     accounts.google.com and the landing handler signs the user in during
+     its own first effect, while localStorage still holds "null" from the
+     last sign-out. A read at that moment would erase the session a frame
+     after it was created, so the first read only fills in a value nobody
+     has touched yet. */
+  const touched = useRef(false);
+  const set = useCallback((v: SetStateAction<T>) => { touched.current = true; setVal(v); }, []);
   useEffect(() => {
     try {
       const raw = localStorage.getItem(key);
-      if (raw != null) setVal(JSON.parse(raw) as T);
+      if (!touched.current && raw != null) setVal(JSON.parse(raw) as T);
     } catch { /* private mode or a corrupt value: keep the initial */ }
     setReady(true);
   }, [key]);
@@ -88,7 +99,7 @@ export function useStored<T>(key: string, initial: T) {
     if (!ready) return;
     try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* private mode */ }
   }, [key, val, ready]);
-  return [val, setVal, ready] as const;
+  return [val, set, ready] as const;
 }
 
 export interface User { name: string; provider: string; email?: string; picture?: string }

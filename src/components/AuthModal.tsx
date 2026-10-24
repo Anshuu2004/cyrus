@@ -7,9 +7,9 @@ import type { CSSProperties, FormEvent } from "react";
 import { useNavigate } from "@/lib/router";
 import { useStore } from "../lib/store";
 import { fmt, LANG_COLORS } from "../lib/util";
-import { googleConfigured, promptGoogle, readGoogleRedirectCredential } from "../lib/google";
-import { githubConfigured, promptGitHub } from "../lib/github";
-import { api, serverAuthReady } from "../lib/api";
+import { googleConfigured, promptGoogle } from "../lib/google";
+import { githubCanFinish, promptGitHub } from "../lib/github";
+import { api } from "../lib/api";
 import { mountTurnstile, turnstileConfigured } from "../lib/turnstile";
 import type { TurnstileHandle } from "../lib/turnstile";
 import { REPOS } from "../data/repos";
@@ -80,24 +80,8 @@ export default function AuthModal() {
   };
   const tsBurn = () => { tsHandle.current?.reset(); };
 
-  /* landing spot for the Google redirect fallback: when the chooser popup was
-     blocked we navigated the whole tab to Google, which returns here with
-     ?credential=... - complete the sign-in on this fresh page load.
-     (This effect MUST sit above the authOpen guard - hook order.) */
-  useEffect(() => {
-    const g = readGoogleRedirectCredential();
-    if (!g) return;
-    signIn({ name: g.name, provider: "Google", email: g.email, picture: g.picture });
-    setAuthOpen(false);
-    toast(`Welcome, ${g.name.split(" ")[0]} - signed in with Google.`);
-    /* hand the verified id_token to the server too, so saves sync across devices */
-    if (g.idToken) {
-      void (async () => {
-        if (await serverAuthReady()) { await api.authGoogle(g.idToken!); await refreshSession(); }
-      })();
-    }
-    setTimeout(() => nav("/dashboard"), 450);
-  }, []);
+  /* the Google redirect is completed in StoreProvider, above every gate -
+     this sheet only ever starts a sign-in from here. */
 
   /* resend cooldown ticker for the email code step */
   useEffect(() => {
@@ -200,8 +184,10 @@ export default function AuthModal() {
     }
   };
 
-  /* a provider button with no OAuth app configured must say so instead of
-     inventing an identity - email codes are the path that works today. */
+  /* a provider button that cannot end in a session says so instead of
+     inventing an identity: GitHub needs the app id *and* somewhere to trade
+     the code (this server, or a relay), and the email code is the path that
+     works on every deploy. */
   const notWired = (p: string) =>
     toast(`${p} sign-in is not connected on this deploy - use the email code below.`);
 
@@ -209,8 +195,8 @@ export default function AuthModal() {
     if (!googleConfigured()) { notWired("Google"); return; }
     setBusyGoogle(true);
     try {
-      const g = await promptGoogle();
-      done(g.name, "Google", `Welcome, ${g.name.split(" ")[0]} - signed in with Google.`, { email: g.email, picture: g.picture });
+      await promptGoogle();          // the tab leaves; the redirect completes the sign-in
+      toast("Opening Google…");
     } catch (e) {
       const m = (e as Error).message ?? "";
       toast(m.includes("popup") ? m : m || "Google sign-in didn't complete - try again.");
@@ -220,7 +206,7 @@ export default function AuthModal() {
   };
 
   const signInGitHub = async () => {
-    if (!githubConfigured()) { notWired("GitHub"); return; }
+    if (!(await githubCanFinish())) { notWired("GitHub"); return; }
     setBusyGithub(true);
     try {
       const g = await promptGitHub();
