@@ -10,6 +10,7 @@ import { btn, Chip, Tag } from "../../components/ui";
 import { avatarOf, fmt } from "../util";
 import { ISSUE_SIGNALS } from "../../data/issueSignals";
 import { Card, DashHead, Ic, StatRow } from "./shell";
+import { ArtLedger } from "./art";
 import {
   DP, ISSUE_STAGES, STAGE_CLS, STAGE_LABEL, STAGE_NEXT,
   daysAgo, isStale, type IssueStage, type TrackedIssue,
@@ -182,6 +183,9 @@ export function IssuesSection({ d }: { d: Dash }) {
         <div className="grid gap-2.5">{shown.map((i) => <IssueRow key={i.url} d={d} issue={i} />)}</div>
       ) : (
         <Card className="text-center py-10">
+          <div className="flex justify-center mb-4 text-dim">
+            <ArtLedger className="max-w-[210px]" />
+          </div>
           <p className="text-[14px] font-semibold">
             {stage === "all" ? "No issues tracked yet" : "Nothing in " + STAGE_LABEL[stage]}
           </p>

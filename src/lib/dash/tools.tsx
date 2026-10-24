@@ -12,6 +12,7 @@ import { Link } from "@/lib/router";
 import { REPOS } from "../../data/repos";
 import { ORGS } from "../../data/orgs";
 import { programsOf } from "../../data/programAssoc";
+import { ArtBranch, ArtPeople, ArtScales } from "./art";
 import { avatarOf, fmt } from "../../lib/util";
 import { btn, OrgImg } from "../../components/ui";
 import { Card, DashHead, Ic } from "./shell";
@@ -115,7 +116,13 @@ function MentorsSection() {
           ))}
         </div>
       ) : (
-        <p className="text-[13.5px] text-dim mt-5">No mentor by that name in the archive. The {fmt(rows?.length ?? 0)} projects we read cover 2022 through 2026.</p>
+        <div className="mt-6 flex items-center gap-6 flex-wrap">
+          <div className="text-dim shrink-0 w-[190px]"><ArtPeople /></div>
+          <p className="text-[13.5px] text-dim max-w-[400px] leading-[1.7]">
+            No mentor by that name in the archive. The {fmt(rows?.length ?? 0)} projects we read
+            cover 2022 through 2026, and only the mentors GitHub listed on the project record are here.
+          </p>
+        </div>
       )}
       <ToolNote>Names and organizations copied verbatim from the official GSoC project export in /data/gsoc-projects.json. Availability is not implied.</ToolNote>
     </Card>
@@ -166,11 +173,24 @@ function CompareSection() {
         <Side o={ob} which={b} set={setB} />
       </div>
       <div className="mt-5">
-        <Bar label="Stars" va={oa.stars} vb={ob.stars} fmtv={fmt} />
-        <Bar label="Repositories" va={oa.repos} vb={ob.repos} fmtv={(n) => String(n)} />
-        <Bar label="Open issues" va={oa.issues} vb={ob.issues} fmtv={fmt} />
+        {oa.login === ob.login ? (
+          <div className="flex items-center gap-6 flex-wrap py-2">
+            <div className="text-dim shrink-0 w-[190px]"><ArtScales /></div>
+            <p className="text-[13.5px] text-dim max-w-[400px] leading-[1.7]">
+              Both sides are {oa.name}. Choose a second organization on the right and the stars,
+              repositories and open issues face off here.
+            </p>
+          </div>
+        ) : (
+          <>
+            <Bar label="Stars" va={oa.stars} vb={ob.stars} fmtv={fmt} />
+            <Bar label="Repositories" va={oa.repos} vb={ob.repos} fmtv={(n) => String(n)} />
+            <Bar label="Open issues" va={oa.issues} vb={ob.issues} fmtv={fmt} />
+          </>
+        )}
       </div>
-      <div className="grid md:grid-cols-2 gap-5 mt-5">
+      {oa.login !== ob.login && (
+        <div className="grid md:grid-cols-2 gap-5 mt-5">
         {[oa, ob].map((o) => (
           <div key={o.login} className="rounded-[12px] border border-line bg-cream p-4">
             <b className="block font-mono text-[9px] uppercase tracking-[.14em] text-dim mb-2">{o.login} runs</b>
@@ -184,7 +204,8 @@ function CompareSection() {
             </span>
           </div>
         ))}
-      </div>
+        </div>
+      )}
       <ToolNote>Numbers are the crawl behind the org pages, not a live API call - open either profile to see the freshest figures.</ToolNote>
     </Card>
   );
@@ -223,7 +244,14 @@ function GitStartSection({ d }: { d: Dash }) {
           placeholder="https://github.com/owner/repo/issues/123" className={fin} aria-label="GitHub issue URL" />
       </div>
       {!target ? (
-        <p className="text-[13.5px] text-dim mt-5">Waiting for a link. An <code className="font-mono text-[12px] text-cocoa">owner/repo</code> works too if you have not picked the issue yet.</p>
+        <div className="mt-6 flex items-center gap-6 flex-wrap">
+          <div className="text-dim shrink-0 w-[190px]"><ArtBranch /></div>
+          <p className="text-[13.5px] text-dim max-w-[380px] leading-[1.7]">
+            Waiting for a link. An <code className="font-mono text-[12px] text-cocoa">owner/repo</code> works too
+            if you have not picked the issue yet - the branch, the commit and the push are the same three moves
+            either way.
+          </p>
+        </div>
       ) : (
         <>
           <div className="flex items-center gap-2.5 mt-5 flex-wrap">

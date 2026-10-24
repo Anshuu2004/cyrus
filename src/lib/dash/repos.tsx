@@ -9,6 +9,7 @@ import { btn, Tag } from "../../components/ui";
 import { CAT_META, avatarOf, fmt } from "../util";
 import { ORGS } from "../../data/orgs";
 import { Card, DashHead, Ic, StatRow } from "./shell";
+import { ArtShelf } from "./art";
 import { DP, norm } from "./shared";
 import type { Dash } from "./useDash";
 
@@ -87,6 +88,9 @@ export function ReposSection({ d }: { d: Dash }) {
         </div>
       ) : (
         <Card className="text-center py-12">
+          <div className="flex justify-center mb-5 text-dim">
+            <ArtShelf className="max-w-[210px]" />
+          </div>
           <p className="text-[14px] font-semibold">
             {d.savedRepos.length ? "No followed repository matches that filter" : "You are not following a repository yet"}
           </p>

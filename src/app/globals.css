@@ -488,6 +488,20 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .faq details[open] summary { border-bottom: 1px solid var(--color-liness); }
 .reveal { animation: riseIn 0.6s var(--ease-silk) both; }
 
+/* ── board artwork (src/lib/dash/art.tsx) ─────────────────────
+   The scenes are built in three depth layers - draw* is the structure,
+   pop* is the node that carries meaning - and each layer arrives 120ms
+   after the one before it. A fade-and-settle, not a stroke chase: the
+   dashed rails in these drawings would slide rather than draw, and the
+   board is a working surface, not a showpiece.                    ── */
+@media (prefers-reduced-motion: no-preference) {
+  .art .draw, .art .draw-2, .art .draw-3,
+  .art .pop, .art .pop-2, .art .pop-3 { animation: artIn 0.55s var(--ease-silk) both; }
+  .art .draw-2, .art .pop-2 { animation-delay: 0.12s; }
+  .art .draw-3, .art .pop-3 { animation-delay: 0.24s; }
+  @keyframes artIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+}
+
 /* ── orbit glow — a green comet arc that travels along the border ── */
 @property --orbit { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes orbitSpin { to { --orbit: 360deg; } }

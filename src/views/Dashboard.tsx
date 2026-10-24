@@ -11,6 +11,7 @@ import { ISSUE_SIGNALS } from "../data/issueSignals";
 import { useDash } from "../lib/dash/useDash";
 import type { Dash } from "../lib/dash/useDash";
 import { Card, DashGate, DashHead, DashShell, Ic, StatRow } from "../lib/dash/shell";
+import { FeatureMark, StageGlyph } from "../lib/dash/art";
 import { AttentionList } from "../lib/dash/issues";
 import { DP, FEATURES, ISSUE_STAGES, STAGE_LABEL, greet } from "../lib/dash/shared";
 
@@ -68,8 +69,9 @@ function Overview({ d }: { d: Dash }) {
       <section aria-label="Issue stages" className="grid grid-cols-4 gap-3.5 max-[760px]:grid-cols-2">
         {stages.map(([s, n]) => (
           <Link key={s} to="/dashboard/issues"
-            className="bg-card border border-line rounded-[18px] p-5 shadow-soft hover:border-accent/45 transition-colors">
+            className="group relative bg-card border border-line rounded-[18px] p-5 shadow-soft hover:border-accent/45 transition-colors">
             <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-dim">{STAGE_LABEL[s]}</span>
+            <StageGlyph stage={s} className="absolute right-4 top-4 text-dim transition-colors group-hover:text-accent" />
             <b className="block font-display text-[30px] font-extrabold tracking-[-.025em] mt-2">{n}</b>
             <span className="text-cocoa text-[12px]">
               {s === "working" ? "open pull requests to write" : s === "done" ? "closed out" : s === "interested" ? "scoping it out" : "on the shelf"}
@@ -107,20 +109,16 @@ function Overview({ d }: { d: Dash }) {
       <Card>
         <div className="flex items-baseline gap-3 flex-wrap mb-4">
           <h2 className="panel-h-lg">The board, page by page</h2>
-          <span className="font-mono text-[11px] text-dim ml-auto">three pages</span>
+          <span className="font-mono text-[11px] text-dim ml-auto">{FEATURES.length} pages</span>
         </div>
         <div className="grid grid-cols-3 gap-3 max-[900px]:grid-cols-1">
           {FEATURES.map((f) => (
             <Link key={f.id} to={`/dashboard/${f.id}`}
               className="group flex flex-col gap-2 bg-cream border border-line rounded-[16px] p-4 hover:border-accent/50 hover:-translate-y-px transition-all">
-              <span className="flex items-center gap-2.5 min-w-0">
-                <span className="w-[30px] h-[30px] grid place-items-center rounded-[9px] bg-card border border-line text-accent shrink-0">
-                  <Ic d={DP[f.icon] ?? DP.star} size={15} />
-                </span>
-                <b className="card-title text-[13.5px] truncate flex-1">{f.title}</b>
-              </span>
+              <FeatureMark id={f.id} size={40} className="text-cocoa transition-colors group-hover:text-ink" />
+              <b className="card-title text-[13.5px] truncate">{f.title}</b>
               <span className="text-cocoa text-[12.5px] leading-[1.5] line-clamp-2">{f.desc}</span>
-              <span className="mt-auto font-mono text-[10px] uppercase tracking-[.1em] text-dim group-hover:text-accent transition-colors flex items-center gap-1.5">
+              <span className="mt-auto pt-1 font-mono text-[10px] uppercase tracking-[.1em] text-dim group-hover:text-accent transition-colors flex items-center gap-1.5">
                 Open <Ic d={DP.arrow} size={12} />
               </span>
             </Link>

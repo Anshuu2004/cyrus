@@ -15,6 +15,7 @@ import { btn } from "../../components/ui";
 import { fmt } from "../util";
 import { repoById } from "../util";
 import { Card, DashHead, Ic } from "./shell";
+import { ArtScope } from "./art";
 import { DP } from "./shared";
 import type { Dash } from "./useDash";
 
@@ -194,13 +195,29 @@ export function AnalyserSection({ d }: { d: Dash }) {
           </button>
         </div>
         {!res && !busy && (
-          <div className="flex flex-wrap gap-1.5 mt-4" role="group" aria-label="Try one of these">
-            <span className="font-mono text-[9px] uppercase tracking-[.14em] text-dim self-center mr-1">Try</span>
-            {["vercel/next.js", "sindresorhus/ky", "rust-lang/rust", "home-assistant/core"].map((x) => (
-              <button key={x} type="button" onClick={() => { setRaw(x); run(x); }}
-                className="font-mono text-[10px] rounded-full px-2.5 py-[6px] border border-line bg-cream text-cocoa hover:border-accent/50 hover:text-accent transition-colors cursor-pointer">{x}</button>
-            ))}
-          </div>
+          <>
+            <div className="flex flex-wrap gap-1.5 mt-4" role="group" aria-label="Try one of these">
+              <span className="font-mono text-[9px] uppercase tracking-[.14em] text-dim self-center mr-1">Try</span>
+              {["vercel/next.js", "sindresorhus/ky", "rust-lang/rust", "home-assistant/core"].map((x) => (
+                <button key={x} type="button" onClick={() => { setRaw(x); run(x); }}
+                  className="font-mono text-[10px] rounded-full px-2.5 py-[6px] border border-line bg-cream text-cocoa hover:border-accent/50 hover:text-accent transition-colors cursor-pointer">{x}</button>
+              ))}
+            </div>
+            <div className="mt-7 pt-6 border-t border-liness flex items-center gap-7 flex-wrap">
+              <div className="text-dim shrink-0 w-[210px]"><ArtScope /></div>
+              <div className="min-w-[260px] flex-1">
+                <b className="block font-mono text-[9px] uppercase tracking-[.14em] text-dim mb-2.5">What one reading covers</b>
+                <ul className="grid sm:grid-cols-2 gap-x-7 gap-y-1.5 text-[12.5px] text-cocoa">
+                  <li>Stars, forks and open issues</li>
+                  <li>The day of the last push</li>
+                  <li>How many people ever committed</li>
+                  <li>Commits landed in the last month</li>
+                  <li>Open issues labelled for newcomers</li>
+                  <li>Which community files exist</li>
+                </ul>
+              </div>
+            </div>
+          </>
         )}
         {catalog && !res && (
           <p className="font-mono text-[10.5px] text-dim mt-3">
